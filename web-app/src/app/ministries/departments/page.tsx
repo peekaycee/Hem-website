@@ -1,8 +1,12 @@
+"use client";
+import Hero from "@/app/components/Hero";
+import styles from './departments.module.css';
+
 // app/faq/page.tsx
-export default function Deparments() {
+export default function Departments() {
   return (
-    <section>
-      <h1>Church Departments</h1>
+    <section className={styles.departmentPage}>
+      <Hero title='Departments' id={styles.department}/>
       {/* church departments and their activities */}
     </section>
   );

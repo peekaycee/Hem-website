@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import './globals.css';
-
+import Header from './components/Navigation';
+import Footer from './components/Footer';
 
 export const metadata: Metadata = {
   title: "HEM Parish",
@@ -11,13 +12,13 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) {;
   return (
     <html lang="en">
       <body>
-        <header>Navigation Menu</header>
-        {children}
-        <footer>Footer Info</footer>
+        <Header />
+        {children}       
+        <Footer />
       </body>
     </html>
   );

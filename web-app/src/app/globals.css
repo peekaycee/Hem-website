@@ -1,7 +1,26 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --textColor: teal;
+  --hoverBg: #00000099;
+  --tertiary-100: #008E8F;
+  --tertiary-50: #80C7C7;
+  --primary-100: #F6F0DF;
+  --primary-50: #FCFBF5;
+  --secondary-100: #A9CBB7;
+  --secondary-50: #D4E5DB;
+  --headerFont: 'Ubuntu';
+  --bodyFont: 'Poppins';
+  --l: 2.5rem;
+  --m: 2rem;
+  --s: 1.5rem;
+  --p1: 1.375rem;
+  --p2: 1.125rem;
+  --p3: 0.875rem;
+  --bold: 700;
+  --medium: 500;
+  --regular: 400;
+  --br-1: 3px;
+  --br-2: 10px;
 }
 
 /* @theme inline {
@@ -21,11 +40,12 @@
   box-sizing: border-box;
 }
 body {
+  position: relative;
   background: var(--background);
   color: var(--foreground);
-  font-family: "Poppins";
+  letter-spacing: 0.5px;
 }
-h1{
-  color: var(--textColor);
-  font-size: 3rem;
+html{
+  scroll-behavior: smooth;
 }
+

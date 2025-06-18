@@ -1,0 +1,8 @@
+#contact{
+  background: url(../../../public/images/about-us-img-1-1.png) no-repeat center fixed;
+  background-size: contain;
+}
+.contactPage{
+  width: 100%;
+  height: auto;
+}

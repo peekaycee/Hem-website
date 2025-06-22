@@ -39,8 +39,8 @@ export default function Navigation() {
                 <div className={styles.dropdownWrapper}>
                   Services <ChevronDown className={`${styles.rotated} ${styles.dd}`} size={12}/>
                   <ul className={styles.sublinks}>
-                    <li><Link href={'/services/service'}>Services</Link></li>
-                    <li><Link href={'/services/announcements'}>Announcements</Link></li>
+                    <li><Link href={'/service'}>Services</Link></li>
+                    <li><Link href={'/announcements'}>Announcements</Link></li>
                   </ul>
                 </div>
               </li>
@@ -49,8 +49,8 @@ export default function Navigation() {
                 <div className={styles.dropdownWrapper}>
                   Ministries<ChevronDown className={`${styles.rotated} ${styles.dd}`} size={12}/>
                   <ul className={styles.sublinks}>
-                    <li><Link href={'/ministries/departments'}>Departments</Link></li>
-                    <li><Link href={'#'}>Follow-up</Link></li>
+                    <li><Link href={'/departments'}>Departments</Link></li>
+                    <li><Link href={'/followUp'}>Follow-up</Link></li>
                   </ul>
                 </div>
               </li>
@@ -58,10 +58,10 @@ export default function Navigation() {
                 <div className={styles.dropdownWrapper}>
                   Pages<ChevronDown className={`${styles.rotated} ${styles.dd}`} size={12}/>
                   <ul className={styles.sublinks}>
-                    <li><Link href={'/pages/give'}>Give</Link></li>
-                    <li><Link href={'/pages/prayers'}>Prayer</Link></li>
-                    <li><Link href={'/pages/faq'}>FAQ</Link></li>
-                    <li><Link href={'/pages/admin'}>Admin</Link></li>
+                    <li><Link href={'/give'}>Give</Link></li>
+                    <li><Link href={'/prayers'}>Prayer</Link></li>
+                    <li><Link href={'/faq'}>FAQ</Link></li>
+                    <li><Link href={'/admin'}>Admin</Link></li>
                   </ul>
                 </div>
               </li>

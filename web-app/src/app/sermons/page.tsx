@@ -68,7 +68,7 @@ export default function Sermons() {
 
             <div className={styles.librarySermon}>
               <div className={styles.sermonThumbnail}>
-                <Image src={Image13} alt='Image Placeholder' />
+                <Image src={Image13} alt='Image Placeholder'/>
               </div>
               <div className={styles.sermonBriefs}>
                 <h2>God&apos;s Mercies <span>- By Sis. Adeyemo</span></h2>

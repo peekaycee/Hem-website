@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Bible",
+    "venue": "Study",
+    "description": "Reading the word of God",
+    "date": "2025-06-27",
+    "time": "10:28",
+    "ministering": "Bro kalu",
+    "image": "Image13",
+    "id": 1
+  },
+  {
+    "title": "Faith Clinic ",
+    "venue": "Church",
+    "description": "Pray your way through",
+    "date": "2025-06-29",
+    "time": "10:29",
+    "ministering": "Sis Adeyemo",
+    "image": "Image12",
+    "id": 2
+  },
+  {
+    "title": "Divine Encounter",
+    "venue": "Church Auditorium",
+    "date": "2025-06-30",
+    "time": "16:36",
+    "ministering": "Bro Sanjo",
+    "image": "Image11",
+    "description": "Power that swallows power",
+    "id": 3
+  },
+  {
+    "title": "Sunday School",
+    "venue": "Auditorium",
+    "description": "Thanksgiving, hearing of the word and offering prayers to God",
+    "date": "2025-07-06",
+    "time": "10:00",
+    "ministering": "Pst. Gbade",
+    "image": "Image10",
+    "id": 4
+  }
+]

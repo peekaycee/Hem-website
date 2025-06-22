@@ -1,17 +1,19 @@
 "use client";
 
-// import Link from "next/link";
 import styles from './components.module.css';
 
-interface ButtonProps{
- tag: string;
- onClick?: () => void;
- // href?: string;
+interface ButtonProps {
+  tag: string;
+  onClick?: () => void;
+  disabled?: boolean;
+  className?: string;
 }
 
-export default function Button({ tag, onClick }: ButtonProps) {
+export default function Button({ tag, onClick, disabled, className }: ButtonProps) {
+  const combinedClass = `${styles.button} ${disabled ? styles.disabled : ""} ${className || ""}`;
+
   return (
-    <button onClick={onClick} className={styles.button}>
+    <button onClick={onClick} className={combinedClass} disabled={disabled}>
       {tag}
     </button>
   );

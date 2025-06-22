@@ -230,9 +230,25 @@
   padding: 0.5em;
 }
 .testifiersDetails{
+  width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 0 10em;
 }
+.testimonyWrapper{
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 3em;
+}
+
+/* .testimonyWrapper{
+  display: flex;
+  width: 100%;
+} */
 .testimonies > div{
   padding: 1.2em;
 }
@@ -281,6 +297,7 @@
 .ctaContent{
   width: 40%;
   height: auto;
+  min-height: 200px;
   text-align: center;
   margin-right: -25em;
 }
@@ -289,7 +306,9 @@
   font-size: calc(var(--l) * 1.5);
   margin-bottom: 15px;
 }
-
+.cta button:hover {
+  border: 1px solid var(--tertiary-50);
+}
 /* CHURCH LOGO */
 .churchLogo{
   width: 100%;

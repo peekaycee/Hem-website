@@ -31,21 +31,22 @@ export default function Footer(){
           <h3>Quicklinks</h3>
           <ul>
             <li><Link href="/home">Home</Link></li>
-            <li><Link href="/services/service">Services</Link></li>
+            <li><Link href="/service">Services</Link></li>
             <li><Link href="/sermons">Sermons</Link></li>
-            <li><Link href="/ministries/departments">Ministries</Link></li>
+            <li><Link href="/departments">Ministries</Link></li>
             <li><Link href="/contact">Contact</Link></li>
-            <li><Link href="/pages/admin">Admin</Link></li>
+            <li><Link href="/admin">Admin</Link></li>
           </ul>
         </div>
         <div className={styles.connect}>
           <h3>Connect</h3>
           <ul>
-            <li><Link href="/services/announcements">Announcements</Link></li>
-            <li><Link href="/ministries/departments">Departments</Link></li>
-            <li><Link href="/pages/prayers">Prayers</Link></li>
-            <li><Link href="/pages/give">Give</Link></li>
-            <li><Link href="/pages/faq">FAQ</Link></li>
+            <li><Link href="/announcements">Announcements</Link></li>
+            <li><Link href="/departments">Departments</Link></li>
+            <li><Link href="/followUp">Follow-up</Link></li>
+            <li><Link href="/prayers">Prayers</Link></li>
+            <li><Link href="/give">Give</Link></li>
+            <li><Link href="/faq">FAQ</Link></li>
           </ul>
         </div>
         <div className={styles.serviceHour}>

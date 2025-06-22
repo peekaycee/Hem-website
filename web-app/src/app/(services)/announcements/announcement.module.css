@@ -9,6 +9,9 @@
 
 .announcementWrapper{
   display: flex;
+  flex-direction: column;
+  margin-top: 2em;
+  padding: 0 2em;
 }
 .announcementContent{
   flex: 1;
@@ -88,7 +91,7 @@
   font-weight: var(--regular);
   font-size: var(--p3);
   font-style: italic;
-  margin: 10px 0;
+  margin: 3px 0 5px;
 }
 .seeMoreButton{
   width: fit-content;

@@ -4,8 +4,31 @@ import Button from '../components/Button';
 import Image from 'next/image';
 import { Image9, Image10, Image11, Image12, Image13, Image14, Pic1, ChurchLogo } from '../../../public/images';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function Home() {
+  const router = useRouter()
+
+  const redirectToGivePage = () => {
+    router.push("/pages/give");
+  }
+  const redirectToAnnouncement = () => {
+    router.push("/services/announcements")
+  }
+  const redirectToPrayer = () => {
+    router.push("/pages/prayers")
+  }
+    const previousTestimonies = () => {
+    setTestimony(prev => Math.max(prev - 1, 1));
+  };
+
+  const nextTestimonies = () => {
+    setTestimony(prev => Math.min(prev + 1, 3));
+  };
+
+  const [testimony, setTestimony] = useState(1);
+
   return (
     <main>
       {/* Hero Section */}
@@ -36,13 +59,13 @@ export default function Home() {
           <div className={styles.projectContent}>
             <h2>Join Us To Make The Church Building A Reality.</h2>
             <p>Partner With Us Today!</p>
-            <Button tag='Donation'/>
+            <Button tag='Donation' onClick={redirectToGivePage}/>
           </div>
         </section>
         
         {/* Events Section */}
         <section className={styles.event}>
-          <h2>Upcoming Events</h2>
+          <h2>Upcoming Programs</h2>
           <div className={styles.events}>
             <div>
               <Image src={Image12} alt='New Events' width={0} height={0}/>
@@ -63,7 +86,7 @@ export default function Home() {
               <Image src={Image11} alt='New Events' width={0} height={0}/>
             </div>
           </div>
-          <Button tag='see more'/>
+          <Button tag='view all' onClick={redirectToAnnouncement}/>
         </section>
         
         {/* Ministers Section */}
@@ -105,41 +128,122 @@ export default function Home() {
         <section className={styles.testimony}>
           <h2>Testimonies</h2>
           <div className={styles.testifiersDetails}>
-            <ChevronLeft size={24} className={styles.dir}/>
-            <div className={styles.testimonies}>
-              <div>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, quae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, voluptate.
-                </p>
+            <ChevronLeft size={24} className={styles.dir} onClick={previousTestimonies}/>
+            {// first
+              testimony === 1 && 
+              (<div className={`${styles.testimonyWrapper} ${styles.first}`}>
+              <div className={styles.testimonies}>
+                <div>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, quae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, voluptate.
+                  </p>
+                </div>
+                <div className={styles.testifier}>
+                  <h3>John Doe 1</h3>
+                  <Image src={Pic1} alt='testifier'/>
+                </div>  
               </div>
-              <div className={styles.testifier}>
-                <h3>John Doe</h3>
-                <Image src={Pic1} alt='testifier'/>
-              </div>  
-            </div>
-            <div className={styles.testimonies}>
-              <div>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, quae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, voluptate.
-                </p>
+              <div className={styles.testimonies}>
+                <div>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, quae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, voluptate.
+                  </p>
+                </div>
+                <div className={styles.testifier}>
+                  <h3>John Doe 1</h3>
+                  <Image src={Pic1} alt='testifier'/>
+                </div>  
               </div>
-              <div className={styles.testifier}>
-                <h3>John Doe</h3>
-                <Image src={Pic1} alt='testifier'/>
-              </div>  
-            </div>
-            <div className={styles.testimonies}>
-              <div>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, quae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, voluptate.
-                </p>
+              <div className={styles.testimonies}>
+                <div>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, quae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, voluptate.
+                  </p>
+                </div>
+                <div className={styles.testifier}>
+                  <h3>John Doe 1</h3>
+                  <Image src={Pic1} alt='testifier'/>
+                </div>  
               </div>
-              <div className={styles.testifier}>
-                <h3>John Doe</h3>
-                <Image src={Pic1} alt='testifier'/>
-              </div>  
-            </div>
-            <ChevronRight size={24} className={styles.dir}/>
+            </div>)
+            }
+            {// second
+              testimony === 2 && 
+              (<div className={`${styles.testimonyWrapper} ${styles.first}`}>
+              <div className={styles.testimonies}>
+                <div>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, quae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, voluptate.
+                  </p>
+                </div>
+                <div className={styles.testifier}>
+                  <h3>John Doe 2</h3>
+                  <Image src={Pic1} alt='testifier'/>
+                </div>  
+              </div>
+              <div className={styles.testimonies}>
+                <div>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, quae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, voluptate.
+                  </p>
+                </div>
+                <div className={styles.testifier}>
+                  <h3>John Doe 2</h3>
+                  <Image src={Pic1} alt='testifier'/>
+                </div>  
+              </div>
+              <div className={styles.testimonies}>
+                <div>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, quae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, voluptate.
+                  </p>
+                </div>
+                <div className={styles.testifier}>
+                  <h3>John Doe 2</h3>
+                  <Image src={Pic1} alt='testifier'/>
+                </div>  
+              </div>
+            </div>)
+            }
+            {// Third
+              testimony === 3 && 
+              (<div className={`${styles.testimonyWrapper} ${styles.first}`}>
+              <div className={styles.testimonies}>
+                <div>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, quae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, voluptate.
+                  </p>
+                </div>
+                <div className={styles.testifier}>
+                  <h3>John Doe 3</h3>
+                  <Image src={Pic1} alt='testifier'/>
+                </div>  
+              </div>
+              <div className={styles.testimonies}>
+                <div>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, quae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, voluptate.
+                  </p>
+                </div>
+                <div className={styles.testifier}>
+                  <h3>John Doe 3</h3>
+                  <Image src={Pic1} alt='testifier'/>
+                </div>  
+              </div>
+              <div className={styles.testimonies}>
+                <div>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, quae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis, voluptate.
+                  </p>
+                </div>
+                <div className={styles.testifier}>
+                  <h3>John Doe 3</h3>
+                  <Image src={Pic1} alt='testifier'/>
+                </div>  
+              </div>
+            </div>)
+            } 
+            <ChevronRight size={24} className={styles.dir} onClick={nextTestimonies}/>
           </div>
           <div className={styles.direction}>
           </div>
@@ -150,7 +254,7 @@ export default function Home() {
         <section className={styles.cta}>
           <div className={styles.ctaContent}>
             <h2>Need Someone To Pray With?</h2>
-            <Button tag='Reach Out To Us'/>
+            <Button tag={'Reach Out To Us'} onClick={redirectToPrayer}/>
           </div>
         </section>
 

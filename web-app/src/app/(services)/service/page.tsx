@@ -7,7 +7,7 @@ import styles from "./services.module.css";
 export default function Services() {
   return (
     <section className={styles.servicePage}>
-      <Hero title='Services' id={styles.service}/>
+      <Hero title='Our Services' id={styles.service}/>
       {/* Bulletin Posts + Event Calendar */}
       <div className={styles.service}>
         <div className={`${styles.dig} ${styles.left}`}>

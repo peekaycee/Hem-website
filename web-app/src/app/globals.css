@@ -3,7 +3,7 @@
   --foreground: #171717;
   --hoverBg: #00000099;
   --tertiary-100: #008E8F;
-  --tertiary-50: #80C7C7;
+  --tertiary-50: #80c7c7;
   --primary-100: #F6F0DF;
   --primary-50: #FCFBF5;
   --secondary-100: #A9CBB7;
@@ -48,4 +48,5 @@ body {
 html{
   scroll-behavior: smooth;
 }
+
 

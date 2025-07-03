@@ -24,14 +24,12 @@ const formatTime = (timeStr: string) => {
   return `${hr}:${minute.toString().padStart(2, "0")} ${ampm}`;
 };
 
-export default function ProgramId({ params }: Props) {
-  const { programId } = params;
-
+// ✅ Make the function async, even if you’re not using await directly
+export default async function ProgramId({ params }: Props) {
+  const { programId } = await params;
   const program = ProgramData.find(p => p.id === parseInt(programId));
 
-  if (!program) {
-    return <h1>Program not found</h1>;
-  }
+  if (!program) return <h1>Program not found</h1>;
 
   const image = imageMap[program.image] || Image12;
 
@@ -46,4 +44,10 @@ export default function ProgramId({ params }: Props) {
       <Image src={image} alt="Program Flyer" />
     </section>
   );
+}
+
+export async function generateStaticParams() {
+  return ProgramData.map(program => ({
+    programId: program.id.toString(),
+  }));
 }

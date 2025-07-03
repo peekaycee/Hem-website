@@ -1,15 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Hero from "@/app/components/Hero";
 import styles from './prayers.module.css';
 import Button from "@/app/components/Button";
 import emailjs from "@emailjs/browser";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function PrayersAndCounselling() {
   const [prayers, setPrayers] = useState([""]);
   const [counselling, setCounselling] = useState("");
   const [sending, setSending] = useState(false);
+  const [name, setName] = useState("");
+  const [tel, setTel] = useState("");
+
+  useEffect(() => {
+    emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!);
+  }, []);
 
   const handleAddPrayer = () => {
     setPrayers([...prayers, ""]);
@@ -21,96 +29,94 @@ export default function PrayersAndCounselling() {
     setPrayers(updated);
   };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  // Check if all prayers are empty and counselling is also empty
-  const hasValidPrayer = prayers.some(p => p.trim() !== "");
-  const hasValidCounselling = counselling.trim() !== "";
+    const hasValidPrayer = prayers.some(p => p.trim() !== "");
+    const hasValidCounselling = counselling.trim() !== "";
 
-  if (!hasValidPrayer && !hasValidCounselling) {
-    alert("Please fill in at least one prayer point or counselling request.");
-    return;
-  }
-
-  setSending(true);
-
-  try {
-    const form = e.currentTarget as HTMLFormElement;
-    const nameInput = form.elements.namedItem("name") as HTMLInputElement;
-    const telInput = form.elements.namedItem("tel") as HTMLInputElement;
+    if (!hasValidPrayer && !hasValidCounselling) {
+      toast.warning("Please fill in at least one prayer point or counselling request.");
+      return;
+    }
 
     const templateParams = {
-      prayers: prayers.filter(p => p.trim()).join("\n"),
-      counselling,
-      name: nameInput?.value || "Anonymous",
-      tel: telInput?.value || "Not provided",
+      name: name.trim() || "Anonymous",
+      tel: tel.trim() || "Not provided",
+      email: "-", // placeholder if your template expects it
+      message: "-", // placeholder if your template expects it
+      prayers: prayers.filter(p => p.trim()).join("\n") || "None",
+      counselling: counselling.trim() || "None",
+      time: new Date().toLocaleString(),
     };
 
-    await emailjs.send(
-      "service_ngyscvf",
-      "template_6a0f2aq",
-      templateParams,
-      "ojvLyk8F6bulR2QjR"
-    );
+    setSending(true);
+    try {
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        templateParams
+      );
 
-    alert("Your request has been sent successfully!");
-
-    // Reset the form fields
-    setPrayers(["", ""]);
-    setCounselling("");
-    if (nameInput) nameInput.value = "";
-    if (telInput) telInput.value = "";
-
-  } catch (error) {
-    console.error("EmailJS Error:", error);
-    alert("Failed to send request. Please try again.");
-  } finally {
-    setSending(false);
-  }
-};
-
-
+      toast.success("Your request has been sent successfully!");
+      setPrayers([""]);
+      setCounselling("");
+      setName("");
+      setTel("");
+    } catch (error: any) {
+      console.error("EmailJS Error:", error);
+      toast.error(`Failed to send: ${error?.message || "Unknown error"}`);
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <section className={styles.prayerPage}>
+      <ToastContainer position="top-right" autoClose={4000} />
       <Hero title='Prayers & Counselling' id={styles.prayer} />
 
-      <form className={styles.prayerForm} onSubmit={handleSubmit}>
-        <h1>Do you have prayer points you would like me to pray with you about? Tell me</h1>
-        <div className={styles.prayerPoints}>
-          <input type="text" name="name" id="name" placeholder="Please type in your name[optional]" />
-          <input type="tel" name="tel" id="tel" placeholder="Please type in your phone number[optional]"/>
-          {prayers.map((prayer, idx) => (
+      <form onSubmit={handleSubmit}>
+        <div className={styles.prayerForm}>
+          <h1>Do you have prayer points?</h1>
+          <div className={styles.prayerPoints}>
             <input
-              key={idx}
-              name={`prayer-${idx}`}
-              placeholder="Type in your prayer points..."
-              value={prayer}
-              onChange={(e) => handlePrayerChange(idx, e.target.value)}
-              required
+              type="text"
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
-          ))}
-          <p>Click the + button to add more prayer points.</p>
+            <input
+              type="tel"
+              placeholder="Your phone number"
+              value={tel}
+              onChange={(e) => setTel(e.target.value)}
+            />
+            {prayers.map((prayer, idx) => (
+              <input
+                key={idx}
+                placeholder="Prayer point"
+                value={prayer}
+                onChange={(e) => handlePrayerChange(idx, e.target.value)}
+              />
+            ))}
+            <p>Click + to add more prayer points</p>
+          </div>
+          <div className={styles.add} onClick={handleAddPrayer}>+</div>
+          <Button tag={sending ? "Sending..." : "Pray For Me"} />
         </div>
-        <div className={styles.add} onClick={handleAddPrayer}>+</div>
-        <Button tag={sending ? "Sending..." : "Pray For Me"} />
-      </form>
 
-      <form className={styles.counsellingForm} onSubmit={handleSubmit}>
-        <h1>Do you need counselling?</h1>
-        <div className={styles.counselText}>
+        <div className={styles.counsellingForm}>
+          <h1>Need counselling?</h1>
           <textarea
-            name="counselRequest"
-            id="counselRequest"
-            placeholder="Tell me about it..."
+            placeholder="Your counselling request..."
             rows={5}
             cols={120}
             value={counselling}
             onChange={(e) => setCounselling(e.target.value)}
-          ></textarea>
+          />
+          <Button tag={sending ? "Sending..." : "Counsel Me"} />
         </div>
-        <Button tag={sending ? "Sending..." : "Counsel Me"} />
       </form>
     </section>
   );

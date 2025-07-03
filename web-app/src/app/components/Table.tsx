@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-table"
 import { useEffect, useState } from "react"
 import Button from "./Button"
+import styles from './components.module.css'
 
 interface DataTableProps<T> {
   columns: ColumnDef<T>[]
@@ -50,50 +51,52 @@ export default function DataTable<T extends { id: string | number }>({
   })
 
   return (
-    <div className="p-4">
-      <table className="w-full border">
-        <thead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <th key={header.id} className="border p-2 bg-gray-100 text-left">
-                  {flexRender(header.column.columnDef.header, header.getContext())}
-                </th>
-              ))}
-              {(enableEdit || enableDelete) && <th className="border p-2">Actions</th>}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map(row => (
-            <tr key={row.id} className="hover:bg-gray-50">
-              {row.getVisibleCells().map(cell => (
-                <td key={cell.id} className="border p-2">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-              {(enableEdit || enableDelete) && (
-                <td className="border p-2 space-x-2">
-                  {enableEdit && (
-                    <Button 
-                      tag ={"Edit"}
-                      onClick={() => enableEdit(row.original)} 
-                    />
-                  )}
-                  {enableDelete && (
-                    <Button 
-                      tag="Delete"
-                      onClick={() => enableDelete(row.original.id)} 
-                    />
-                  )}
-                </td>
-              )}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className={styles.dataTable}>
+      <div className={styles.tableWrpper}>
+        <table>
+          <thead>
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th key={header.id} className="border p-2 bg-gray-100 text-left">
+                    {flexRender(header.column.columnDef.header, header.getContext())}
+                  </th>
+                ))}
+                {(enableEdit || enableDelete) && <th className="border p-2">Actions</th>}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map(row => (
+              <tr key={row.id} className="hover:bg-gray-50">
+                {row.getVisibleCells().map(cell => (
+                  <td key={cell.id} className="border p-2">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+                {(enableEdit || enableDelete) && (
+                  <td className="border p-2 space-x-2">
+                    {enableEdit && (
+                      <Button 
+                        tag ={"Edit"}
+                        onClick={() => enableEdit(row.original)} 
+                      />
+                    )}
+                    {enableDelete && (
+                      <Button 
+                        tag="Delete"
+                        onClick={() => typeof row.original.id === "number" && enableDelete(row.original.id)} 
+                      />
+                    )}
+                  </td>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      <div className="flex justify-between mt-4 items-center">
+      <div className={styles.dataTableButtons}>
         <Button 
           tag={"Previous"}
           onClick={() => setPage(p => Math.max(p - 1, 1))} 
@@ -101,7 +104,6 @@ export default function DataTable<T extends { id: string | number }>({
         />
         <span>Page {page} of {Math.ceil(total / 10)}</span>
         <Button 
-          className="disabled"
           tag={"Next"}
           onClick={() => setPage(p => p + 1)} disabled={page >= Math.ceil(total / 10)}
         />

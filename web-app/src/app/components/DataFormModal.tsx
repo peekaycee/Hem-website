@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import Button from "./Button";
+import styles from './components.module.css'
 
 interface FormModalProps<T> {
   isOpen: boolean
@@ -53,30 +54,30 @@ export default function DataFormModal<T>({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded p-6 w-[90%] max-w-md">
-        <h2 className="text-xl mb-4 font-semibold">
+    <div className={styles.dataModalTable}>
+      <div>
+        <h2>
           {mode === "create" ? "Add New Item" : "Edit Item"}
         </h2>
 
         {fields.map((field) => (
-          <div key={String(field.key)} className="mb-4">
-            <label className="block mb-1 text-sm font-medium">{field.label}</label>
+          <div key={String(field.key)} className={styles.table}>
+            <label htmlFor="inputValue">{field.label}</label>
             <input
               type={field.type || "text"}
               value={(formData[field.key] as any) || ""}
               onChange={(e) => handleChange(field.key, e.target.value)}
-              className={`w-full border p-2 rounded ${
-                errors[field.key as string] ? "border-red-500" : ""
-              }`}
+              className={styles.inputValue}
+              // placeholder={field.label}
+              title={field.label}
             />
             {errors[field.key as string] && (
-              <p className="text-red-600 text-sm mt-1">{errors[field.key as string]}</p>
+              <p>{errors[field.key as string]}</p>
             )}
           </div>
         ))}
 
-        <div className="flex justify-end gap-2 mt-4">
+        <div className={styles.buttons}>
           <Button
             tag ={"Cancel"}
             onClick={onClose}

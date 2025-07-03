@@ -40,7 +40,15 @@ interface FollowUp {
 
 type Tab = "announcement" | "sermon" | "followUp";
 
-export default function Admin() {
+interface FormModalProps<T> {
+  isOpen: boolean
+  onClose: () => void
+}
+
+export default function Admin({
+  isOpen,
+  onClose
+}: FormModalProps<T>) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialTab = (searchParams.get("tab") as Tab) || "announcement";
@@ -131,38 +139,103 @@ export default function Admin() {
     ],
   };
 
-  const fetchMap = {
-    announcement: async ({ search, page }: any) => {
-      const res = await fetch(`/api/announcement`);
-      const data = await res.json();
-      const filtered = data.filter((item: Announcement) =>
-        item.title.toLowerCase().includes(search.toLowerCase())
-      );
-      const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-      return { data: paginated, total: filtered.length };
-    },
-    sermon: async ({ search, page }: any) => {
-      const res = await fetch(`/api/sermon`);
-      const data = await res.json();
-      const filtered = data.filter((item: Sermon) =>
-        item.topic.toLowerCase().includes(search.toLowerCase()) ||
-        item.preacher.toLowerCase().includes(search.toLowerCase())
-      );
-      const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-      return { data: paginated, total: filtered.length };
-    },
-    followUp: async ({ search, page }: any) => {
-      const res = await fetch(`/api/followup`);
-      const data = await res.json();
-      const filtered = data.filter((item: FollowUp) =>
-        item.name.toLowerCase().includes(search.toLowerCase()) ||
-        item.phone.includes(search) ||
-        item.assignedTo.toLowerCase().includes(search.toLowerCase())
-      );
-      const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-      return { data: paginated, total: filtered.length };
-    },
-  };
+  // const fetchMap = {
+  //   announcement: async ({ search, page }: any) => {
+  //     const res = await fetch(`/api/announcement`);
+  //     const data = await res.json();
+  //     const filtered = data.filter((item: Announcement) =>
+  //       item.title.toLowerCase().includes(search.toLowerCase())
+  //     );
+  //     const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  //     return { data: paginated, total: filtered.length };
+  //   },
+  //   sermon: async ({ search, page }: any) => {
+  //     const res = await fetch(`/api/sermon`);
+  //     const data = await res.json();
+  //     const filtered = data.filter((item: Sermon) =>
+  //       item.topic.toLowerCase().includes(search.toLowerCase()) ||
+  //       item.preacher.toLowerCase().includes(search.toLowerCase())
+  //     );
+  //     const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  //     return { data: paginated, total: filtered.length };
+  //   },
+  //   followUp: async ({ search, page }: any) => {
+  //     const res = await fetch(`/api/followup`);
+  //     const data = await res.json();
+  //     const filtered = data.filter((item: FollowUp) =>
+  //       item.name.toLowerCase().includes(search.toLowerCase()) ||
+  //       item.phone.includes(search) ||
+  //       item.assignedTo.toLowerCase().includes(search.toLowerCase())
+  //     );
+  //     const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  //     return { data: paginated, total: filtered.length };
+  //   },
+  // };
+
+
+const fetchMap = {
+  announcement: async ({ search, page }: any) => {
+  const res = await fetch(`/api/announcement`);
+  const data = await res.json();
+
+  const filtered = data.filter((item: Announcement) =>
+    item.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const sorted = filtered
+    .filter(item => item.date && item.time)
+    .sort((a, b) => {
+      const dateA = new Date(`${a.date}T${a.time}`);
+      const dateB = new Date(`${b.date}T${b.time}`);
+      return dateB.getTime() - dateA.getTime(); // newest first
+    });
+
+  const paginated = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  return { data: paginated, total: sorted.length };
+},
+  sermon: async ({ search, page }: any) => {
+  const res = await fetch(`/api/sermon`);
+  const data = await res.json();
+
+  const filtered = data.filter((item: Sermon) =>
+    item.topic.toLowerCase().includes(search.toLowerCase()) ||
+    item.preacher.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const sorted = filtered
+    .filter(item => item.date) // remove undefined/null dates
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  const paginated = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  return { data: paginated, total: sorted.length };
+},
+
+  followUp: async ({ search, page }: any) => {
+    const res = await fetch(`/api/followup`);
+    const data = await res.json();
+
+    const filtered = data.filter((item: FollowUp) =>
+      item.name.toLowerCase().includes(search.toLowerCase()) ||
+      item.phone.includes(search) ||
+      item.assignedTo.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const sorted = filtered.sort(
+      (a, b) => b.id - a.id // Assuming most recent have higher IDs
+    );
+
+    const paginated = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+    return { data: paginated, total: sorted.length };
+  },
+};
+
+
+
+
+
 
   const submitMap = {
     announcement: async (form: any) => {
@@ -308,18 +381,21 @@ export default function Admin() {
               />
             </div>
           </div>
-
-          <DataFormModal<any>
-            isOpen={modalOpen}
-            onClose={closeModal}
-            onSubmit={async (form) => {
-              await submitMap[activeTab](form);
-              triggerRefresh();
-            }}
-            initialData={editData || {}}
-            fields={formFieldsMap[activeTab]}
-            mode={editData ? "update" : "create"}
-          />
+          {modalOpen && (
+            <div className={styles.modalOverlay}>
+              <DataFormModal<any>
+                isOpen={modalOpen}
+                onClose={closeModal}
+                onSubmit={async (form) => {
+                  await submitMap[activeTab](form);
+                  triggerRefresh();
+                }}
+                initialData={editData || {}}
+                fields={formFieldsMap[activeTab]}
+                mode={editData ? "update" : "create"}
+              />
+            </div>
+          )}
         </section>
       )}
     </>

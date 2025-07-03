@@ -1,8 +1,7 @@
-// app/pages/admin/page.tsx
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useSearchParams, useRouter} from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Hero from "@/app/components/Hero";
 import Button from "@/app/components/Button";
 import DataTable from "@/app/components/Table";
@@ -36,16 +35,20 @@ export default function Admin() {
   const [authenticated, setAuthenticated] = useState(false);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
+  const [phoneNumbers, setPhoneNumbers] = useState<string[]>([]);
+  const [showNumbers, setShowNumbers] = useState(false);
+
   useEffect(() => {
-  if (!authenticated && passwordInputRef.current) {
-    passwordInputRef.current.focus();
+    if (!authenticated && passwordInputRef.current) {
+      passwordInputRef.current.focus();
     }
   }, [authenticated]);
-  
-const openCreate = () => {
+
+  const openCreate = () => {
     setEditData(null);
     setModalOpen(true);
   };
+
   const bulkMessages = () => {
     router.push("https://www.bulksmsnigeria.com/app/bulksms/welcome");
   };
@@ -75,50 +78,63 @@ const openCreate = () => {
     ],
   };
 
-const fetchMap = {
-  followUp: async ({ search, page }: any) => {
-    const res = await fetch(`/api/followup`);
-    const data = await res.json();
-    const filtered = data.filter((item: FollowUp) =>
-      item.name.toLowerCase().includes(search.toLowerCase()) ||
-      item.phone.includes(search) ||
-      item.assignedTo.toLowerCase().includes(search.toLowerCase())
-    );
-    const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-    return { data: paginated, total: filtered.length };
-  },
-};
+  const fetchMap = {
+    followUp: async ({ search, page }: any) => {
+      const res = await fetch(`/api/followup`);
+      const data = await res.json();
+      const filtered = data.filter((item: FollowUp) =>
+        item.name.toLowerCase().includes(search.toLowerCase()) ||
+        item.phone.includes(search) ||
+        item.assignedTo.toLowerCase().includes(search.toLowerCase())
+      );
+      const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+      return { data: paginated, total: filtered.length };
+    },
+  };
 
-const submitMap = {
-followUp: async (form: any) => {
-  try {
-    const method = form.id ? "PUT" : "POST";
-    await fetch("/api/followup", {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    toast.success("Saved successfully");
-  } catch {
-    toast.error("Failed to save");
-  }
- },
-};
+  const submitMap = {
+    followUp: async (form: any) => {
+      try {
+        const method = form.id ? "PUT" : "POST";
+        await fetch("/api/followup", {
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        });
+        toast.success("Saved successfully");
+      } catch {
+        toast.error("Failed to save");
+      }
+    },
+  };
 
-const deleteMap = {
-  followUp: async (id: number) => {
-    await fetch(`/api/followup?id=${id}`, { method: "DELETE" });
-    triggerRefresh();
-  },
-};
+  const deleteMap = {
+    followUp: async (id: number) => {
+      await fetch(`/api/followup?id=${id}`, { method: "DELETE" });
+      triggerRefresh();
+    },
+  };
 
-const handleAuthentication = () => {
-  if (followUpTeam.includes(password.trim())) {
-    setAuthenticated(true);
-  } else {
-    toast.error("Incorrect password. Access Denied!");
-  }
-};
+  const handleAuthentication = () => {
+    if (followUpTeam.includes(password.trim())) {
+      setAuthenticated(true);
+    } else {
+      toast.error("Incorrect password. Access Denied!");
+    }
+  };
+
+  const extractNumbers = async () => {
+    try {
+      const res = await fetch("/api/followup");
+      const data = await res.json();
+      const numbers = data.map((item: FollowUp) => item.phone);
+      setPhoneNumbers(numbers);
+      setShowNumbers(true);
+    } catch (error) {
+      console.error("Failed to extract numbers:", error);
+      toast.error("Could not fetch phone numbers.");
+    }
+  };
 
   return (
     <>
@@ -134,10 +150,7 @@ const handleAuthentication = () => {
             placeholder="Enter password"
             className="border p-2 mb-2"
           />
-          <Button
-            tag="Submit"
-            onClick={handleAuthentication}
-          />
+          <Button tag="Submit" onClick={handleAuthentication} />
         </div>
       ) : (
         <section className={styles.adminPage}>
@@ -166,19 +179,38 @@ const handleAuthentication = () => {
                 enableDelete={deleteMap[activeTab]}
               />
             </div>
+
+            {/* Phone Numbers Display */}
+            <div className={styles.phoneNumbersSection}>
+              <Button tag="Get Contacts" onClick={extractNumbers} />
+              {showNumbers && phoneNumbers.length > 0 && (
+                <div className={styles.phoneNumbers}>
+                  <h3>Extracted Phone Numbers</h3>
+                  <p style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+                    {phoneNumbers.join(", ")}
+                  </p>
+                  <Button tag="Close" onClick={() => setShowNumbers(false)} />
+                </div>
+              )}
+            </div>
           </div>
 
-          <DataFormModal<any>
-            isOpen={modalOpen}
-            onClose={closeModal}
-            onSubmit={async (form) => {
-              await submitMap[activeTab](form);
-              triggerRefresh();
-            }}
-            initialData={editData || {}}
-            fields={formFieldsMap[activeTab]}
-            mode={editData ? "update" : "create"}
-          />
+          {modalOpen && (
+            <div className={styles.modalOverlay}>
+              <DataFormModal<any>
+                isOpen={modalOpen}
+                onClose={closeModal}
+                onSubmit={async (form) => {
+                  await submitMap[activeTab](form);
+                  triggerRefresh();
+                }}
+                initialData={editData || {}}
+                fields={formFieldsMap[activeTab]}
+                mode={editData ? "update" : "create"}
+              />
+            </div>
+          )}
+
         </section>
       )}
     </>

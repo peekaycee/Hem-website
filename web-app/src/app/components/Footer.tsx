@@ -30,7 +30,7 @@ export default function Footer(){
         <div className={styles.quicklinks}>
           <h3>Quicklinks</h3>
           <ul>
-            <li><Link href="/home">Home</Link></li>
+            <li><Link href="/">Home</Link></li>
             <li><Link href="/service">Services</Link></li>
             <li><Link href="/sermons">Sermons</Link></li>
             <li><Link href="/departments">Ministries</Link></li>

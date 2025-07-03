@@ -20,6 +20,11 @@ const faqs = [
     question: '3. What is the name of your church?',
     answer: 'His Everlasting Mercy parish.',
   },
+  {
+    id: 4,
+    question: '4. What is the name of your pastor?',
+    answer: 'Pastor Gbadegesin Adedamola',
+  },
 ];
 
 export default function Faq() {

@@ -3,7 +3,7 @@
     "title": "aaa",
     "venue": "aaa",
     "description": "aaa",
-    "date": "2025-07-05",
+    "date": "2025-07-19",
     "time": "14:51",
     "ministering": "aaa",
     "image": "Image12",
@@ -20,13 +20,23 @@
     "id": 2
   },
   {
-    "title": "kkk",
-    "venue": "kkk",
+    "title": "Lorem Iscum Lavrush",
+    "venue": "kkkadhsjkhojahjvhlavnlnjklavjknbkjkva askkvhlkjsvd skjvhalkjhlkas avhnlakjhvlkvasd jshlvkasjhjklhasv sajhvlakjashlkjasvh kjslhvjslkhjlkhvsa sjkvlhjhvklhjklasv s\\hlkj\\hjklsvv\\ ",
     "description": "kkk",
     "date": "2025-08-10",
     "time": "16:57",
     "ministering": "kkk",
     "image": "Image14",
     "id": 3
+  },
+  {
+    "title": "aaabbb cccddff",
+    "venue": "sadfsgvsgsa",
+    "description": "adfsa fsgsfg sgfsgffsdg rgsdfgdfsg",
+    "date": "2025-08-08",
+    "time": "16:45",
+    "ministering": "Pst. Godwin",
+    "image": "Image12",
+    "id": 4
   }
 ]

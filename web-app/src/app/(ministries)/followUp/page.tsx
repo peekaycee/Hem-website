@@ -37,6 +37,7 @@ export default function Admin() {
 
   const [phoneNumbers, setPhoneNumbers] = useState<string[]>([]);
   const [showNumbers, setShowNumbers] = useState(false);
+  const [loading, setLoading] = useState(false); // ✅ loading state
 
   useEffect(() => {
     if (!authenticated && passwordInputRef.current) {
@@ -123,7 +124,20 @@ export default function Admin() {
     }
   };
 
+  const copyToClipboard = () => {
+    if (phoneNumbers.length === 0) {
+      toast.error("No phone numbers to copy.");
+      return;
+    }
+
+    const textToCopy = phoneNumbers.join(", ");
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => toast.success("Phone numbers copied to clipboard!"))
+      .catch(() => toast.error("Failed to copy phone numbers."));
+  };
+
   const extractNumbers = async () => {
+    setLoading(true); // ✅ Start loading
     try {
       const res = await fetch("/api/followup");
       const data = await res.json();
@@ -133,6 +147,8 @@ export default function Admin() {
     } catch (error) {
       console.error("Failed to extract numbers:", error);
       toast.error("Could not fetch phone numbers.");
+    } finally {
+      setLoading(false); // ✅ End loading
     }
   };
 
@@ -182,14 +198,20 @@ export default function Admin() {
 
             {/* Phone Numbers Display */}
             <div className={styles.phoneNumbersSection}>
-              <Button tag="Get Contacts" onClick={extractNumbers} />
+              <Button
+                tag={loading ? "Extracting..." : "Extract Phone Numbers"}
+                onClick={extractNumbers}
+                disabled={loading}
+              />
               {showNumbers && phoneNumbers.length > 0 && (
                 <div className={styles.phoneNumbers}>
-                  <h3>Extracted Phone Numbers</h3>
                   <p style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
                     {phoneNumbers.join(", ")}
                   </p>
-                  <Button tag="Close" onClick={() => setShowNumbers(false)} />
+                  <div className={styles.controlBtns}>
+                    <Button tag="Copy" onClick={copyToClipboard} />
+                    <Button tag="Close" onClick={() => setShowNumbers(false)} />
+                  </div>
                 </div>
               )}
             </div>
@@ -210,7 +232,6 @@ export default function Admin() {
               />
             </div>
           )}
-
         </section>
       )}
     </>

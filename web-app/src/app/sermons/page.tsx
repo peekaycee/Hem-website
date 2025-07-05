@@ -34,13 +34,14 @@ export default function Sermons() {
     fetchSermons();
   }, []);
 
-  const filteredSermons = sermons.filter(s =>
-    s.topic.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    s.preacher.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredSermons = sermons.filter(
+    (s) =>
+      s.topic.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.preacher.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const recentSermons = filteredSermons.slice(0, 3);
-  const librarySermons = filteredSermons.slice(3);
+  const recentSermons = sermons.slice(0, 3);
+  const librarySermons = sermons.slice(3);
   const paginatedLibrary = librarySermons.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
   const totalPages = Math.ceil(librarySermons.length / PAGE_SIZE);
 
@@ -68,37 +69,52 @@ export default function Sermons() {
       <div className={styles.sermonWrapper}>
         <div className={styles.sideBar}>
           <div className={styles.search}>
-            <input
-              name="searchTopic"
-              id="searchTopic"
-              placeholder="Search by topic or preacher..."
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1); // Reset page on new search
-              }}
-            />
+            <div style={{ position: "relative" }}>
+              <input
+                name="searchTopic"
+                id="searchTopic"
+                placeholder="Search by topic or preacher..."
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className={styles.clearButton}
+                  aria-label="Clear search"
+                >
+                  ×
+                </button>
+              )}
+            </div>
           </div>
           <Button tag="Recent" onClick={() => setActiveTab("recent")} />
           <Button tag="Library" onClick={() => setActiveTab("library")} />
         </div>
 
         <div className={styles.sermonContent}>
-          {/* Recent Tab */}
-          {activeTab === "recent" && (
+          {searchTerm ? (
+            <div className={styles.recent}>
+              <h1>Search Results</h1>
+              {filteredSermons.length > 0 ? (
+                filteredSermons.map(renderSermon)
+              ) : (
+                <p>No sermons match your search.</p>
+              )}
+            </div>
+          ) : activeTab === "recent" ? (
             <div className={styles.recent}>
               <h1>Recent Sermons</h1>
               {recentSermons.map(renderSermon)}
             </div>
-          )}
-
-          {/* Library Tab with Pagination */}
-          {activeTab === "library" && (
+          ) : (
             <div className={styles.library}>
               <h1>Sermon Library</h1>
-              {paginatedLibrary.map(renderSermon)}
+              {paginatedLibrary.map((sermon, i) => renderSermon(sermon, i))}
 
-              {/* Pagination Controls */}
               <div className={styles.pagination}>
                 {Array.from({ length: totalPages }, (_, i) => (
                   <button

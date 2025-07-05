@@ -18,27 +18,32 @@ const formatTime = (timeStr: string) => {
   return `${hr}:${minute.toString().padStart(2, "0")} ${ampm}`;
 };
 
+const imageMap: Record<string, any> = {
+  Image11,
+  Image12,
+  Image13,
+  Image14,
+};
+
+// Enrich each program with date and image
+const enrichedPrograms = [...ProgramData].map((program) => ({
+  ...program,
+  image: imageMap[program.image] || Image12,
+  fullDate: new Date(`${program.date}T${program.time}`),
+}));
+
+// Export first 6 images for external use (e.g. home page Events section)
+export const announcementImages = enrichedPrograms
+  .map((p) => p.image)
+  .slice(0, 6);
+
+// Assume the last one added is the latest
+const nextProgram = enrichedPrograms[enrichedPrograms.length - 1];
+const scheduledPrograms = enrichedPrograms
+  .slice(0, enrichedPrograms.length - 1)
+  .reverse();
+
 export default function Announcement() {
-  const imageMap: Record<string, any> = {
-    Image11,
-    Image12,
-    Image13,
-    Image14,
-  };
-
-  // Enrich each program with date and image
-  const enrichedPrograms = [...ProgramData].map((program) => ({
-    ...program,
-    image: imageMap[program.image] || Image12,
-    fullDate: new Date(`${program.date}T${program.time}`),
-  }));
-
-  // Assume the last one added is the latest
-  const nextProgram = enrichedPrograms[enrichedPrograms.length - 1];
-  const scheduledPrograms = enrichedPrograms
-    .slice(0, enrichedPrograms.length - 1)
-    .reverse(); // reverse to show most recent first
-
   return (
     <section className={styles.announcementPage}>
       <Hero title="Programs" id={styles.announcement} />
@@ -51,8 +56,14 @@ export default function Announcement() {
                 <Image src={nextProgram.image} alt={nextProgram.title} />
               </div>
               <div className={styles.announcementBriefs}>
-                <h2>{nextProgram.title} <span>- happening @{nextProgram.venue}</span></h2>
-                <p>{formatDate(nextProgram.date)} | {formatTime(nextProgram.time)}</p>
+                <h2>
+                  {nextProgram.title}{" "}
+                  <span>- happening @{nextProgram.venue}</span>
+                </h2>
+                <p>
+                  {formatDate(nextProgram.date)} |{" "}
+                  {formatTime(nextProgram.time)}
+                </p>
                 <p>{nextProgram.description}</p>
               </div>
             </div>
@@ -68,8 +79,12 @@ export default function Announcement() {
                   <Image src={program.image} alt={program.title} />
                 </div>
                 <div className={styles.announcementBriefs}>
-                  <h2>{program.title} <span>- happening @{program.venue}</span></h2>
-                  <p>{formatDate(program.date)} | {formatTime(program.time)}</p>
+                  <h2>
+                    {program.title} <span>- happening @{program.venue}</span>
+                  </h2>
+                  <p>
+                    {formatDate(program.date)} | {formatTime(program.time)}
+                  </p>
                   <p>{program.description}</p>
                 </div>
               </div>

@@ -48,6 +48,17 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--secondary-50);
 }
+.clearButton{
+  position: absolute;
+  right: -85px;
+  top: 0.5rem;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #999;
+}
 .sideBar button{
   width: 100%;
   margin: 0.5em auto;

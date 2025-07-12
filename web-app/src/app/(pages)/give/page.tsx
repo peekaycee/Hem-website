@@ -41,7 +41,7 @@ export default function Give() {
     setAmount("");
   };
 
-  const handleSuccess = (ref: any) => {
+  const handleSuccess = (ref: { reference: string }) => {
     alert("Payment successful! Reference: " + ref.reference);
     clearForm(); // ✅ Clear input fields
   };
@@ -137,6 +137,8 @@ export default function Give() {
                 placeholder="Amount (NGN)"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
+                min={1000}
+                step={100}
                 required
               />
             </div>

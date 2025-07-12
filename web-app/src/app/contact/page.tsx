@@ -49,7 +49,7 @@ export default function Contact() {
 
           <div className={styles.formGroup}>
             <label htmlFor="name">Name:</label>
-            <input type="text" id="name" name="name" required />
+            <input type="text" id="name" name="name" required autoFocus />
           </div>
 
           <div className={styles.formGroup}>

@@ -85,6 +85,7 @@ export default function PrayersAndCounselling() {
               placeholder="Your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              autoFocus
             />
             <input
               type="tel"

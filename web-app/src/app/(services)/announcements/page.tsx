@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Image from 'next/image';
@@ -60,11 +61,14 @@ export default function Announcement() {
                   {nextProgram.title}{" "}
                   <span>- happening @{nextProgram.venue}</span>
                 </h2>
-                <p>
+                <p className={styles.dateTime}>
                   {formatDate(nextProgram.date)} |{" "}
                   {formatTime(nextProgram.time)}
                 </p>
-                <p>{nextProgram.description}</p>
+                 <p className={styles.ministering}>
+                   <span>Ministering :</span> {nextProgram.ministering}
+                  </p>
+                <p className={styles.expectation}>{nextProgram.description}</p>
               </div>
             </div>
           </div>
@@ -82,10 +86,13 @@ export default function Announcement() {
                   <h2>
                     {program.title} <span>- happening @{program.venue}</span>
                   </h2>
-                  <p>
+                  <p className={styles.dateTime}>
                     {formatDate(program.date)} | {formatTime(program.time)}
                   </p>
-                  <p>{program.description}</p>
+                  <p className={styles.ministering}>
+                   <span>Ministering : </span>{program.ministering}
+                  </p>
+                  <p  className={styles.expectation}>{program.description}</p>
                 </div>
               </div>
             ))}

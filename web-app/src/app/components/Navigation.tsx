@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from './components.module.css';
 import Image from 'next/image';
-import { Twitter, Instagram, Facebook } from '../../../public/images/index';
+import { Youtube, Instagram, Facebook } from '../../../public/images/index';
 import { ChevronDown } from "lucide-react";
 
 export default function Navigation() {
@@ -20,7 +20,7 @@ export default function Navigation() {
         <p>9, Redeemed Avenue, Off Remlek Bus-stop, Badore</p>
         <div className={styles.socialIcons}>
           <a href="https://twitter.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title='Twitter'>
-            <Image src={Twitter} alt="Twitter" width={20} height={20} />
+            <Image src={Youtube} alt="Twitter" width={20} height={20} />
           </a><span>|</span>
           <a href="https://instagram.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title='Instagram'>
             <Image src={Instagram} alt="Instagram" width={20} height={20} />

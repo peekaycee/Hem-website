@@ -5,11 +5,76 @@ import Hero from "@/app/components/Hero";
 import styles from './give.module.css';
 import Button from "@/app/components/Button";
 
+// ✅ Dynamically import PaystackButton on the client side only
+import dynamic from "next/dynamic";
+const PaystackButton = dynamic(() =>
+  import("react-paystack").then((mod) => mod.PaystackButton),
+  { ssr: false }
+);
+
 export default function Give() {
   const [formTitle, setFormTitle] = useState("Offering");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [amount, setAmount] = useState("");
+
+  const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "";
+
+  // Subaccount mapping by category
+  const subaccountMap: Record<string, string> = {
+    Offering: "ACCT_yxr9wcq3bjitw8w",
+    Tithe: "ACCT_eal1s4xwrolnldl",
+    // "Building Project": "ACCT_XXXXX3",
+    // Mission: "ACCT_XXXXX4",
+    // Welfare: "ACCT_XXXXX5",
+  };
 
   const handleCategoryClick = (category: string) => {
     setFormTitle(category);
+  };
+
+  const clearForm = () => {
+    setFullName("");
+    setEmail("");
+    setPhone("");
+    setAmount("");
+  };
+
+  const handleSuccess = (ref: any) => {
+    alert("Payment successful! Reference: " + ref.reference);
+    clearForm(); // ✅ Clear input fields
+  };
+
+  const handleClose = () => {
+    alert("Payment closed.");
+  };
+
+  const paystackConfig = {
+    reference: new Date().getTime().toString(),
+    email,
+    amount: Number(amount) * 100, // kobo
+    publicKey,
+    subaccount: subaccountMap[formTitle], // ✅ Route to selected account
+    metadata: {
+      custom_fields: [
+        {
+          display_name: "Full Name",
+          variable_name: "fullName",
+          value: fullName,
+        },
+        {
+          display_name: "Phone Number",
+          variable_name: "phone",
+          value: phone,
+        },
+        {
+          display_name: "Category",
+          variable_name: "category",
+          value: formTitle,
+        },
+      ],
+    },
   };
 
   return (
@@ -18,43 +83,72 @@ export default function Give() {
 
       <section className={styles.giveContainer}>
         <div className={styles.leftSide}>
-          <Button tag="Offering" className={styles.categoryBtn} onClick={() => handleCategoryClick("Offering")} />
-          <Button tag="Tithe" className={styles.categoryBtn} onClick={() => handleCategoryClick("Tithe")} />
-          <Button tag="Building Project" className={styles.categoryBtn} onClick={() => handleCategoryClick("Building Project")} />
-          <Button tag="Mission" className={styles.categoryBtn} onClick={() => handleCategoryClick("Mission")} />
+          {["Offering", "Tithe", "Building Project", "Mission", "Welfare"].map(category => (
+            <Button
+              key={category}
+              tag={category}
+              className={styles.categoryBtn}
+              onClick={() => handleCategoryClick(category)}
+            />
+          ))}
         </div>
 
         <div className={styles.rightSide}>
-          <form>
+          <form onSubmit={(e) => e.preventDefault()}>
             <h1>{formTitle}</h1>
 
             <div className={styles.formDivs}>
-              {/* <label htmlFor="FullName">Full Name:</label> */}
-              <input type="text" id="FullName" name="FullName" placeholder="Full Name" required />
+              <input
+                type="text"
+                id="FullName"
+                placeholder="Full Name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+              />
             </div>
 
             <div className={styles.formDivs}>
-              {/* <label htmlFor="Email">Email:</label> */}
-              <input type="text" id="Email" name="Email" placeholder="Email" required />
+              <input
+                type="email"
+                id="Email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
 
             <div className={styles.formDivs}>
-              {/* <label htmlFor="PhoneNumber">Phone Number:</label> */}
-              <input type="text" id="PhoneNumber" name="PhoneNumber" placeholder="Phone Number" required />
+              <input
+                type="tel"
+                id="PhoneNumber"
+                placeholder="Phone Number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
             </div>
 
             <div className={styles.formDivs}>
-              {/* <label htmlFor="amount">Amount:</label> */}
-              <input type="text" id="amount" name="amount" placeholder="Amount (₦----)" required />
+              <input
+                type="number"
+                id="amount"
+                placeholder="Amount (NGN)"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                required
+              />
             </div>
 
-            {/* <div className={styles.formDivs}>
-              <label htmlFor="Address">Address:</label>
-              <input type="text" id="Address" name="Address" required />
-            </div> */}
-
             <div className={styles.formDivs}>
-              <Button tag={"Submit"} className={styles.giveButton} />
+              <PaystackButton
+                {...paystackConfig}
+                className={styles.giveButton}
+                text="Make Payment"
+                onSuccess={handleSuccess}
+                onClose={handleClose}
+              />
             </div>
           </form>
         </div>

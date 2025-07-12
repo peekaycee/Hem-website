@@ -26,7 +26,7 @@
   {
     "name": "jude",
     "phone": "098978788",
-    "assignedTo": "kelly",
+    "assignedTo": "Peekay",
     "id": 5
   },
   {
@@ -44,7 +44,7 @@
   {
     "name": "tyhuj",
     "phone": "4567",
-    "assignedTo": "ytrew",
+    "assignedTo": "Genesis",
     "id": 8
   },
   {
@@ -52,12 +52,6 @@
     "phone": "098978788",
     "assignedTo": "kelly",
     "id": 9
-  },
-  {
-    "name": "fff",
-    "phone": "567",
-    "assignedTo": "rtyhujy",
-    "id": 10
   },
   {
     "name": "jude",
@@ -68,14 +62,8 @@
   {
     "name": "fff",
     "phone": "567",
-    "assignedTo": "rty",
+    "assignedTo": "Rita",
     "id": 13
-  },
-  {
-    "name": "Klau",
-    "phone": "35534",
-    "assignedTo": "sdf",
-    "id": 15
   },
   {
     "name": "kay",
@@ -86,7 +74,7 @@
   {
     "name": "kaykay",
     "phone": "098765431",
-    "assignedTo": "jay",
+    "assignedTo": "jayjay",
     "id": 17
   }
 ]

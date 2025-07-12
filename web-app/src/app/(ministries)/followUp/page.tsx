@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -137,7 +138,7 @@ export default function Admin() {
   };
 
   const extractNumbers = async () => {
-    setLoading(true); // ✅ Start loading
+    setLoading(true); // Start loading
     try {
       const res = await fetch("/api/followup");
       const data = await res.json();
@@ -148,7 +149,7 @@ export default function Admin() {
       console.error("Failed to extract numbers:", error);
       toast.error("Could not fetch phone numbers.");
     } finally {
-      setLoading(false); // ✅ End loading
+      setLoading(false); // End loading
     }
   };
 
@@ -156,17 +157,18 @@ export default function Admin() {
     <>
       {!authenticated ? (
         <div className={styles.authBox}>
-          <h1>Follow Up Team Members Only</h1>
-          <h3>Enter Password to Access</h3>
-          <input
-            ref={passwordInputRef}
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter password"
-            className="border p-2 mb-2"
-          />
-          <Button tag="Submit" onClick={handleAuthentication} />
+          <div className={styles.authBoxCard}>
+            <h1>Follow Up Team Only</h1>
+            <input
+              ref={passwordInputRef}
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter Password to Access"
+              autoFocus
+            />
+            <Button tag="Submit" onClick={handleAuthentication} />
+          </div>
         </div>
       ) : (
         <section className={styles.adminPage}>
@@ -180,6 +182,7 @@ export default function Admin() {
                   className="border p-2 mb-2 w-full"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
+                  autoFocus
                 />
                 <Button tag={`Add ${activeTab}`} onClick={openCreate} />
                 <Button tag="Send Bulk Message" onClick={bulkMessages} />

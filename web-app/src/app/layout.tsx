@@ -3,6 +3,7 @@ import './globals.css';
 import Header from './components/Navigation';
 import Footer from './components/Footer';
 import { Toaster } from "react-hot-toast";
+import LiveChat from "./components/liveChat";
 
 export const metadata: Metadata = {
   title: "HEM Parish",
@@ -19,7 +20,8 @@ export default function RootLayout({
       <body>
         <Header />
          <Toaster position="top-right" />
-        {children}       
+        {children}
+        <LiveChat/>       
         <Footer />
       </body>
     </html>

@@ -232,6 +232,7 @@ ul.sublinks:hover {
   font-weight: var(--regular);
   color: var(--foreground);
   margin-bottom: 10px;
+  opacity: .8;
 }
 .socials > h2{
   font-family: var(--bodyFont);
@@ -269,7 +270,8 @@ ul.sublinks:hover {
 .connect a{
  text-decoration: none;
  color: var(--foreground);
- transition: all 0.3s ease;
+ transition: all 0.3s ease; 
+ opacity: .8;
 }
 .quicklinks a:hover,
 .connect a:hover{
@@ -282,6 +284,7 @@ ul.sublinks:hover {
   font-weight: var(--medium);
   margin-bottom: 8px;
 }
+.footerAddress address,
 .serviceHour pre{
   font-family: var(--bodyFont);
   font-size: var(--p3);
@@ -300,8 +303,14 @@ ul.sublinks:hover {
   color: var(--background);
   font-family: var(--bodyFont);
   font-weight: var(--regular);
+  font-size: calc(var(--s)/1.3);
 }
-
+.footerAddress{
+  margin-top: 1em;
+}
+.footerAddress address{
+  font-style: normal;
+}
 /* BUTTON */
 .button{
   background-color: var(--tertiary-100);
@@ -330,25 +339,29 @@ ul.sublinks:hover {
 
 /* TABLE */
 .dataTable {
-  width: fit-content;
+  width: 100%;
   height: auto;
   font-family: var(--bodyFont);
   color: var(--foreground);
+  padding: 1rem;
   margin-top: 1em;
 }
 
 .tableWrapper {
-  overflow-x: auto;   /*===========No need==============*/
-  width: 100%;
+  overflow-x: hidden;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  user-select: none;
+} 
+
+.dragScroll {
+  overflow-x: hidden;
+  white-space: nowrap;
+  cursor: grab;
 }
 
-.dataTable table {
-  width: 100%;
-  height: 100%;
-  border-collapse: collapse;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  font-size: var(--p3);
-  cursor: default;
+.dragScroll:active {
+  cursor: grabbing;
 }
 
 .dataTable thead {
@@ -363,18 +376,17 @@ ul.sublinks:hover {
 
 .dataTable thead:hover{
   color: var(--foreground);
-}
-
-.dataTable th, .dataTable td {
-  word-wrap: wrap;
-  width: 100%; 
-  height: 100%;
+} 
+.dataTable th,
+.dataTable td {
   padding: 1em;
-  /* border: 1px solid var(--secondary-100); */
-}
-.dataTable td:last-child{
-  display: flex;
-  align-items: center;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;        /* Prevents line break */
+  overflow: hidden;           /* Hides overflowed content */
+  text-overflow: ellipsis;    /* Adds the ellipsis */
+  max-width: 350px; 
 }
 .dataTable td button{
   margin: 0 3px;
@@ -389,16 +401,17 @@ ul.sublinks:hover {
 .dataTable tr:hover {
   background-color: var(--secondary-50);
 }
-
 .dataTableButtons {
-  width: 100%;
-  margin: 1rem 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  font-size: var(--p2);
+  justify-content: space-between;
+  margin: 1rem 0;
+  font-size: var(--p3);
 }
+.paginationText {
+  font-weight: var(--medium);
+}
+
 .dataModalTable{
   position: sticky; 
   width: 35%;
@@ -418,11 +431,10 @@ ul.sublinks:hover {
 }
 .table{
   width: 100%;
+  min-width: 700px;
   height: auto;
-  border-radius: var(--br-1);
-  display: flex;
-  flex-direction: column;
-  padding: 0.5em 0;
+  border-collapse: collapse;
+  border-radius: var(--br-2);
 }
 .table label{
   width: 100%;
@@ -446,7 +458,6 @@ ul.sublinks:hover {
   border-radius: var(--br-1);
   letter-spacing: 1px;
   color: var(--foreground);
-  opacity: 0.85;
 }
 .buttons{
   margin-top: 10px;
@@ -465,5 +476,27 @@ ul.sublinks:hover {
   border-radius:  0 var(--br-1) var(--br-1) 0;
   box-shadow: none;
 }
+.liveChatBox{
+  width: 45px;
+  height: 45px;
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  border-radius: 50%;
+  z-index: 2;
+  cursor: pointer;
+}
+.liveChatBox img{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+
+
+
 
 

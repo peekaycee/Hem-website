@@ -5,8 +5,8 @@
     "description": "aaa",
     "date": "2025-07-19",
     "time": "14:51",
-    "ministering": "aaa",
-    "image": "Image12",
+    "ministering": "Rev. Joe Joseph",
+    "image": "Image13",
     "id": 1
   },
   {
@@ -15,28 +15,38 @@
     "description": "ddd",
     "date": "2025-07-27",
     "time": "03:49",
-    "ministering": "ddd",
+    "ministering": "Sis. Ireti",
     "image": "Image13",
     "id": 2
   },
   {
-    "title": "Lorem Iscum Lavrush",
-    "venue": "kkkadhsjkhojahjvhlavnlnjklavjknbkjkva askkvhlkjsvd skjvhalkjhlkas avhnlakjhvlkvasd jshlvkasjhjklhasv sajhvlakjashlkjasvh kjslhvjslkhjlkhvsa sjkvlhjhvklhjklasv s\\hlkj\\hjklsvv\\ ",
-    "description": "kkk",
-    "date": "2025-08-10",
-    "time": "16:57",
-    "ministering": "kkk",
-    "image": "Image14",
-    "id": 3
-  },
-  {
-    "title": "aaabbb cccddff",
-    "venue": "sadfsgvsgsa",
-    "description": "adfsa fsgsfg sgfsgffsdg rgsdfgdfsg",
+    "title": "God's Love",
+    "venue": "HEMA Parish",
+    "description": "For God so love the orld that He gave His only begotten son, that hosoever believes in Him will not perish but have everlasting life.",
     "date": "2025-08-08",
     "time": "16:45",
     "ministering": "Pst. Godwin",
     "image": "Image12",
     "id": 4
+  },
+  {
+    "title": "Next Level Miracle",
+    "venue": "EDWJ",
+    "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. jh jhjhk jkhjepellat distinctio! hhujhj bggftr nkjkjk joy to thr world",
+    "date": "2025-08-10",
+    "time": "16:07",
+    "ministering": "Pst. Davidson",
+    "image": "Image12",
+    "id": 5
+  },
+  {
+    "title": "mnmnmnmnm",
+    "venue": "dydtcj",
+    "description": "hvckgjhglkghckjl",
+    "date": "2025-08-04",
+    "time": "14:46",
+    "ministering": "Pst. Jude",
+    "image": "Image14",
+    "id": 6
   }
 ]

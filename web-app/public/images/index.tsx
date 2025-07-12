@@ -9,7 +9,7 @@ export { default as Instagram } from './instagram-svgrepo-com.svg';
 export { default as Playbutton } from './play-button-svgrepo-com.svg';
 export { default as Pointer } from './pointer-svgrepo-com.svg';
 export { default as ScriptIcon } from './script-svgrepo-com.svg';
-export { default as Twitter } from './twitter-3-svgrepo-com.svg';
+export { default as Youtube } from './youtube.svg';
 export { default as VideoIcon } from './video-svgrepo-com.svg';
 export { default as Image1 } from './image1.jpg';
 export { default as Image2 } from './image2.jpg';

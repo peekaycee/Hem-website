@@ -1,7 +1,7 @@
 "use client";
 import Image  from 'next/image';
 import styles from './components.module.css';
-import { Twitter, Instagram, Facebook } from '../../../public/images/index';
+import { Youtube, Instagram, Facebook } from '../../../public/images/index';
 import Link from "next/link";
 
 export default function Footer(){
@@ -16,7 +16,7 @@ export default function Footer(){
             <h2>Follow Us</h2>
             <div className={styles.socialIcons}>
               <a href="https://twitter.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title="twitter">
-                <Image src={Twitter} alt="Twitter" width={22} height={22} />
+                <Image src={Youtube} alt="Twitter" width={22} height={22} />
               </a>
               <a href="https://instagram.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title="instagram">
                 <Image src={Instagram} alt="Instagram" width={22} height={22} />
@@ -50,16 +50,22 @@ export default function Footer(){
           </ul>
         </div>
         <div className={styles.serviceHour}>
-          <h3>Service Hour</h3>
-          <p>Sunday Services</p>
-          <pre>
-            First-Service:
-            8:00AM - 9:00AM
-          </pre>
-          <pre>
-            Second-Service:
-            9:00AM - 11:30AM
-          </pre>
+          <div>
+            <h3>Service Hour</h3>
+            <p>Sunday Services</p>
+            <pre>
+              First-Service:
+              8:00AM - 9:00AM
+            </pre>
+            <pre>
+              Second-Service:
+              9:00AM - 11:30AM
+            </pre>
+          </div>
+          <div className={styles.footerAddress}>
+            <h3>Address</h3>
+            <address>9, Redeemed Avenue, Off Remlek, Badore, Ajah, Lagos.</address>
+          </div>
         </div>
       </div>
       <div className={styles.copyright}>

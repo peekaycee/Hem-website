@@ -5,7 +5,15 @@ import Image from "next/image";
 import Hero from "../components/Hero";
 import Button from "../components/Button";
 import styles from "./sermons.module.css";
-import { VideoIcon, AudioIcon, ScriptIcon, Image12, Image13, Image14 } from "../../../public/images";
+import {
+  VideoIcon,
+  AudioIcon,
+  ScriptIcon,
+  Image12,
+  Image13,
+  Image14,
+} from "../../../public/images";
+import Link from "next/link";
 
 interface Sermon {
   id: number;
@@ -13,6 +21,9 @@ interface Sermon {
   preacher: string;
   description: string;
   date: string;
+  videoUrl: string;
+  audioUrl: string;
+  scriptUrl: string;
 }
 
 const imageMap = [Image12, Image13, Image14];
@@ -28,7 +39,9 @@ export default function Sermons() {
     const fetchSermons = async () => {
       const res = await fetch("/api/sermon");
       const data: Sermon[] = await res.json();
-      const sorted = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      const sorted = data.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
       setSermons(sorted);
     };
     fetchSermons();
@@ -42,8 +55,31 @@ export default function Sermons() {
 
   const recentSermons = sermons.slice(0, 3);
   const librarySermons = sermons.slice(3);
-  const paginatedLibrary = librarySermons.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const paginatedLibrary = librarySermons.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
   const totalPages = Math.ceil(librarySermons.length / PAGE_SIZE);
+
+  const buildMediaQuery = (
+    sermon: Sermon,
+    mediaType: "video" | "audio" | "script",
+    imageIndex: number
+  ) => {
+    const params = new URLSearchParams({
+      topic: sermon.topic,
+      preacher: sermon.preacher,
+      description: sermon.description,
+      date: sermon.date,
+      imageIndex: imageIndex.toString(),
+    });
+
+    if (mediaType === "video") params.append("videoUrl", sermon.videoUrl);
+    if (mediaType === "audio") params.append("audioUrl", sermon.audioUrl);
+    if (mediaType === "script") params.append("scriptUrl", sermon.scriptUrl);
+
+    return `/sermons/${sermon.id}?${params.toString()}`;
+  };
 
   const renderSermon = (sermon: Sermon, index: number) => (
     <div key={sermon.id} className={styles.librarySermon}>
@@ -51,13 +87,22 @@ export default function Sermons() {
         <Image src={imageMap[index % 3]} alt="Sermon Flyer" />
       </div>
       <div className={styles.sermonBriefs}>
-        <h2>{sermon.topic} <span>- By {sermon.preacher}</span></h2>
+        <h2>
+          {sermon.topic} <span>- By {sermon.preacher}</span>
+        </h2>
         <pre>{sermon.date}</pre>
         <p>{sermon.description}</p>
+
         <div className={styles.mediaIcons}>
-          <Image src={VideoIcon} alt="Video" width={20} height={20} />
-          <Image src={AudioIcon} alt="Audio" width={20} height={20} />
-          <Image src={ScriptIcon} alt="Script" width={20} height={20} />
+          <Link href={buildMediaQuery(sermon, "video", index % 3)}>
+            <Image src={VideoIcon} alt="Video" width={20} height={20} />
+          </Link>
+          <Link href={buildMediaQuery(sermon, "audio", index % 3)}>
+            <Image src={AudioIcon} alt="Audio" width={20} height={20} />
+          </Link>
+          <Link href={buildMediaQuery(sermon, "script", index % 3)}>
+            <Image src={ScriptIcon} alt="Script" width={20} height={20} />
+          </Link>
         </div>
       </div>
     </div>
@@ -69,30 +114,45 @@ export default function Sermons() {
       <div className={styles.sermonWrapper}>
         <div className={styles.sideBar}>
           <div className={styles.search}>
-            <div style={{ position: "relative" }}>
+            <div className={styles.inputWrapper}>
               <input
-                name="searchTopic"
-                id="searchTopic"
                 placeholder="Search by topic or preacher..."
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
                   setCurrentPage(1);
                 }}
+                autoFocus
               />
               {searchTerm && (
                 <button
-                  onClick={() => setSearchTerm("")}
+                  onClick={() => {
+                    setSearchTerm("");
+                    setCurrentPage(1);
+                  }}
                   className={styles.clearButton}
-                  aria-label="Clear search"
+                  type="button"
                 >
                   ×
                 </button>
               )}
             </div>
           </div>
-          <Button tag="Recent" onClick={() => setActiveTab("recent")} />
-          <Button tag="Library" onClick={() => setActiveTab("library")} />
+
+          <Button
+            tag="Recent"
+            onClick={() => {
+              setActiveTab("recent");
+              setSearchTerm("");
+            }}
+          />
+          <Button
+            tag="Library"
+            onClick={() => {
+              setActiveTab("library");
+              setSearchTerm("");
+            }}
+          />
         </div>
 
         <div className={styles.sermonContent}>
@@ -102,7 +162,9 @@ export default function Sermons() {
               {filteredSermons.length > 0 ? (
                 filteredSermons.map(renderSermon)
               ) : (
-                <p>No sermons match your search.</p>
+                <p className={styles.searchResponse}>
+                  No sermons match your search.
+                </p>
               )}
             </div>
           ) : activeTab === "recent" ? (
@@ -114,12 +176,13 @@ export default function Sermons() {
             <div className={styles.library}>
               <h1>Sermon Library</h1>
               {paginatedLibrary.map((sermon, i) => renderSermon(sermon, i))}
-
               <div className={styles.pagination}>
                 {Array.from({ length: totalPages }, (_, i) => (
                   <button
                     key={i + 1}
-                    className={`${styles.pageButton} ${currentPage === i + 1 ? styles.active : ""}`}
+                    className={`${styles.pageButton} ${
+                      currentPage === i + 1 ? styles.active : ""
+                    }`}
                     onClick={() => setCurrentPage(i + 1)}
                   >
                     {i + 1}

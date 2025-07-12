@@ -21,7 +21,7 @@
 }
 .scheduled,
 .next{
-  width: 70%;
+  width: 80%;
   height: auto;                        
   margin: 0.5em auto;
 }
@@ -32,7 +32,7 @@
 .next h1{
   font-family: var(--headerFont);
   font-weight: var(--bold);
-  font-size: var(--s);
+  font-size: var(--m);
   text-align: center;
   background-color: var(--tertiary-100);
   width: fit-content;
@@ -73,7 +73,7 @@
 }
 .announcementBriefs{
   flex: 1;
-  padding: 0.5em 1.5em;
+  padding: 0.5em 2em;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -82,20 +82,33 @@
 .announcementBriefs h2{
   font-family: var(--headerFont);
   font-weight: var(--bold);
-  font-size: var(--s);
+  font-size: var(--m);
 }
 .announcementBriefs span{
   font-family: var(--bodyFont);
   font-weight: var(--regular);
-  font-size: var(--p3);
-  font-style: italic;
+  font-size: var(--p2);
+  opacity: .8;
 }
-.announcementBriefs p{
+p.dateTime{
+  font-family: var(--bodyFont);
+  font-weight: var(--regular);
+  font-size: calc(var(--p2) - 1.5px);
+  opacity: .8;
+  margin-bottom: 15px;
+}
+p.expectation,
+p.ministering,
+p.ministering span{
   font-family: var(--bodyFont);
   font-weight: var(--regular);
   font-size: var(--p3);
-  font-style: italic;
-  margin: 3px 0 5px;
+  word-wrap: break-word;
+  margin-bottom: 5px;
+  opacity: .85;
+}
+p.ministering span{
+  font-weight: var(--bold);
 }
 .seeMoreButton{
   width: fit-content;

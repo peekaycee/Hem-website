@@ -7,13 +7,6 @@
     "id": 1
   },
   {
-    "topic": "ddd",
-    "preacher": "ddd",
-    "description": "ddd",
-    "date": "2025-07-03",
-    "id": 2
-  },
-  {
     "topic": "Joy is coming",
     "preacher": "Kalu",
     "description": "The joy of the Lord is our strength",
@@ -30,9 +23,12 @@
   {
     "topic": "gbgbgbgb gdggd jkfjjfi skjmklajloai ajkhjhua jhghjgah ajhnkaka kjahnjkajh ",
     "preacher": "ggbgbgbggb",
-    "description": "dfg",
+    "description": "abcde",
     "date": "2025-08-10",
-    "id": 5
+    "id": 5,
+    "videoUrl": "/videos/Hema-vid.mp4",
+    "audioUrl": "/audios/tlbeatedit.mp3",
+    "scriptUrl": "/docx/design_rules.docx"
   },
   {
     "topic": "Guide me Lord!",
@@ -46,6 +42,9 @@
     "preacher": "Kelly Jones",
     "description": "With the hands of the Lord He shall lift to a rock higher than high",
     "date": "2025-07-27",
-    "id": 7
+    "id": 7,
+    "videoUrl": "kkk",
+    "audioUrl": "lll",
+    "scriptUrl": "mmm"
   }
 ]

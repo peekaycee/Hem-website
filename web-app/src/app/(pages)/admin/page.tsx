@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -30,6 +31,9 @@ interface Sermon {
   preacher: string;
   description: string;
   date: string;
+  videoUrl: string;
+  audioUrl: string;
+  scriptUrl: string;
 }
 interface FollowUp {
   id: number;
@@ -40,15 +44,13 @@ interface FollowUp {
 
 type Tab = "announcement" | "sermon" | "followUp";
 
-interface FormModalProps<T> {
+interface FormModalProps {
   isOpen: boolean
   onClose: () => void
 }
 
 export default function Admin({
-  isOpen,
-  onClose
-}: FormModalProps<T>) {
+  }: FormModalProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialTab = (searchParams.get("tab") as Tab) || "announcement";
@@ -102,6 +104,9 @@ export default function Admin({
       { key: "preacher", label: "Preacher" },
       { key: "description", label: "Description" },
       { key: "date", label: "Date", type: "date" },
+      { key: "videoUrl", label: "Video Url"},
+      { key: "audioUrl", label: "Audio Url"},
+      { key: "scriptUrl", label: "Script Url" },
     ],
     followUp: [
       { key: "name", label: "Name" },
@@ -130,6 +135,9 @@ export default function Admin({
       { accessorKey: "preacher", header: "Preacher" },
       { accessorKey: "description", header: "Description" },
       { accessorKey: "date", header: "Date", cell: ({ row }) => formatDate(row.original.date), },
+      { accessorKey: "videoUrl", header: "Vidoe Url" },
+      { accessorKey: "audioUrl", header: "Audio Url" },
+      { accessorKey: "scriptUrl", header: "Script Url" },
     ],
     followUp: [
       { accessorKey: "id", header: "ID" },
@@ -138,40 +146,6 @@ export default function Admin({
       { accessorKey: "assignedTo", header: "Assigned To" },
     ],
   };
-
-  // const fetchMap = {
-  //   announcement: async ({ search, page }: any) => {
-  //     const res = await fetch(`/api/announcement`);
-  //     const data = await res.json();
-  //     const filtered = data.filter((item: Announcement) =>
-  //       item.title.toLowerCase().includes(search.toLowerCase())
-  //     );
-  //     const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-  //     return { data: paginated, total: filtered.length };
-  //   },
-  //   sermon: async ({ search, page }: any) => {
-  //     const res = await fetch(`/api/sermon`);
-  //     const data = await res.json();
-  //     const filtered = data.filter((item: Sermon) =>
-  //       item.topic.toLowerCase().includes(search.toLowerCase()) ||
-  //       item.preacher.toLowerCase().includes(search.toLowerCase())
-  //     );
-  //     const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-  //     return { data: paginated, total: filtered.length };
-  //   },
-  //   followUp: async ({ search, page }: any) => {
-  //     const res = await fetch(`/api/followup`);
-  //     const data = await res.json();
-  //     const filtered = data.filter((item: FollowUp) =>
-  //       item.name.toLowerCase().includes(search.toLowerCase()) ||
-  //       item.phone.includes(search) ||
-  //       item.assignedTo.toLowerCase().includes(search.toLowerCase())
-  //     );
-  //     const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-  //     return { data: paginated, total: filtered.length };
-  //   },
-  // };
-
 
 const fetchMap = {
   announcement: async ({ search, page }: any) => {
@@ -183,8 +157,8 @@ const fetchMap = {
   );
 
   const sorted = filtered
-    .filter(item => item.date && item.time)
-    .sort((a, b) => {
+    .filter((item: { date: any; time: any; }) => item.date && item.time)
+    .sort((a: { date: any; time: any; }, b: { date: any; time: any; }) => {
       const dateA = new Date(`${a.date}T${a.time}`);
       const dateB = new Date(`${b.date}T${b.time}`);
       return dateB.getTime() - dateA.getTime(); // newest first
@@ -204,8 +178,8 @@ const fetchMap = {
   );
 
   const sorted = filtered
-    .filter(item => item.date) // remove undefined/null dates
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    .filter((item: { date: any; }) => item.date) // remove undefined/null dates
+    .sort((a: { date: string | number | Date; }, b: { date: string | number | Date; }) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const paginated = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
@@ -223,7 +197,7 @@ const fetchMap = {
     );
 
     const sorted = filtered.sort(
-      (a, b) => b.id - a.id // Assuming most recent have higher IDs
+      (a: { id: number; }, b: { id: number; }) => b.id - a.id // Assuming most recent have higher IDs
     );
 
     const paginated = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -231,11 +205,6 @@ const fetchMap = {
     return { data: paginated, total: sorted.length };
   },
 };
-
-
-
-
-
 
   const submitMap = {
     announcement: async (form: any) => {
@@ -330,20 +299,21 @@ const fetchMap = {
     <>
       {!authenticated ? (
         <div className={styles.authBox}>
-          <h1>Admins Only</h1>
-          <h3>Enter Password to Access</h3>
-          <input
-            ref={passwordInputRef}
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter password"
-            className="border p-2 mb-2"
-          />
-          <Button
-            tag="Submit"
-            onClick={handleAdminAuthentication}
-          />
+          <div className={styles.authBoxCard}>
+            <h1>Admins Only</h1>
+            <input
+              ref={passwordInputRef}
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password to Access"
+              autoFocus
+            />
+            <Button
+              tag="Submit"
+              onClick={handleAdminAuthentication}
+            />
+          </div>
         </div>
       ) : (
         <section className={styles.adminPage}>
@@ -363,6 +333,7 @@ const fetchMap = {
                   className="border p-2 mb-2 w-full"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
+                  autoFocus
                 />
                 <Button tag={`Add ${activeTab}`} onClick={openCreate} />
                 {activeTab === "followUp" && (

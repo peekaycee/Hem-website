@@ -21,17 +21,29 @@
 .dig{
   width: 50%;
   height: auto;
-  font-family: var(--bodyFont);
   padding: 7em;
   display: flex;
   flex-direction: column;
   align-items: start;
   justify-content: center;
 }
-.dig h3,
-.dig em,
+.dig h3{
+  font-family: var(--headerFont);
+  font-weight: var(--bold);
+  font-size: var(--m);
+  margin-bottom: 3px;
+}
+.dig em{
+  font-family: var(--bodyFont);
+  font-weight: var(--regular);
+  font-size: var(--p2);
+}
 .dig p{
-  margin: 0.5em 0;
+  font-family: var(--bodyFont);
+  font-weight: var(--regular);
+  font-size: var(--p3);  
+  margin-top: 10px;
+  opacity: .8;
 }
 .left{
   order: 0;

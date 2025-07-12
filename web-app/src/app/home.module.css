@@ -85,6 +85,7 @@
   color: var(--foreground);
   text-align: justify;
   letter-spacing: 1px;
+  opacity: .8;
 }
 .prototype{
   position: relative;
@@ -110,14 +111,14 @@
   font-weight: var(--bold);
   font-size: var(--m);
   color: var(--foreground);
-  margin-bottom: 3px;
+  margin-bottom: 5px;
 }
 .projectContent p{
   font-family: var(--bodyFont);
   font-weight: var(--regular);
   font-size: var(--p2);
   color: var(--foreground);
-  margin-bottom: 15px;
+  margin-bottom: 15px;opacity: .8;
 }
 
 /* Events */
@@ -218,6 +219,7 @@
   font-family: var(--bodyFont);
   font-weight: var(--regular);
   font-size: calc(var(--p3)*0.8);
+  opacity: .8;
 }
 /* Testimonies */
 .testifier{
@@ -229,6 +231,11 @@
   border-radius: 0 0 var(--br-2) var(--br-2);
   padding: 0.5em;
 }
+.testifiersDetails p{
+  color: var(--foreground);
+  opacity: .7;
+}
+
 .testifiersDetails{
   width: 100%;
   display: flex;
@@ -244,14 +251,13 @@
   justify-content: center;
   gap: 3em;
 }
-
-/* .testimonyWrapper{
-  display: flex;
-  width: 100%;
-} */
 .testimonies > div{
   padding: 1.2em;
 }
+.testimonies:hover{
+  transform: scale(1.05);
+}
+
 .testifier img{
   background-color: var(--secondary-50);
   width: 25%;

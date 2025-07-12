@@ -24,6 +24,34 @@
   width: 70%;
   margin: 0.5em auto;
 }
+.authBox{
+  background: url(../../../../public/images/about-us-img-1-1.png) no-repeat 20%;
+  background-size: contain;
+  width: 100%;
+  height: 70dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.authBoxCard{
+  background-color: var(--secondary-50);
+  width: 25%;
+  height: auto;
+  padding: 1.5em 2em;
+  border-radius: var(--br-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.authBoxCard h1{
+  font-family: var(--headerFont);
+  font-weight: var(--bold);
+  font-size: var(--m);
+  color: var(--foreground);
+  margin-bottom: 15px;
+}
 .adminTable{
   flex: 1;
   padding: 3em;
@@ -35,7 +63,9 @@
 .tableHeader{
   flex: 1;
   height: auto;
+  padding-left: 1em;
 }
+.authBoxCard input,
 .tableHeader input{
   width: 20%;
   padding: 0.2em 0.5em;
@@ -48,6 +78,18 @@
   letter-spacing: 1px;
   color: var(--foreground);
   background-color: var(--secondary-50);
+}
+.authBoxCard input {
+  background-color: var(--background);
+  width: 100%;
+  height: 30px;
+  margin-bottom: 10px;
+}
+.authBox input:focus{
+  border: 1px solid var(--secondary-50);
+}
+.authBox input::placeholder,
+.tableHeader input::placeholder{
   opacity: 0.5;
 }
 .tableHeader button{
@@ -98,7 +140,6 @@
 }
 .phoneNumbersSection button{
   width: 100%;
-  /* background-color: red; */
 }
 .controlBtns{
   width: 100%;

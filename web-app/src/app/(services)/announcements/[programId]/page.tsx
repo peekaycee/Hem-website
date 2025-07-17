@@ -37,10 +37,16 @@ type Program = {
   image: string;
 };
 
-// ✅ Correct Next.js App Router Page Function Signature
-export default function Page({ params }: { params: { programId: string } }) {
+type Props = {
+  params: {
+    programId: string;
+  };
+};
+
+// ✅ DO NOT try to use `PageProps` or a custom `interface` here.
+export default function ProgramId({ params }: Props) {
   const programId = parseInt(params.programId);
-  const program = (ProgramData as Program[]).find(p => p.id === programId);
+  const program = (ProgramData as Program[]).find((p) => p.id === programId);
 
   if (!program) return <h1>Program not found</h1>;
 
@@ -59,7 +65,6 @@ export default function Page({ params }: { params: { programId: string } }) {
   );
 }
 
-// ✅ This must match the expected return type — and stay sync
 export function generateStaticParams() {
   return (ProgramData as Program[]).map((program) => ({
     programId: program.id.toString(),

@@ -530,9 +530,14 @@ export default function Admin() {
       const filtered = data.filter((item: Announcement) =>
         item.title.toLowerCase().includes(search.toLowerCase())
       );
-      const sorted = filtered
-        .filter((item) => item.date && item.time)
-        .sort((a, b) => {
+      interface AnnouncementWithDateTime extends Announcement {
+        date: string;
+        time: string;
+      }
+
+      const sorted = (filtered as AnnouncementWithDateTime[])
+        .filter((item: AnnouncementWithDateTime) => item.date && item.time)
+        .sort((a: AnnouncementWithDateTime, b: AnnouncementWithDateTime) => {
           const dateA = new Date(`${a.date}T${a.time}`);
           const dateB = new Date(`${b.date}T${b.time}`);
           return dateB.getTime() - dateA.getTime();
@@ -548,9 +553,12 @@ export default function Admin() {
         item.topic.toLowerCase().includes(search.toLowerCase()) ||
         item.preacher.toLowerCase().includes(search.toLowerCase())
       );
-      const sorted = filtered
-        .filter((item) => item.date)
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      interface SermonWithDate extends Sermon {
+        date: string;
+      }
+      const sorted = (filtered as SermonWithDate[])
+        .filter((item: SermonWithDate) => item.date)
+        .sort((a: SermonWithDate, b: SermonWithDate) => new Date(b.date).getTime() - new Date(a.date).getTime());
       const paginated = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
       return { data: paginated, total: sorted.length };
     },
@@ -563,7 +571,10 @@ export default function Admin() {
         item.phone.includes(search) ||
         item.assignedTo.toLowerCase().includes(search.toLowerCase())
       );
-      const sorted = filtered.sort((a, b) => b.id - a.id);
+      interface FollowUpWithId extends FollowUp {
+        id: number;
+      }
+      const sorted = (filtered as FollowUpWithId[]).sort((a: FollowUpWithId, b: FollowUpWithId) => b.id - a.id);
       const paginated = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
       return { data: paginated, total: sorted.length };
     },
@@ -618,7 +629,7 @@ export default function Admin() {
         if (!res.ok) throw new Error("Delete failed");
         toast.success("Deleted successfully");
         triggerRefresh();
-      } catch (err) {
+      } catch {
         toast.error("Failed to delete");
       }
     },
@@ -628,7 +639,7 @@ export default function Admin() {
         if (!res.ok) throw new Error("Delete failed");
         toast.success("Deleted successfully");
         triggerRefresh();
-      } catch (err) {
+      } catch {
         toast.error("Failed to delete");
       }
     },
@@ -638,7 +649,7 @@ export default function Admin() {
         if (!res.ok) throw new Error("Delete failed");
         toast.success("Deleted successfully");
         triggerRefresh();
-      } catch (err) {
+      } catch {
         toast.error("Failed to delete");
       }
     },

@@ -7,7 +7,7 @@ import { Pic1, ChurchLogo } from '../../public/images';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { announcementImages } from '../app/(services)/announcements/page.tsx';
+// import { announcementImages } from '../app/(services)/announcements/page.tsx';
 
 export default function Home() {
   const router = useRouter();
@@ -70,13 +70,13 @@ export default function Home() {
       {/* Events Section */}
       <section className={styles.event}>
         <h2>Upcoming Programs</h2>
-        <div className={styles.events}>
+        {/* <div className={styles.events}>
           {[...announcementImages].reverse().map((img, index) => (
             <div key={index}>
               <Image src={img} alt="New Events" width={0} height={0} />
             </div>
           ))}
-        </div>
+        </div> */}
         <Button tag="view all" onClick={redirectToAnnouncement} />
       </section>
 

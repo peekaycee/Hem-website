@@ -2,6 +2,7 @@ import { Image12, Image13, Image14 } from '../../../../../public/images';
 import Image from 'next/image';
 import ProgramData from '../../../data/announcements.json';
 import type { StaticImageData } from 'next/image';
+import type { Metadata } from 'next';
 
 const imageMap: Record<string, StaticImageData> = {
   Image12,
@@ -21,6 +22,10 @@ const formatTime = (timeStr: string) => {
   return `${hr}:${minute.toString().padStart(2, "0")} ${ampm}`;
 };
 
+export const metadata: Metadata = {
+  title: "Program Details | Your Site",
+};
+
 type Program = {
   id: number;
   title: string;
@@ -32,8 +37,8 @@ type Program = {
   image: string;
 };
 
-// ✅ No need to define custom PageProps anymore
-export default function ProgramId({ params }: { params: { programId: string } }) {
+// ✅ Correct Next.js App Router Page Function Signature
+export default function Page({ params }: { params: { programId: string } }) {
   const programId = parseInt(params.programId);
   const program = (ProgramData as Program[]).find(p => p.id === programId);
 
@@ -54,8 +59,8 @@ export default function ProgramId({ params }: { params: { programId: string } })
   );
 }
 
-// ✅ Leave as-is — this is fine for SSG
-export async function generateStaticParams() {
+// ✅ This must match the expected return type — and stay sync
+export function generateStaticParams() {
   return (ProgramData as Program[]).map((program) => ({
     programId: program.id.toString(),
   }));

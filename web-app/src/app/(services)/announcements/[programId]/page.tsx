@@ -32,13 +32,14 @@ type Program = {
   image: string;
 };
 
-type PageProps = {
+// ✅ Corrected for strict Next.js 15+ compatibility
+type Props = {
   params: {
     programId: string;
   };
 };
 
-export default function ProgramIdPage({ params }: PageProps) {
+export default function ProgramId({ params }: Props) {
   const programId = parseInt(params.programId);
   const program = (ProgramData as Program[]).find(p => p.id === programId);
 

@@ -1,12 +1,9 @@
 import { Image12, Image13, Image14 } from '../../../../../public/images';
 import Image from 'next/image';
 import ProgramData from '../../../data/announcements.json';
+import type { StaticImageData } from 'next/image';
 
-type Props = {
-  params: { programId: string };
-};
-
-const imageMap: Record<string, any> = {
+const imageMap: Record<string, StaticImageData> = {
   Image12,
   Image13,
   Image14,
@@ -24,10 +21,26 @@ const formatTime = (timeStr: string) => {
   return `${hr}:${minute.toString().padStart(2, "0")} ${ampm}`;
 };
 
-// ✅ Make the function async, even if you’re not using await directly
-export default async function ProgramId({ params }: Props) {
-  const { programId } = await params;
-  const program = ProgramData.find(p => p.id === parseInt(programId));
+type Program = {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+  time: string;
+  venue: string;
+  ministering: string;
+  image: string;
+};
+
+type PageProps = {
+  params: {
+    programId: string;
+  };
+};
+
+export default function ProgramIdPage({ params }: PageProps) {
+  const programId = parseInt(params.programId);
+  const program = (ProgramData as Program[]).find(p => p.id === programId);
 
   if (!program) return <h1>Program not found</h1>;
 
@@ -47,7 +60,7 @@ export default async function ProgramId({ params }: Props) {
 }
 
 export async function generateStaticParams() {
-  return ProgramData.map(program => ({
+  return (ProgramData as Program[]).map((program: Program) => ({
     programId: program.id.toString(),
   }));
 }

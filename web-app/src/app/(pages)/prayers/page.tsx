@@ -63,9 +63,13 @@ export default function PrayersAndCounselling() {
       setCounselling("");
       setName("");
       setTel("");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("EmailJS Error:", error);
-      toast.error(`Failed to send: ${error?.message || "Unknown error"}`);
+      if (error instanceof Error) {
+        toast.error(`Failed to send: ${error.message}`);
+      } else {
+        toast.error("Failed to send: Unknown error");
+      }
     } finally {
       setSending(false);
     }

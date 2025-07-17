@@ -10,7 +10,9 @@ async function readData() {
   return JSON.parse(file);
 }
 
-async function writeData(data: any) {
+type Followup = { id: number; [key: string]: unknown };
+
+async function writeData(data: Followup[]) {
   await fs.writeFile(filePath, JSON.stringify(data, null, 2));
 }
 
@@ -31,7 +33,7 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   const updatedItem = await req.json();
   const data = await readData();
-  const index = data.findIndex((i: any) => i.id === updatedItem.id);
+  const index = data.findIndex((i: Followup) => i.id === updatedItem.id);
   if (index === -1)
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   data[index] = updatedItem;
@@ -43,7 +45,7 @@ export async function DELETE(req: Request) {
   const { searchParams } = new URL(req.url);
   const id = parseInt(searchParams.get("id") || "0");
   let data = await readData();
-  data = data.filter((i: any) => i.id !== id);
+  data = data.filter((i: Followup) => i.id !== id);
   await writeData(data);
   return NextResponse.json({ message: "Deleted" });
 }

@@ -104,7 +104,7 @@ export default function PrayersAndCounselling() {
             <p>Click + to add more prayer points</p>
           </div>
           <div className={styles.add} onClick={handleAddPrayer}>+</div>
-          <Button tag={sending ? "Sending..." : "Pray For Me"} />
+          <Button tag={sending ? "Sending..." : "Pray For Me"} type={"submit"}/>
         </div>
 
         <div className={styles.counsellingForm}>
@@ -116,7 +116,7 @@ export default function PrayersAndCounselling() {
             value={counselling}
             onChange={(e) => setCounselling(e.target.value)}
           />
-          <Button tag={sending ? "Sending..." : "Counsel Me"} />
+          <Button tag={sending ? "Sending..." : "Counsel Me"} type={"submit"} />
         </div>
       </form>
     </section>

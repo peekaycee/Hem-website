@@ -67,7 +67,23 @@
   opacity: 0.5;
 }
 .giveButton{
+  background-color: var(--tertiary-100);
   width:100%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  color: var(--background);
+  font-weight: var(--medium);
+  padding: 0.5em 1em;
+  border: 0;
+  outline: none;
+  border-radius: var(--br-1);
+  font-family: var(--bodyFont);
+  cursor: pointer;
+  letter-spacing: 1.2px;
+  transition: all .3s ease;
+}
+.giveButton:hover{
+  background-color: var(--hoverBg);
+  letter-spacing: 3px;
 }
 .categoryBtn{
   width: 70%;

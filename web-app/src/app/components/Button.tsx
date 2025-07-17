@@ -7,12 +7,13 @@ interface ButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   className?: string;
+  type?: "button" | "submit" | "reset"; 
 }
 
-export default function Button({ tag, onClick, disabled, className }: ButtonProps) {
+export default function Button({ tag, onClick, disabled, className, type = "button" }: ButtonProps) {
   const combinedClass = `${styles.button} ${disabled ? styles.disabled : ""} ${className || ""}`;
   return (
-    <button type='button' onClick={onClick} className={combinedClass} disabled={disabled}>
+    <button onClick={onClick} className={combinedClass} disabled={disabled} type={type}>
       {tag}
     </button>
   );

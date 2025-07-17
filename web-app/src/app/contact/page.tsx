@@ -75,6 +75,7 @@ export default function Contact() {
           <Button
             tag={sending ? "Sending..." : "Submit"}
             className={styles.contactButton}
+            type={"submit"}
           />
         </form>
         <div className={styles.overlay}></div>

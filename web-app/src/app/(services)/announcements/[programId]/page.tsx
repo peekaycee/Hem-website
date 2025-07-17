@@ -72,23 +72,26 @@
 // }
 
 
+
+
 // src/app/(services)/announcements/[programId]/page.tsx
 
 import { notFound } from "next/navigation";
 
-interface PageProps {
+interface ProgramPageProps {
   params: {
     programId: string;
   };
 }
 
-export default function ProgramPage({ params }: PageProps) {
+export default function ProgramPage({ params }: ProgramPageProps) {
   const { programId } = params;
 
-  // You can fetch data here if needed using `programId`
-  if (!programId) {
-    notFound(); // optional fallback if ID is invalid
-  }
+  if (!programId) notFound();
 
-  return <h1>Program ID: {programId}</h1>;
+  return (
+    <div>
+      <h1>Program ID: {programId}</h1>
+    </div>
+  );
 }

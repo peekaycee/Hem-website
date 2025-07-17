@@ -34,9 +34,9 @@ const enrichedPrograms = [...ProgramData].map((program) => ({
 }));
 
 // Export first 6 images for external use (e.g. home page Events section)
-export const announcementImages = enrichedPrograms
-  .map((p) => p.image)
-  .slice(0, 6);
+// export const announcementImages = enrichedPrograms
+//   .map((p) => p.image)
+//   .slice(0, 6);
 
 // Assume the last one added is the latest
 const nextProgram = enrichedPrograms[enrichedPrograms.length - 1];

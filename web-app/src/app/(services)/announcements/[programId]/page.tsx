@@ -70,3 +70,8 @@
 //     programId: program.id.toString(),
 //   }));
 // }
+
+
+export default function ProgramId(){
+  return <h1>Program ID</h1>;
+}

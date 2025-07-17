@@ -2,21 +2,12 @@ import { Image12, Image13, Image14 } from '../../../../../public/images';
 import Image from 'next/image';
 import ProgramData from '../../../data/announcements.json';
 import type { StaticImageData } from 'next/image';
-// import { type Metadata } from 'next'; // optional if you use generateMetadata
 
-// ✅ Correct static image mapping
 const imageMap: Record<string, StaticImageData> = {
   Image12,
   Image13,
   Image14,
 };
-
-// ✅ Dynamic segment param types for Next.js 15+
-interface PageProps {
-  params: {
-    programId: string;
-  };
-}
 
 const formatDate = (dateStr: string) => {
   const [year, month, day] = dateStr.split("-");
@@ -41,8 +32,8 @@ type Program = {
   image: string;
 };
 
-// ✅ Main dynamic page
-export default function ProgramId({ params }: PageProps) {
+// ✅ No need to define custom PageProps anymore
+export default function ProgramId({ params }: { params: { programId: string } }) {
   const programId = parseInt(params.programId);
   const program = (ProgramData as Program[]).find(p => p.id === programId);
 
@@ -63,9 +54,9 @@ export default function ProgramId({ params }: PageProps) {
   );
 }
 
-// ✅ Required for dynamic routing with `programId`
+// ✅ Leave as-is — this is fine for SSG
 export async function generateStaticParams() {
-  return (ProgramData as Program[]).map((program: Program) => ({
+  return (ProgramData as Program[]).map((program) => ({
     programId: program.id.toString(),
   }));
 }

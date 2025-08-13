@@ -78,22 +78,18 @@
 
 import { notFound } from "next/navigation";
 
-interface ProgramPageProps {
-  params: {
-    programId: string;
-  };
-}
+export default function ProgramPage({
+  params,
+}: {
+  params: { programId: string };
+}) {
+  const { programId } = params || {};
 
-export default function ProgramPage({ params }: ProgramPageProps) {
-  const { programId } = params;
-
-  if (!programId) {
-    notFound();
-  }
+  if (!programId) notFound();
 
   return (
-    <main style={{ padding: "1rem" }}>
+    <div>
       <h1>Program ID: {programId}</h1>
-    </main>
+    </div>
   );
 }

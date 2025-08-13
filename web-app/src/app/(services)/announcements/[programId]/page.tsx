@@ -87,11 +87,13 @@ interface ProgramPageProps {
 export default function ProgramPage({ params }: ProgramPageProps) {
   const { programId } = params;
 
-  if (!programId) notFound();
+  if (!programId) {
+    notFound();
+  }
 
   return (
-    <div>
+    <main style={{ padding: "1rem" }}>
       <h1>Program ID: {programId}</h1>
-    </div>
+    </main>
   );
 }

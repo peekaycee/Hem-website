@@ -34,7 +34,7 @@ export default function Navigation() {
       <nav className={styles.navbar}>
         <div className={styles.navlinks}>
           <div className={styles.logo}>
-            <Link href='/'><h1>LOGO</h1></Link>
+            <Link href='/'><h1>HEMA</h1></Link>
           </div>
 
           <div className={styles.links}>

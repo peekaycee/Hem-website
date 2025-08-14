@@ -56,7 +56,6 @@
   font-weight: var(--bold);
   font-size: var(--h3);
 }
-
 .links {
   width: 50%;
   text-align: center;
@@ -84,7 +83,6 @@
   display: inline-block;
   border-radius: var(--br-1) var(--br-1);
 }
-
 ul.sublinks {
   position: absolute;
   opacity: 0;
@@ -99,8 +97,6 @@ ul.sublinks {
   border-radius: var(--br-1) var(--br-1);
   z-index: 2;
 }
-
-/* Keep it visible if hovering on either the trigger or submenu */
 .dropdownWrapper:hover ul.sublinks,
 ul.sublinks:hover {
   opacity: 1;
@@ -143,7 +139,6 @@ ul.sublinks:hover {
   color: var(--tertiary-100);
   font-weight: var(--regular);
 }
-
 .active,
 .links a.active {
   background-color: var(--tertiary-100);
@@ -338,7 +333,51 @@ ul.sublinks:hover {
   opacity: 0.4;
 }
 
-/* TABLE */
+/* ==================== Events Section ==================== */
+.event {
+  background-color: var(--background);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5em 1em;
+}
+
+.event h2 {
+  font-family: var(--headerFont);
+  font-weight: var(--bold);
+  font-size: var(--m);
+  color: var(--foreground);
+  margin-bottom: 2em;
+  text-align: center;
+}
+
+.events {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5em;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  scroll-behavior: smooth; /* Smooth scroll prevents bouncing */
+}
+
+.eventImageWrapper {
+  position: relative;
+  width: 250px;
+  height: 200px;
+  border-radius: var(--br-2);
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.eventImageWrapper:hover {
+  transform: translateY(-5px);
+}
+
+/* ==================== Table ==================== */
 .dataTable {
   width: 100%;
   height: auto;
@@ -384,9 +423,9 @@ ul.sublinks:hover {
   text-align: left;
   vertical-align: middle;
   border-bottom: 1px solid #e5e7eb;
-  white-space: nowrap;        /* Prevents line break */
-  overflow: hidden;           /* Hides overflowed content */
-  text-overflow: ellipsis;    /* Adds the ellipsis */
+  white-space: nowrap;        
+  overflow: hidden;           
+  text-overflow: ellipsis;    
   max-width: 350px; 
 }
 .dataTable td button{
@@ -495,12 +534,6 @@ ul.sublinks:hover {
   height: 100%;
 }
 
-
-
-
-
-
-
 /* ==================== Responsive Media Queries ==================== */
 
 /* Tablet / Laptop view */
@@ -511,18 +544,15 @@ ul.sublinks:hover {
     gap: 0.5em;
     font-size: calc(var(--p3) * 0.9);
   }
-  .socialIcons {
+  footer .socialIcons {
     width: 100%;
     justify-content: flex-start;
     gap: 1em;
   }
   .navlinks {
-    /* flex-direction: column; */
     padding: 1em 5em;
   }
   .links {
-    /* width: 100%;
-    margin-top: 0.5em; */
     display: none;
   }
   .links ul {
@@ -531,7 +561,6 @@ ul.sublinks:hover {
   }
   .heroSlide {
     height: 200px;
-
   }
   .heroSlide h1 {
     font-size: calc(var(--m) * 0.9);
@@ -539,7 +568,6 @@ ul.sublinks:hover {
     text-align: center;
   }
   .footerContent {
-    /* flex-direction: column; */
     padding: 2em;
     gap: 2em;
   }
@@ -568,6 +596,11 @@ ul.sublinks:hover {
     height: 40px;
     bottom: 10px;
     right: 10px;
+  }
+
+  /* Remove hover for Events on tablet */
+  .eventImageWrapper {
+    transition: none !important;
   }
 }
 
@@ -610,6 +643,11 @@ ul.sublinks:hover {
   .liveChatBox {
     width: 35px;
     height: 35px;
+  }
+
+  /* Remove hover for Events on mobile */
+  .eventImageWrapper {
+    transition: none !important;
   }
 }
 

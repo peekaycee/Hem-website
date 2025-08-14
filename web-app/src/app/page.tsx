@@ -7,7 +7,8 @@ import { Pic1, ChurchLogo } from '../../public/images';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-// import { announcementImages } from '../app/(services)/announcements/page.tsx';
+import { announcementImages } from './data/announcementImages';
+
 
 export default function Home() {
   const router = useRouter();
@@ -63,22 +64,29 @@ export default function Home() {
         <div className={styles.projectContent}>
           <h2>Join Us To Make The Church Building A Reality.</h2>
           <p>Partner With Us Today!</p>
-          <Button tag="Donation" onClick={redirectToGivePage} />
+          <Button tag="Donate" onClick={redirectToGivePage} />
         </div>
       </section>
 
       {/* Events Section */}
       <section className={styles.event}>
         <h2>Upcoming Programs</h2>
-        {/* <div className={styles.events}>
+        <div className={styles.events}>
           {[...announcementImages].reverse().map((img, index) => (
-            <div key={index}>
-              <Image src={img} alt="New Events" width={0} height={0} />
-            </div>
-          ))}
-        </div> */}
+            <div className={styles.eventImageWrapper} key={index}>
+            <Image
+              src={img}
+              alt={`Event ${index + 1}`}
+              // fill
+              width={100}
+              height={100}
+            />
+          </div>
+         ))}
+        </div>
         <Button tag="view all" onClick={redirectToAnnouncement} />
       </section>
+
 
       {/* Ministers Section */}
       <section className={styles.minister}>

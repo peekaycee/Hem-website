@@ -122,9 +122,43 @@
 }
 
 /* Events */
-.testimony,
-.minister,
 .event{
+  background-color: var(--background);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  padding: 3em;
+}
+.events{
+  width: 100%;
+  height: auto;
+  gap: 2em;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5em 0;
+}
+.eventImageWrapper{
+  width: 170px;
+  height: 25dvh;
+  border-radius: var(--br-2);
+  transition: all 0.3s ease;
+}
+.eventImageWrapper img{
+  width: 100%;
+  height: 100%;
+  object-fit: center;
+  border-radius: var(--br-2);
+}
+.eventImageWrapper:hover {
+  transform:translateY(-10px);
+} 
+.testimony,
+.minister {
   background-color: var(--background);
   width: 100%;
   height: auto;
@@ -149,8 +183,7 @@
   color: var(--foreground);
   margin-bottom: 0.7em;
 }
-.ministers,
-.events{
+.ministers{ 
   width: fit-content;
   height: auto;
   display: flex;
@@ -160,6 +193,7 @@
   align-items: center;
   justify-content: center; 
 }
+
 .ministers{
   gap: 2.5em;
 }
@@ -168,8 +202,7 @@
   gap: 2em;
 }
 .testimonies,
-.minDetails,
-.events div {
+.minDetails {
   width: 170px;
   height: fit-content;
   border-radius: var(--br-2);
@@ -182,15 +215,11 @@
 .minDetails{
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
-.minDetails img,
-.events img{
+.minDetails img{
   width: 100%;
   height: 100%;
   border-radius: var(--br-2);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-.events div:hover {
-  transform:translateY(-10px);
 }
 
 .minDetails:hover{
@@ -345,4 +374,126 @@
 /*  Tablet view 960px */
 @media only screen and (max-width: 960px){
   
+}
+
+
+
+
+
+/* ==================== Responsive Media Queries ==================== */
+
+/* Tablet / Laptop view */
+@media only screen and (max-width: 960px) {
+  .about {
+    position: static;
+    flex-direction: column;
+    padding: 2em 1.5em 0 1.5em;
+    top: 10px;
+  }
+  .details {
+    width: 100%;
+    margin-bottom: 2em;
+  }
+  .detailImage {
+    height: 70dvh;
+    background-size: contain;
+  }
+  .pastorsDetails{
+    width: 95%;
+    padding: 1em 2em;
+    margin: 0 auto;
+  }
+  .aboutContent {
+    align-items: center;
+    text-align: center;
+    padding: 2em;
+  }
+  .prototype {
+    flex-direction: column;
+    padding-left: 2em;
+    padding-top: 3em;
+    height: auto;
+    height: 50dvh;
+    background-attachment: scroll;
+    align-items: flex-start;
+  }
+  .projectContent {
+    width: 50%;
+  }
+  .projectContent img {
+    display: none;
+  }
+  .ctaContent {
+    width: 70%;
+    margin-right: 0;
+  }
+  .testimonyWrapper,
+  .ministers,
+  .events {
+    justify-content: center;
+    gap: 2em;
+  }
+  .testifiersDetails {
+    flex-direction: column;
+    padding: 0 3em;
+    gap: 1.5em;
+  }
+}
+@media only screen and (max-width: 860px){
+  .prototype{
+    background: var(--primary-100);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+}
+/* Mobile view */
+@media only screen and (max-width: 599px) {
+  .video {
+    height: 30dvh;
+  }
+  .detailImage {
+    height: 50dvh;
+  }
+  .aboutContent {
+    padding: 0em;
+    margin: 0;
+  }
+  .projectContent h2 {
+    font-size: calc(var(--m) * 0.8);
+  }
+  .projectContent p {
+    font-size: calc(var(--p2) * 0.8);
+  }
+  .testimonyWrapper,
+  .ministers,
+  .events {
+    flex-direction: column;
+    gap: 1.5em;
+  }
+  .testifiersDetails {
+    padding: 0 1em;
+    gap: 1em;
+  }
+  .ctaContent {
+    width: 95%;
+  }
+  .churchLogo img {
+    width: 50%;
+    height: auto;
+  }
+}
+
+/* Landscape orientation for small devices */
+@media only screen and (orientation: landscape) and (max-width: 800px) {
+  .video {
+    height: 50dvh;
+  }
+  .detailImage {
+    height: 50dvh;
+  }
+  .cta {
+    height: 60dvh;
+  }
 }

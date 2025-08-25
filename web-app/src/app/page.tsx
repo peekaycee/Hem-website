@@ -21,14 +21,21 @@ export default function Home() {
   const [testimony, setTestimony] = useState(1);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  // Ensure hero video plays on mount
+  // Ensure hero video plays on mount (desktop + mobile)
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
-      video.muted = true; // required for autoplay
-      video.play().catch((err) => {
-        console.warn("Autoplay prevented:", err);
-      });
+      video.muted = true;
+      video.setAttribute("muted", "true");
+      video.setAttribute("playsinline", "true");
+      video.setAttribute("webkit-playsinline", "true");
+
+      // slight delay helps Safari autoplay
+      setTimeout(() => {
+        video.play().catch((err) => {
+          console.warn("Autoplay prevented:", err);
+        });
+      }, 200);
     }
   }, []);
 
@@ -57,7 +64,7 @@ export default function Home() {
         className={styles.hero}
         variants={fadeIn}
         initial="hidden"
-        animate="visible"   // 👈 plays immediately on mount
+        animate="visible"   // plays immediately on mount
       >
         <div className={styles.video}>
           <video
@@ -67,6 +74,7 @@ export default function Home() {
             autoPlay
             muted
             playsInline
+            preload="auto"
           />
         </div>
       </motion.section>

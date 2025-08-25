@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Pic1, ChurchLogo } from '../../public/images';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { announcementImages } from './data/announcementImages';
 import { motion } from "framer-motion";
 
@@ -18,6 +18,19 @@ const fadeIn = {
 
 export default function Home() {
   const router = useRouter();
+  const [testimony, setTestimony] = useState(1);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  // Ensure hero video plays on mount
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.muted = true; // required for autoplay
+      video.play().catch((err) => {
+        console.warn("Autoplay prevented:", err);
+      });
+    }
+  }, []);
 
   const redirectToGivePage = () => {
     router.push("/give");
@@ -37,8 +50,6 @@ export default function Home() {
     setTestimony((prev) => Math.min(prev + 1, 3));
   };
 
-  const [testimony, setTestimony] = useState(1);
-
   return (
     <main>
       {/* Hero Section */}
@@ -46,11 +57,17 @@ export default function Home() {
         className={styles.hero}
         variants={fadeIn}
         initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
+        animate="visible"   // 👈 plays immediately on mount
       >
         <div className={styles.video}>
-          <video src="/videos/Hema-vid.mp4" loop autoPlay muted playsInline></video>
+          <video
+            ref={videoRef}
+            src="/videos/Hema-vid.mp4"
+            loop
+            autoPlay
+            muted
+            playsInline
+          />
         </div>
       </motion.section>
 
@@ -92,35 +109,33 @@ export default function Home() {
         </div>
       </motion.section>
 
-     <section className={styles.event}>
-  <h2>Upcoming Programs</h2>
-  <div className={styles.eventsWrapper}>
-    <motion.div
-      className={styles.track}
-      animate={{ x: ["0%", "-50%"] }} // half since it's duplicated
-      transition={{
-        repeat: Infinity,
-        ease: "linear",
-        duration: 20,
-      }}
-    >
-      {[...announcementImages, ...announcementImages].map((img, index) => (
-        <div className={styles.eventImageWrapper} key={index}>
-          <Image
-            src={img}
-            alt={`Event ${index + 1}`}
-            width={200}
-            height={200}
-          />
+      {/* Events Section (Infinite Scroll with Seamless Loop) */}
+      <section className={styles.event}>
+        <h2>Upcoming Programs</h2>
+        <div className={styles.eventsWrapper}>
+          <motion.div
+            className={styles.track}
+            animate={{ x: ["0%", "-50%"] }} // half since it's duplicated
+            transition={{
+              repeat: Infinity,
+              ease: "linear",
+              duration: 20,
+            }}
+          >
+            {[...announcementImages, ...announcementImages].map((img, index) => (
+              <div className={styles.eventImageWrapper} key={index}>
+                <Image
+                  src={img}
+                  alt={`Event ${index + 1}`}
+                  width={200}
+                  height={200}
+                />
+              </div>
+            ))}
+          </motion.div>
         </div>
-      ))}
-    </motion.div>
-  </div>
-  <Button tag="view all" onClick={redirectToAnnouncement} />
-</section>
-
-
-
+        <Button tag="view all" onClick={redirectToAnnouncement} />
+      </section>
 
       {/* Ministers Section */}
       <section className={styles.minister}>

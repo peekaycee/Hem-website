@@ -8,7 +8,13 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { announcementImages } from './data/announcementImages';
+import { motion } from "framer-motion";
 
+// Reusable fade-in animation
+const fadeIn = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+};
 
 export default function Home() {
   const router = useRouter();
@@ -36,14 +42,26 @@ export default function Home() {
   return (
     <main>
       {/* Hero Section */}
-      <section className={styles.hero}>
+      <motion.section
+        className={styles.hero}
+        variants={fadeIn}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
         <div className={styles.video}>
           <video src="/videos/Hema-vid.mp4" loop autoPlay muted playsInline></video>
         </div>
-      </section>
+      </motion.section>
 
       {/* About Section */}
-      <section className={styles.about}>
+      <motion.section
+        className={styles.about}
+        variants={fadeIn}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
         <div className={styles.details}>
           <div className={styles.detailImage}></div>
           <div className={styles.pastorsDetails}>
@@ -57,35 +75,51 @@ export default function Home() {
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus modi iste quas hic, harum magni placeat consequatur laboriosam, nemo vel nulla alias aut quod debitis eaque, quasi rem! Quaerat rerum eaque tenetur quis, id accusamus tempora error nulla tempore officiis, eligendi aliquam quisquam. Incidunt repellat nisi facere labore amet. Velit?
           </p>
         </div>
-      </section>
+      </motion.section>
 
       {/* Church Project Section */}
-      <section className={styles.prototype}>
+      <motion.section
+        className={styles.prototype}
+        variants={fadeIn}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
         <div className={styles.projectContent}>
           <h2>Join Us To Make The Church Building A Reality.</h2>
           <p>Partner With Us Today!</p>
           <Button tag="Donate" onClick={redirectToGivePage} />
         </div>
-      </section>
+      </motion.section>
 
-      {/* Events Section */}
-      <section className={styles.event}>
-        <h2>Upcoming Programs</h2>
-        <div className={styles.events}>
-          {[...announcementImages].reverse().map((img, index) => (
-            <div className={styles.eventImageWrapper} key={index}>
-            <Image
-              src={img}
-              alt={`Event ${index + 1}`}
-              // fill
-              width={100}
-              height={100}
-            />
-          </div>
-         ))}
+     <section className={styles.event}>
+  <h2>Upcoming Programs</h2>
+  <div className={styles.eventsWrapper}>
+    <motion.div
+      className={styles.track}
+      animate={{ x: ["0%", "-50%"] }} // half since it's duplicated
+      transition={{
+        repeat: Infinity,
+        ease: "linear",
+        duration: 20,
+      }}
+    >
+      {[...announcementImages, ...announcementImages].map((img, index) => (
+        <div className={styles.eventImageWrapper} key={index}>
+          <Image
+            src={img}
+            alt={`Event ${index + 1}`}
+            width={200}
+            height={200}
+          />
         </div>
-        <Button tag="view all" onClick={redirectToAnnouncement} />
-      </section>
+      ))}
+    </motion.div>
+  </div>
+  <Button tag="view all" onClick={redirectToAnnouncement} />
+</section>
+
+
 
 
       {/* Ministers Section */}
@@ -104,7 +138,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonies Section */}
+      {/* Testimonies Section (NO animation) */}
       <section className={styles.testimony}>
         <h2>Testimonies</h2>
         <div className={styles.testifiersDetails}>
@@ -132,7 +166,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Prayer CTA */}
+      {/* Prayer CTA (NO animation) */}
       <section className={styles.cta}>
         <div className={styles.ctaContent}>
           <h2>Need Someone To Pray With?</h2>

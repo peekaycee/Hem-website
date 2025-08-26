@@ -26,6 +26,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   display: block;
+  font-size: 1rem;
 }
 
 .rightSide{
@@ -83,6 +84,7 @@
   width:100%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   color: var(--background);
+  font-size: 1rem;
   font-weight: var(--medium);
   padding: 0.5em 1em;
   border: 0;
@@ -100,6 +102,7 @@
 .categoryBtn{
   width: 70%;
   margin: 0.5em 0;
+  font-size: 1rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 @media (min-width: 769px) {

@@ -32,13 +32,17 @@
   font-size: 20px;
   font-weight: var(--regular);
 }
-.navbar {
+/* .navbar {
   position: sticky;
   top: 0;
   z-index: 2;
   background-color: var(--background);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
+} */
+.navbar {
+  position: relative;
+  z-index: 100; 
 }
 .navlinks{
   width: 100%;
@@ -80,61 +84,61 @@
 }
 .dropdownWrapper {
   position: relative;
-  display: inline-block;
-  border-radius: var(--br-1) var(--br-1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
 }
+
 ul.sublinks {
   position: absolute;
+  top: 100%; /* anchor directly under parent */
+  left: 0;
   opacity: 0;
-  transform: translateY(10px);
   pointer-events: none;
+  transform: translateY(5px);
   transition: opacity 300ms ease, transform 300ms ease;
+  display: flex;
   flex-direction: column;
-  width: 135px;
-  border-radius: var(--br-1);
+  width: max-content;
+  min-width: 150px;
   background-color: var(--background);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: var(--br-1) var(--br-1);
-  z-index: 2;
+  border-radius: var(--br-1);
+  z-index: 99;
 }
-.dropdownWrapper:hover ul.sublinks,
-ul.sublinks:hover {
+
+.dropdownWrapper:hover ul.sublinks {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
-.dropdownWrapper:hover{
-  color: var(--tertiary-100);
-}
-.sublinks li{
+
+.sublinks li {
   width: 100%;
 }
-.sublinks li a{
-  width: 100%;
+
+.sublinks li a {
   display: block;
-  padding: 1em 0em;
+  padding: 0.75em 1em;
+  text-decoration: none;
+  color: var(--foreground);
 }
-.sublinks li:first-child{
+
+.sublinks li:first-child {
   border-radius: var(--br-1) var(--br-1) 0 0;
 }
-.sublinks li:last-child{
+.sublinks li:last-child {
   border-radius: 0 0 var(--br-1) var(--br-1);
 }
+
 .sublinks li:hover {
   background-color: var(--hoverBg);
 }
-.sublinks li:hover a{
+.sublinks li:hover a {
   color: var(--background);
 }
-.rotated.dd {
-  margin-left: 2px;
-  margin-bottom: -1px;
-  transition: transform 0.3s ease;
-}
-.dropdown:hover .rotated.dd{
-  transform: rotate(180deg);
-  transition: transform 0.3s ease;
-}
+
 .links a:hover{
   color: var(--tertiary-100);
   font-weight: var(--regular);
@@ -154,7 +158,116 @@ ul.sublinks:hover {
 .links a.active:hover{
   background-color: var(--hoverBg);
 }
+
+
+/* Mobile Nav wrapper */
+.mobileNavWrapper {
+  position: absolute;   /* relative to .navbar */
+  top: 100%;            /* drops down below navbar */
+  left: 0;
+  width: 100%;
+  max-height: 0;
+  overflow: hidden;
+  background: var(--background);
+  transition: max-height 0.3s ease;
+  z-index: 100;         /* same layer as navbar */
+}
+
+.mobileNavWrapper.open {
+  max-height: 80vh;     /* enough to reveal menu items */
+  overflow-y: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 0.5rem;
+}
+
+.mobileNav li {
+  list-style: none;
+  padding: 0.5em;
+}
+
+.mobileNav a,
+.mobileNav button {
+  display: block;
+  width: 100%;
+  font-size: 1rem;
+  font-family: var(--bodyFont);
+  color: var(--foreground);
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  padding: 0.5rem;
+  text-decoration: none;
+}
+
+.mobileNav button:focus {
+  outline: none;
+}
+
+/* Submenu styles */
+.innerMobileNav {
+  max-height: 0;
+  overflow: hidden;
+  padding-left: 2rem;
+  transition: max-height 0.3s ease;
+}
+
+.innerMobileNav.show {
+  max-height: 500px; /* enough to show all links */
+}
+
+.innerMobileNav li {
+  margin: 0.5rem 0;
+  list-style: none;
+}
+
+.innerMobileNav a {
+  font-size: 0.95rem;
+  color: var(--foreground);
+}
+
+/* ensure caret can rotate */
+.caret,
+.caretMobile {
+  display: inline-block;        /* important for rotation */
+  transform-origin: 50% 50%;    /* center pivot */
+  line-height: 0;               /* avoid extra spacing with icon */
+}
+
+/* optional: make desktop dropdown wrapper clearly hoverable */
+.dropdownWrapper {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 /* LOGIN */
+.login{
+  gap: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icons{
+  display: none;
+  cursor: pointer;
+}
+@media screen and (max-width: 559px){
+  .icons{
+    display: block;
+  }
+  .login a {
+    display: none;
+  }
+  
+}
 .login a{
   text-decoration: none;
   font-family: var(--bodyFont);
@@ -174,10 +287,11 @@ ul.sublinks:hover {
   color: var(--background);
 }
 /* HERO SLIDE */
-.heroSlide{
+.heroSlide {
   position: relative;
-  width: 100%;
-  height: 300px;
+  background: url("/images/hero-bg.jpg") center/cover no-repeat;
+  min-height: 80vh;
+  z-index: 1; /* always behind nav & livechat */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -189,13 +303,10 @@ ul.sublinks:hover {
   font-size: var(--m);
   z-index: 1;
 }
-.overlay{
+.heroSlide .overlay {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: rgba(0,0,0,0.4);
 }
 
 /* FOOTER */
@@ -641,9 +752,11 @@ ul.sublinks:hover {
     gap: 0.3em;
   }
   .liveChatBox {
-    width: 35px;
-    height: 35px;
-  }
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999; /* always above nav + hero */
+}
 
   /* Remove hover for Events on mobile */
   .eventImageWrapper {

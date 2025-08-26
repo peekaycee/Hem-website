@@ -292,8 +292,9 @@ ul.sublinks {
 /* HERO SLIDE */
 .heroSlide {
   position: relative;
-  background: url("/images/hero-bg.jpg") center/cover no-repeat;
-  min-height: 80vh;
+  background: url("/images/hero-bg.jpg") center no-repeat;
+  background-size: contain;
+  min-height: 50vh;
   z-index: 1; /* always behind nav & livechat */
   display: flex;
   align-items: center;

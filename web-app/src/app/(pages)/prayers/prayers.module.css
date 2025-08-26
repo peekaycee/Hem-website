@@ -141,7 +141,6 @@
 
   .counsellingForm h1,
   .prayerForm h1 {
-    font-size: var(--p2);
     text-align: center;
   }
 
@@ -163,7 +162,7 @@
 
   .counsellingForm h1,
   .prayerForm h1 {
-    font-size: var(--p3);
+    font-size: var(--s);
   }
 
   .prayerPoints input,

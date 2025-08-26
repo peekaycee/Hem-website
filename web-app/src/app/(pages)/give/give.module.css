@@ -119,12 +119,13 @@
     width: 100%;
     height: auto;
     flex-direction: column;
-    padding: 1em;
+    padding: 2em;
     box-shadow: none;
   }
 
   .categoryBtn {
-    width: 100%; 
+    width: 90%;
+    margin: 0.5em auto; 
   }
 
   .rightSide {

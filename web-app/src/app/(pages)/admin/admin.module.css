@@ -1,16 +1,20 @@
-#admin{
+#admin {
   background: url(../../../../public/images/church-sermon2-768x600.jpg) no-repeat center fixed;
   background-size: cover;
   position: relative;
 }
-.adminPage{
+
+.adminPage {
   width: 100%;
   height: auto;
 }
-.adminWrapper{
+
+.adminWrapper {
   display: flex;
+  gap: 1rem;
 }
-.sideBar{
+
+.sideBar {
   padding: 2em 0;
   width: 20%;
   height: auto;
@@ -18,13 +22,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
 }
-.sideBar button{
+.sideBar button {
   width: 70%;
   margin: 0.5em auto;
 }
-.authBox{
+
+.authBox {
   background: url(../../../../public/images/about-us-img-1-1.png) no-repeat 20%;
   background-size: contain;
   width: 100%;
@@ -34,7 +38,8 @@
   align-items: center;
   justify-content: center;
 }
-.authBoxCard{
+
+.authBoxCard {
   background-color: var(--secondary-50);
   width: 25%;
   height: auto;
@@ -45,33 +50,65 @@
   align-items: center;
   justify-content: center;
 }
-.authBoxCard h1{
+.authBoxCard h1 {
   font-family: var(--headerFont);
   font-weight: var(--bold);
   font-size: var(--m);
   color: var(--foreground);
   margin-bottom: 15px;
 }
-.adminTable{
+
+/* ===== Scroll/drag container ===== */
+.adminTable {
   flex: 1;
   padding: 3em;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: auto;
+  display: block;
+  overflow-x: auto; /* ✅ always scrollable container */
+  /* cursor: grab; */
 }
-.tableHeader{
+.adminTable:active,
+.dragging {
+  cursor: grabbing;
+}
+
+/* ===== Table wrapper ===== */
+.tableInner {
+  display: inline-block; /* ✅ keeps table wrapped inside */
+  min-width: 960px;
+  width: 100%;
+  vertical-align: top; /* prevents misalignment */
+}
+
+/* DataTable cells */
+.adminTable table,
+.adminTable th,
+.adminTable td {
+  white-space: nowrap;
+}
+
+/* Scrollbar styling */
+.adminTable::-webkit-scrollbar {
+  height: 8px;
+}
+.adminTable::-webkit-scrollbar-thumb {
+  background: var(--secondary-50);
+  border-radius: 4px;
+}
+
+.tableHeader {
   flex: 1;
   height: auto;
   padding-left: 1em;
+  margin-bottom: 0.75rem;
 }
+
 .authBoxCard input,
-.tableHeader input{
+.tableHeader input {
   width: 20%;
   padding: 0.2em 0.5em;
   font-family: var(--bodyFont);
   font-size: var(--p3);
-  border:0;
+  border: 0;
   outline: none;
   border-radius: var(--br-1);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -79,23 +116,30 @@
   color: var(--foreground);
   background-color: var(--secondary-50);
 }
+
+/* 👉 Popup inputs */
 .authBoxCard input {
   background-color: var(--background);
   width: 100%;
-  height: 30px;
+  max-width: 500px; /* desktop cap */
+  height: 35px;
   margin-bottom: 10px;
+  padding: 0.4em 0.6em;
 }
-.authBox input:focus{
+
+.authBox input:focus {
   border: 1px solid var(--secondary-50);
 }
 .authBox input::placeholder,
-.tableHeader input::placeholder{
+.tableHeader input::placeholder {
   opacity: 0.5;
 }
-.tableHeader button{
+
+.tableHeader button {
   margin-left: 10px;
 }
-.modalOverlay{
+
+.modalOverlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -109,12 +153,13 @@
   justify-content: center;
 }
 
-.show{
+.show {
   display: block;
 }
-.hide{
+.hide {
   display: none;
 }
+
 .phoneNumbersSection {
   flex: 1;
   padding: 3em 4em;
@@ -128,26 +173,117 @@
   margin-top: 1rem;
   border-radius: var(--br-2);
 }
-.phoneNumbers h3{
+.phoneNumbers h3 {
   font-family: var(--headerFont);
   font-weight: var(--medium);
   margin-bottom: 10px;
 }
-.phoneNumbers p{
+.phoneNumbers p {
   font-family: var(--bodyFont);
   font-weight: var(--regular);
   margin-bottom: 10px;
 }
-.phoneNumbersSection button{
+.phoneNumbersSection button {
   width: 100%;
 }
-.controlBtns{
+
+.controlBtns {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.controlBtns button{
+.controlBtns button {
   flex: 1;
   border-radius: 0;
+}
+
+/* ======= RESPONSIVE ======= */
+@media (max-width: 1280px) {
+  .tableInner {
+    min-width: 880px;
+  }
+}
+@media (max-width: 1024px) {
+  .authBoxCard {
+    width: 50%;
+  }
+  .sideBar {
+    width: 25%;
+  }
+  .tableHeader input {
+    width: 40%;
+  }
+  .tableInner {
+    min-width: 820px;
+  }
+
+  .adminTable {
+    width: 100%; 
+    overflow-x: hidden;
+  }
+  .tableInner {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+@media (max-width: 768px) {
+  .tableInner,
+  .adminTable{
+    min-width: 100%;
+  }
+  .adminWrapper {
+    flex-direction: column;
+  }
+  .sideBar {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1em 0;
+  }
+  .sideBar button {
+    width: 45%;
+    margin: 0.5em;
+  }
+  .authBoxCard {
+    width: 80%;
+  }
+  .adminTable {
+    padding: 1.5em;
+    touch-action: pan-y;
+
+    width: 80%; /* fixed */
+    overflow-x: hidden; /* wrapper takes over */
+    margin: 0 auto;
+  }
+  .tableHeader input {
+    width: 60%;
+  }
+  .tableInner {
+    display: block;
+    min-width: 720px;
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+@media (max-width: 640px) {
+  .adminTable,
+  .sideBar {
+    flex-direction: column;
+  }
+  .sideBar button {
+    width: 70%;
+  }
+  .adminTable {
+    padding: 1em;
+    min-width: 100%; 
+    overflow-x: hidden;
+    margin: 0 auto;
+  }
+  .tableInner {
+    min-width: 100%;
+    overflow-x: auto;
+  }
 }

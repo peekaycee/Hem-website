@@ -142,7 +142,7 @@ export default function Home() {
             ))}
           </motion.div>
         </div>
-        <Button tag="view all" onClick={redirectToAnnouncement} />
+        <Button tag="View all" onClick={redirectToAnnouncement} />
       </section>
 
       {/* Ministers Section */}

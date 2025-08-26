@@ -56,6 +56,9 @@ function AdminContent() {
   const [authenticated, setAuthenticated] = useState(false);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
+  // 👉 horizontal drag-to-scroll ref
+  const tableScrollRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     router.replace(`/admin?tab=${activeTab}`);
   }, [activeTab, router]);
@@ -65,6 +68,54 @@ function AdminContent() {
       passwordInputRef.current.focus();
     }
   }, [authenticated]);
+
+  // 👉 add “grab to scroll” behavior (mouse + touch)
+  useEffect(() => {
+    const el = tableScrollRef.current;
+    if (!el) return;
+
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    const isInteractive = (target: EventTarget | null) => {
+      if (!(target instanceof HTMLElement)) return false;
+      return !!target.closest("input, textarea, select, button, a, [role='button']");
+    };
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (isInteractive(e.target)) return;
+      isDown = true;
+      el.classList.add(styles.dragging);
+      try { el.setPointerCapture?.(e.pointerId); } catch {}
+      startX = e.clientX;
+      scrollLeft = el.scrollLeft;
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const dx = e.clientX - startX;
+      el.scrollLeft = scrollLeft - dx;
+    };
+
+    const onPointerUp = () => {
+      isDown = false;
+      el.classList.remove(styles.dragging);
+    };
+
+    el.addEventListener("pointerdown", onPointerDown, { passive: true });
+    el.addEventListener("pointermove", onPointerMove as any, { passive: false });
+    el.addEventListener("pointerup", onPointerUp, { passive: true });
+    el.addEventListener("pointerleave", onPointerUp, { passive: true });
+
+    return () => {
+      el.removeEventListener("pointerdown", onPointerDown as any);
+      el.removeEventListener("pointermove", onPointerMove as any);
+      el.removeEventListener("pointerup", onPointerUp as any);
+      el.removeEventListener("pointerleave", onPointerUp as any);
+    };
+  }, []);
 
   const openCreate = () => {
     setEditData(null);
@@ -156,11 +207,7 @@ function AdminContent() {
       }
       const sorted = (filtered as AnnouncementWithDateTime[])
         .filter((item) => item.date && item.time)
-        .sort((a: AnnouncementWithDateTime, b: AnnouncementWithDateTime) => {
-          const dateA = new Date(`${a.date}T${a.time}`);
-          const dateB = new Date(`${b.date}T${b.time}`);
-          return dateB.getTime() - dateA.getTime();
-        });
+        .sort((a, b) => new Date(`${b.date}T${b.time}`).getTime() - new Date(`${a.date}T${a.time}`).getTime());
       const paginated = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
       return { data: paginated, total: sorted.length };
     },
@@ -172,8 +219,8 @@ function AdminContent() {
         item.preacher.toLowerCase().includes(search.toLowerCase())
       );
       const sorted = (filtered as Sermon[])
-        .filter((item: Sermon) => item.date)
-        .sort((a: Sermon, b: Sermon) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        .filter((item) => item.date)
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       const paginated = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
       return { data: paginated, total: sorted.length };
     },
@@ -185,7 +232,7 @@ function AdminContent() {
         item.phone.includes(search) ||
         item.assignedTo.toLowerCase().includes(search.toLowerCase())
       );
-      const sorted: FollowUp[] = (filtered as FollowUp[]).sort((a: FollowUp, b: FollowUp) => b.id - a.id);
+      const sorted: FollowUp[] = (filtered as FollowUp[]).sort((a, b) => b.id - a.id);
       const paginated = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
       return { data: paginated, total: sorted.length };
     },
@@ -299,7 +346,8 @@ function AdminContent() {
           <Button tag={"Follow-up"} onClick={() => setActiveTab("followUp")} />
         </div>
 
-        <div className={styles.adminTable}>
+        {/* SCROLL/DRAG CONTAINER */}
+        <div className={styles.adminTable} ref={tableScrollRef}>
           <div className={styles.tableHeader}>
             <input
               type="text"
@@ -315,13 +363,16 @@ function AdminContent() {
             )}
           </div>
 
-          <DataTable<any>
-            key={refreshKey + activeTab + search}
-            columns={columnDefs[activeTab]}
-            fetchData={(query) => fetchMap[activeTab]({ ...query, search })}
-            enableEdit={openEdit}
-            enableDelete={deleteMap[activeTab]}
-          />
+          {/* Give the inner content a min-width so horizontal scroll is forced */}
+          <div className={styles.tableInner}>
+            <DataTable<any>
+              key={refreshKey + activeTab + search}
+              columns={columnDefs[activeTab]}
+              fetchData={(query) => fetchMap[activeTab]({ ...query, search })}
+              enableEdit={openEdit}
+              enableDelete={deleteMap[activeTab]}
+            />
+          </div>
         </div>
       </div>
 

@@ -1,35 +1,44 @@
-#faq{
+#faq {
   background: url(../../../../public/images/about-us-img-1-1.png) no-repeat center fixed;
   background-size: contain;
 }
-.faqPage{
+
+.faqPage {
   width: 100%;
   height: auto;
 }
-.faqQuestions{
+
+.faqQuestions {
   width: 100%;
-  height: 100dvh;
+  height: auto; /* avoid fixed 100dvh for better scrolling */
   padding: 3em 0;
 }
-.faqBox{
+
+.faqBox {
   width: 100%;
   height: auto;
-  margin: 1em 0 0em;
+  margin: 1em 0;
 }
-.faqQst{
+
+.faqQst {
   width: 65%;
   margin: auto;
   background-color: teal;
   color: white;
   cursor: pointer;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: var(--br-1) calc(var(--br-2)/2) 0 0;
+  border-radius: var(--br-1) calc(var(--br-2) / 2) 0 0;
+  padding: 0.7em;
+  text-align: left;
 }
-.ans,.faqQst{
+
+.ans,
+.faqQst {
   margin: auto;
   width: 60%;
   padding: 0.7em;
 }
+
 .ans {
   overflow: hidden;
   transition: max-height 0.3s ease, opacity 0.3s ease;
@@ -38,10 +47,12 @@
   border: 1px solid rgba(211, 211, 211, 0.517);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 0 0 var(--br-1) var(--br-1);
+  background: #fff;
+  color: #333;
 }
 
 .show {
-  max-height: 200px; /* Adjust based on your content */
+  max-height: 200px; /* Adjust based on content */
   opacity: 1;
 }
 
@@ -50,3 +61,32 @@
   opacity: 0;
 }
 
+/* Tablet (≤1024px) */
+@media (max-width: 1024px) {
+  .faqQst,
+  .ans {
+    width: 80%; /* wider for tablets */
+  }
+}
+
+/* Mobile (≤768px) */
+@media (max-width: 768px) {
+  .faqQst,
+  .ans {
+    width: 95%; /* almost full width on small screens */
+    font-size: 0.95rem;
+  }
+
+  .faqQuestions {
+    padding: 2em 1em; /* reduce padding */
+  }
+}
+
+/* Small mobile (≤480px) */
+@media (max-width: 480px) {
+  .faqQst,
+  .ans {
+    width: 100%; /* full width */
+    font-size: 0.9rem;
+  }
+}

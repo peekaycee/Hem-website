@@ -30,7 +30,7 @@
 
 .rightSide{
   flex: 1;
-  height: 80dvh;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;

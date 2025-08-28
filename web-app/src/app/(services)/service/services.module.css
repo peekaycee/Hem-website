@@ -144,7 +144,7 @@ order: 1;
     font-size: var(--p4);
   }
   .pic {
-    height: 55vh;             /* smaller for phones */
+    height: 60vh;             /* smaller for phones */
     background-size: cover;   /* back to crop-fill for narrow screens */
   }
 }

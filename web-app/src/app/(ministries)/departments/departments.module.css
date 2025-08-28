@@ -22,8 +22,6 @@
   height: fit-content;
   border-radius: var(--br-2);
   transition: all 0.3s ease;
-}
-.minDetails{
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 .minDetails img{
@@ -49,13 +47,16 @@
   border-radius: var(--br-2);
   color: var(--foreground);
 }
-.name h3{
+.nameDetail {
+ padding: 0 0.5rem;
+}
+.nameDetail h3{
   font-family: var(--headerFont);
   font-weight: var(--bold);
-  font-size: var(--p2);
+  font-size: var(--p1);
 }
-.name p{  
+.nameDetail p{  
   font-family: var(--bodyFont);
   font-weight: var(--regular);
-  font-size: calc(var(--p3)*0.8);
+  font-size: var(--p3);
 }

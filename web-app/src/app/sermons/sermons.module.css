@@ -93,6 +93,8 @@ p.searchResponse{
 .sideBar button{
   width: 100%;
   margin: 0.5em auto;
+  font-family: var(--bodyFont);
+  font-size: 1rem;
 }
 .library,
 .recent{

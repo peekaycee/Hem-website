@@ -54,8 +54,10 @@ export default function Departments() {
               <div className={styles.minDetails} key={department.department}>
                 <div className={styles.name}>
                   <Image src={Pic1} alt='New Events' width={0} height={0}/>
-                  <h3>{department.department}</h3>
-                  <p>{department.text}</p>
+                  <div className={styles.nameDetail}>
+                    <h3>{department.department}</h3>
+                    <p>{department.text}</p>
+                  </div>
                 </div>
               </div>
             )

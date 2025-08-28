@@ -162,12 +162,12 @@
 
   .counsellingForm h1,
   .prayerForm h1 {
-    font-size: var(--s);
+    font-size: var(--m);
   }
 
   .prayerPoints input,
   .counsellingForm textarea {
-    font-size: var(--p4);
+    font-size: var(--p3);
     padding: 0.4em 0.6em;
   }
 

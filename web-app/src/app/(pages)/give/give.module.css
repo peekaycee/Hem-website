@@ -125,10 +125,13 @@
     padding: 2em;
     box-shadow: none;
   }
-
+  .giveButton{
+    font-size: 1rem;
+  }
   .categoryBtn {
     width: 90%;
     margin: 0.5em auto; 
+    font-size: 1rem;
   }
 
   .rightSide {

@@ -123,3 +123,94 @@ p.ministering span{
 .hide {
   display: none;
 }
+
+/* ========== Responsive Styles ========== */
+
+/* Tablet (≤960px) */
+@media screen and (max-width: 960px) {
+  .scheduled,
+  .next {
+    width: 95%; 
+  }
+
+  .scheduledService,
+  .nextAnnouncement {
+    flex-direction: column; 
+    height: auto;            
+    align-items: flex-start;  /* keep text left aligned */
+  }
+
+  .announcementThumbnail {
+    width: 100%; 
+    height: auto;   /* let image decide height */
+    border-radius: var(--br-2) var(--br-2) 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .announcementThumbnail img {
+    width: 100%;
+    height: auto;          /* preserve aspect ratio */
+    object-fit: contain;   /* show full image */
+    border-radius: var(--br-2) var(--br-2) 0 0;
+  }
+
+  .announcementBriefs {
+    width: 100%;
+    padding: 1.5em;
+    border-radius: 0 0 var(--br-2) var(--br-2);
+    text-align: left;   /* keep everything left-aligned */
+  }
+
+  .announcementBriefs h2 {
+    font-size: var(--p1);
+    margin-bottom: 0.5em;
+  }
+
+  .announcementBriefs span,
+  p.dateTime,
+  p.expectation,
+  p.ministering {
+    text-align: left; /* override center */
+  }
+}
+
+/* Mobile (≤560px) */
+@media screen and (max-width: 560px) {
+  .announcementWrapper {
+    padding: 0 1em;
+  }
+
+  .announcementThumbnail {
+    height: auto; /* fully responsive */
+  }
+
+  .announcementThumbnail img {
+    width: 100%;
+    height: auto;
+    object-fit: contain; /* prevent cropping */
+  }
+
+  .announcementBriefs {
+    padding: 1em;
+  }
+
+  .announcementBriefs h2 {
+    font-size: var(--p2);
+  }
+
+  .announcementBriefs span {
+    font-size: var(--p3);
+  }
+
+  p.dateTime {
+    font-size: var(--p3);
+  }
+
+  p.expectation,
+  p.ministering {
+    font-size: var(--p4);
+  }
+}

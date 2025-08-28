@@ -1,0 +1,111 @@
+.sermonPage {
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  padding: 3rem 10rem 7rem;
+}
+
+.headerText h1{
+  font-family: var(--headerFont);
+  font-weight: var(--bold);
+  font-size: var(--l);
+  background-color: var(--tertiary-100);
+  width: fit-content;
+  margin: 0 auto 1em;
+  padding: 0.3em;
+  color: var(--background) !important;
+  border-radius: var(--br-2) var(--br-1) var(--br-2) var(--br-1);
+  cursor: default;
+}
+.details {
+  line-height: 1.5;
+  color: var(--foreground);
+}
+
+.details h2 {
+  font-size: var(--m);
+  margin-bottom: 0.5rem;
+}
+
+.details p {
+  font-size: var(--p2);
+}
+
+.videoWrapper,
+.audioWrapper {
+  margin: 0 auto;
+}
+
+.video,
+.audio {
+  width: 100%;
+  margin: 2rem auto;
+  border-radius: var(--br-2);
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+}
+.audio{
+  box-shadow: none;
+}
+/* Script Section */
+.scriptWrapper { 
+  margin-top: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.scriptImage {
+  width: 100%;
+  max-width: 400px; /* keep full visibility */
+  height: auto;
+  border-radius: var(--br-2);
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Tablet */
+@media screen and (max-width: 960px) {
+  .sermonPage {
+    padding: 5rem;
+  }
+
+  .headerText h1{
+    font-size: 1.7rem;
+  }
+
+  .details h2 {
+    font-size: 1.3rem;
+  }
+
+  .details p {
+    font-size: 0.95rem;
+  }
+
+  .scriptImage {
+    max-width: 350px;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 560px) {
+  .sermonPage {
+    padding: 2rem;
+  }
+
+  .headerText h1{
+    font-size: 1.5rem;
+  }
+
+  .details h2 {
+    font-size: 1.2rem;
+  }
+
+  .details p {
+    font-size: 0.9rem;
+  }
+
+  .scriptImage {
+    max-width: 260px; /* smaller but still fully visible */
+  }
+}

@@ -660,6 +660,12 @@ ul.sublinks {
     gap: 0.5em;
     font-size: calc(var(--p3) * 0.9);
   }
+    .login a {
+    display: none;
+  }
+  .icons {
+    display: block;
+  }
   footer .socialIcons {
     width: 100%;
     justify-content: flex-start;

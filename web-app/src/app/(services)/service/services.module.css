@@ -60,3 +60,91 @@ order: 1;
 .service:nth-child(5){
   background-color: var(--tertiary-50);
 }
+
+/* ============= Responsive Fix ============= */
+
+/* Tablet (portrait + landscape) */
+@media screen and (max-width: 960px) {
+  .service {
+    flex-direction: column;
+  }
+  .pic,
+  .dig {
+    width: 100%;
+    height: auto;
+    padding: 3em 2em; /* reduce padding for smaller screens */
+  }
+  .pic {
+    height: 50dvh; /* shrink image height for better fit */
+  }
+  .dig {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 560px) {
+  .dig {
+    padding: 2em 1.5em;
+  }
+  .dig h3 {
+    font-size: var(--p1); /* smaller headline */
+  }
+  .dig em {
+    font-size: var(--p3);
+  }
+  .dig p {
+    font-size: var(--p4);
+  }
+  .pic {
+    height: 40dvh; /* smaller image height on small phones */
+  }
+}
+/* Tablet + Mobile (≤960px) */
+@media screen and (max-width: 960px) {
+  .service {
+    flex-direction: column;
+  }
+
+  .pic, 
+  .dig {
+    width: 100%;
+    height: auto;
+    padding: 2em;
+  }
+
+  .pic {
+    order: 0;                 
+    height: 50vh;             /* taller so more image shows */
+    background-size: contain; /* show full image without cropping */
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .dig {
+    order: 1;      
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* Mobile (≤560px) */
+@media screen and (max-width: 560px) {
+  .dig {
+    padding: 2em 1.5em;
+  }
+  .dig h3 {
+    font-size: var(--p1);
+  }
+  .dig em {
+    font-size: var(--p3);
+  }
+  .dig p {
+    font-size: var(--p4);
+  }
+  .pic {
+    height: 35vh;             /* smaller for phones */
+    background-size: cover;   /* back to crop-fill for narrow screens */
+  }
+}

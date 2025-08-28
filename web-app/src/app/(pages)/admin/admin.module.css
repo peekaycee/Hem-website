@@ -85,6 +85,7 @@
 .adminTable th,
 .adminTable td {
   white-space: nowrap;
+  font-size: 1rem;
 }
 
 /* Scrollbar styling */
@@ -172,6 +173,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
   margin-top: 1rem;
+  font-size: 1rem;
   border-radius: var(--br-2);
 }
 .phoneNumbers h3 {
@@ -186,6 +188,7 @@
 }
 .phoneNumbersSection button {
   width: 100%;
+  font-size: 1rem;
 }
 
 .controlBtns {
@@ -197,6 +200,7 @@
 .controlBtns button {
   flex: 1;
   border-radius: 0;
+  font-size: 1rem;
 }
 
 /* ======= RESPONSIVE ======= */

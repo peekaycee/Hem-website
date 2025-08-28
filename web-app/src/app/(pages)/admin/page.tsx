@@ -379,7 +379,7 @@ function AdminContent() {
             <input
               type="text"
               placeholder="Search..."
-              className="border p-2 mb-2 w-full"
+              className={styles.searchInput}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               autoFocus

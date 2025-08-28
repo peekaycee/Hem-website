@@ -182,7 +182,7 @@ export default function FollowUpAdmin() {
                 <input
                   type="text"
                   placeholder="Search..."
-                  className="border p-2 mb-2 w-full"
+                  className={styles.follow}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   autoFocus
@@ -190,14 +190,15 @@ export default function FollowUpAdmin() {
                 <Button tag={`Add ${activeTab}`} onClick={openCreate} />
                 <Button tag="Send Bulk Message" onClick={bulkMessages} />
               </div>
-
-              <DataTable<FollowUp>
-                key={refreshKey + activeTab + search}
-                columns={columnDefs[activeTab]}
-                fetchData={(query) => fetchMap[activeTab]({ ...query, search })}
-                enableEdit={openEdit}
-                enableDelete={deleteMap[activeTab]}
-              />
+              <div className={styles.tableInner}>
+                <DataTable<FollowUp>
+                  key={refreshKey + activeTab + search}
+                  columns={columnDefs[activeTab]}
+                  fetchData={(query) => fetchMap[activeTab]({ ...query, search })}
+                  enableEdit={openEdit}
+                  enableDelete={deleteMap[activeTab]}
+                />
+              </div>
             </div>
 
             {/* Phone Numbers Display */}

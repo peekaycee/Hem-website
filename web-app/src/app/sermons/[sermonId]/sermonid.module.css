@@ -115,7 +115,4 @@
   .scriptImage {
     max-width: 260px; /* smaller but still fully visible */
   }
-  button:hover{
-    transition: none;
-  }
 }

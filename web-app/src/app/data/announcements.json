@@ -5,8 +5,8 @@
     "description": "aaa",
     "date": "2025-07-19",
     "time": "14:51",
-    "ministering": "Rev. Joe Joseph",
-    "image": "Image13",
+    "ministering": "Rev. Joe",
+    "image": "Image14",
     "id": 1
   },
   {
@@ -22,21 +22,11 @@
   {
     "title": "Next Level Miracle",
     "venue": "EDWJ",
-    "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. jh jhjhk jkhjepellat distinctio! hhujhj bggftr nkjkjk joy to thr world",
+    "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. ",
     "date": "2025-08-10",
     "time": "16:07",
     "ministering": "Pst. Davidson",
     "image": "Image12",
     "id": 5
-  },
-  {
-    "title": "mnmnmnmnm",
-    "venue": "dydtcj",
-    "description": "hvckgjhglkghckjl",
-    "date": "2025-08-04",
-    "time": "14:46",
-    "ministering": "Pst. Jude",
-    "image": "Image14",
-    "id": 6
   }
 ]

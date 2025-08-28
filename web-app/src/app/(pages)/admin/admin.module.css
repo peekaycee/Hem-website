@@ -201,7 +201,7 @@
 /* ======= RESPONSIVE ======= */
 @media (max-width: 1280px) {
   .tableInner {
-    min-width: 880px;
+    min-width: 100%;
   }
 }
 @media (max-width: 1024px) {
@@ -214,10 +214,6 @@
   .tableHeader input {
     width: 40%;
   }
-  .tableInner {
-    min-width: 820px;
-  }
-
   .adminTable {
     width: 100%; 
     overflow-x: hidden;
@@ -225,14 +221,13 @@
   .tableInner {
     display: block;
     width: 100%;
+    min-width: 100%;
     overflow-x: auto;
   }
 }
-@media (max-width: 768px) {
-  .tableInner,
-  .adminTable{
-    min-width: 100%;
-  }
+
+
+@media (max-width: 960px) {
   .adminWrapper {
     flex-direction: column;
   }
@@ -252,22 +247,20 @@
   }
   .adminTable {
     padding: 1.5em;
-    touch-action: pan-y;
-
-    width: 80%; /* fixed */
-    overflow-x: hidden; /* wrapper takes over */
+    width: 100%;
     margin: 0 auto;
+    touch-action: pan-y;
+    cursor: grab;
   }
   .tableHeader input {
     width: 60%;
   }
   .tableInner {
     display: block;
-    min-width: 720px;
     width: 100%;
-    overflow-x: auto;
   }
 }
+
 @media (max-width: 640px) {
   .adminTable,
   .sideBar {
@@ -278,12 +271,10 @@
   }
   .adminTable {
     padding: 1em;
-    min-width: 100%; 
-    overflow-x: hidden;
-    margin: 0 auto;
-  }
-  .tableInner {
-    min-width: 100%;
-    overflow-x: auto;
   }
 }
+
+
+
+
+

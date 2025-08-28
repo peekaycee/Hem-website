@@ -23,12 +23,19 @@
 }
 
 .details h2 {
-  font-size: var(--m);
+  font-family: var(--headerFont);
+  font-size: var(--l);
+  font-weight: var(--bold);
   margin-bottom: 0.5rem;
+}
+.details h2 span{
+  font-weight: var(--regular);
 }
 
 .details p {
   font-size: var(--p2);
+  font-family: var(--bodyFont);
+  font-weight: var(--regular);
 }
 
 .videoWrapper,
@@ -107,5 +114,8 @@
 
   .scriptImage {
     max-width: 260px; /* smaller but still fully visible */
+  }
+  button:hover{
+    transition: none;
   }
 }

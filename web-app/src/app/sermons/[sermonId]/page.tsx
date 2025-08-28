@@ -46,7 +46,7 @@ export default function SermonId() {
       </div>
 
       <div className={styles.details}>
-        {topic && <h2 className={styles.topic}>Topic: {topic}</h2>}
+        {topic && <h2 className={styles.topic}>Topic: <span>{topic}</span></h2>}
         {preacher && <p><strong>Preacher:</strong> {preacher}</p>}
         {description && <p><strong>Description:</strong> {description}</p>}
         {date && <p><strong>Date:</strong> {date}</p>}

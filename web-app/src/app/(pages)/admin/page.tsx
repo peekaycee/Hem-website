@@ -69,7 +69,7 @@ function AdminContent() {
     }
   }, [authenticated]);
 
-  // 👉 add “grab to scroll” behavior (mouse + touch)
+  // 👉 add “grab to scroll” behavior
   useEffect(() => {
     const el = tableScrollRef.current;
     if (!el) return;
@@ -83,37 +83,64 @@ function AdminContent() {
       return !!target.closest("input, textarea, select, button, a, [role='button']");
     };
 
-    const onPointerDown = (e: PointerEvent) => {
+    // --- Mouse Events ---
+    const onMouseDown = (e: MouseEvent) => {
       if (isInteractive(e.target)) return;
       isDown = true;
       el.classList.add(styles.dragging);
-      try { el.setPointerCapture?.(e.pointerId); } catch {}
-      startX = e.clientX;
+      startX = e.pageX - el.offsetLeft;
       scrollLeft = el.scrollLeft;
     };
-
-    const onPointerMove = (e: PointerEvent) => {
+    const onMouseMove = (e: MouseEvent) => {
       if (!isDown) return;
       e.preventDefault();
-      const dx = e.clientX - startX;
-      el.scrollLeft = scrollLeft - dx;
+      const x = e.pageX - el.offsetLeft;
+      const walk = x - startX;
+      el.scrollLeft = scrollLeft - walk;
     };
-
-    const onPointerUp = () => {
+    const onMouseUp = () => {
       isDown = false;
       el.classList.remove(styles.dragging);
     };
 
-    el.addEventListener("pointerdown", onPointerDown, { passive: true });
-    el.addEventListener("pointermove", onPointerMove as any, { passive: false });
-    el.addEventListener("pointerup", onPointerUp, { passive: true });
-    el.addEventListener("pointerleave", onPointerUp, { passive: true });
+    // --- Touch Events ---
+    const onTouchStart = (e: TouchEvent) => {
+      if (isInteractive(e.target)) return;
+      isDown = true;
+      el.classList.add(styles.dragging);
+      startX = e.touches[0].pageX - el.offsetLeft;
+      scrollLeft = el.scrollLeft;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (!isDown) return;
+      const x = e.touches[0].pageX - el.offsetLeft;
+      const walk = x - startX;
+      el.scrollLeft = scrollLeft - walk;
+    };
+    const onTouchEnd = () => {
+      isDown = false;
+      el.classList.remove(styles.dragging);
+    };
+
+    // Attach
+    el.addEventListener("mousedown", onMouseDown);
+    el.addEventListener("mousemove", onMouseMove);
+    el.addEventListener("mouseup", onMouseUp);
+    el.addEventListener("mouseleave", onMouseUp);
+
+    el.addEventListener("touchstart", onTouchStart, { passive: false });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd);
 
     return () => {
-      el.removeEventListener("pointerdown", onPointerDown as any);
-      el.removeEventListener("pointermove", onPointerMove as any);
-      el.removeEventListener("pointerup", onPointerUp as any);
-      el.removeEventListener("pointerleave", onPointerUp as any);
+      el.removeEventListener("mousedown", onMouseDown);
+      el.removeEventListener("mousemove", onMouseMove);
+      el.removeEventListener("mouseup", onMouseUp);
+      el.removeEventListener("mouseleave", onMouseUp);
+
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
     };
   }, []);
 
@@ -363,7 +390,7 @@ function AdminContent() {
             )}
           </div>
 
-          {/* Give the inner content a min-width so horizontal scroll is forced */}
+          {/* Force inner min-width for scroll */}
           <div className={styles.tableInner}>
             <DataTable<any>
               key={refreshKey + activeTab + search}

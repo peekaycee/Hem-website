@@ -45,7 +45,7 @@
   background-color: var(--background);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease-in-out;
-  z-index: 100; 
+  z-index: 2; 
 }
 .navlinks{
   width: 100%;
@@ -502,24 +502,20 @@ ul.sublinks {
   padding: 1rem;
   margin-top: 1em;
 }
-
 .tableWrapper {
   overflow-x: hidden;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
   user-select: none;
 } 
-
 .dragScroll {
   overflow-x: hidden;
   white-space: nowrap;
   cursor: grab;
 }
-
 .dragScroll:active {
   cursor: grabbing;
 }
-
 .dataTable thead {
   background-color: var(--tertiary-100);
   color: var(--background);
@@ -529,7 +525,6 @@ ul.sublinks {
   width: 100%;
   text-align: left;
 }
-
 .dataTable thead:hover{
   color: var(--foreground);
 } 
@@ -567,11 +562,10 @@ ul.sublinks {
 .paginationText {
   font-weight: var(--medium);
 }
-
 .dataModalTable{
-  position: sticky; 
+  position: sticky;
   width: 35%;
-  top: 7%;
+  top: 12%;
   background-color: var(--tertiary-50);
   padding: 1em 2em;
   border-radius: var(--br-2);
@@ -587,7 +581,6 @@ ul.sublinks {
 }
 .table{
   width: 100%;
-  min-width: 700px;
   height: auto;
   border-collapse: collapse;
   border-radius: var(--br-2);
@@ -614,6 +607,7 @@ ul.sublinks {
   border-radius: var(--br-1);
   letter-spacing: 1px;
   color: var(--foreground);
+  margin-bottom: 5px;
 }
 .buttons{
   margin-top: 10px;
@@ -753,7 +747,7 @@ ul.sublinks {
   }
   .dataModalTable {
     width: 95%;
-    top: 5%;
+    top: 15%;
   }
   .table {
     min-width: 100%;

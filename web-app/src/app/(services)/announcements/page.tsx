@@ -17,6 +17,7 @@ interface Announcement {
   venue: string;
   ministering: string;
   image?: string;
+  fullDate?: Date;
 }
 
 const formatDate = (dateStr: string) => {
@@ -31,6 +32,7 @@ const formatTime = (timeStr: string) => {
   return `${hr}:${minute.toString().padStart(2, "0")} ${ampm}`;
 };
 
+// ✅ local image mapping
 const imageMap: Record<string, any> = {
   Image11,
   Image12,
@@ -55,7 +57,10 @@ export default function Announcement() {
 
       const enriched = (data || []).map((program) => ({
         ...program,
-        image: imageMap[program.image as keyof typeof imageMap] || Image12,
+        image:
+          program.image && imageMap[program.image as keyof typeof imageMap]
+            ? imageMap[program.image as keyof typeof imageMap]
+            : Image12, // fallback image
         fullDate: new Date(`${program.date}T${program.time}`),
       }));
 
@@ -67,6 +72,7 @@ export default function Announcement() {
 
   if (programs.length === 0) return null;
 
+  // ✅ show last as next, rest as scheduled
   const nextProgram = programs[programs.length - 1];
   const scheduledPrograms = programs.slice(0, programs.length - 1).reverse();
 
@@ -79,7 +85,12 @@ export default function Announcement() {
             <h1>Next Program</h1>
             <div className={styles.nextAnnouncement}>
               <div className={styles.announcementThumbnail}>
-                <Image src={nextProgram.image} alt={nextProgram.title} />
+                <Image
+                  src={nextProgram.image}
+                  alt={nextProgram.title}
+                  width={500}
+                  height={300}
+                />
               </div>
               <div className={styles.announcementBriefs}>
                 <h2>
@@ -87,7 +98,8 @@ export default function Announcement() {
                   <span>- happening @{nextProgram.venue}</span>
                 </h2>
                 <p className={styles.dateTime}>
-                  {formatDate(nextProgram.date)} | {formatTime(nextProgram.time)}
+                  {formatDate(nextProgram.date)} |{" "}
+                  {formatTime(nextProgram.time)}
                 </p>
                 <p className={styles.ministering}>
                   <span>Ministering :</span> {nextProgram.ministering}
@@ -104,7 +116,12 @@ export default function Announcement() {
             {scheduledPrograms.map((program) => (
               <div className={styles.nextAnnouncement} key={program.id}>
                 <div className={styles.announcementThumbnail}>
-                  <Image src={program.image} alt={program.title} />
+                  <Image
+                    src={program.image}
+                    alt={program.title}
+                    width={500}
+                    height={300}
+                  />
                 </div>
                 <div className={styles.announcementBriefs}>
                   <h2>

@@ -22,9 +22,9 @@ export default function SermonId() {
   const imageMap = [Image12, Image13, Image14];
   const selectedImage = imageMap[imageIndex % 3];
 
-  const isVideo = !!videoUrl;
-  const isAudio = !!audioUrl;
-  const isScript = !!scriptUrl;
+  const isVideo = Boolean(videoUrl);
+  const isAudio = Boolean(audioUrl);
+  const isScript = Boolean(scriptUrl);
 
   // ✅ Format date to dd-mm-yyyy
   const formattedDate = date
@@ -35,7 +35,7 @@ export default function SermonId() {
   const handleDownload = () => {
     if (!scriptUrl) return;
     const link = document.createElement("a");
-    link.href = scriptUrl; // works for /docx/myScript.docx
+    link.href = scriptUrl; // e.g. /docx/my-sermon.docx in /public/docx
     link.download = scriptUrl.split("/").pop() || "sermon-script.docx";
     document.body.appendChild(link);
     link.click();

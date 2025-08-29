@@ -22,7 +22,7 @@ interface Sermon {
   preacher: string;
   description: string;
   date: string;
-  video_url: string;  // ✅ use DB column names
+  video_url: string;  // ✅ DB column names
   audio_url: string;
   script_url: string;
 }
@@ -68,7 +68,7 @@ export default function Sermons() {
   );
   const totalPages = Math.ceil(librarySermons.length / PAGE_SIZE);
 
-  // ✅ Pass DB values directly (e.g., /videos/myVideo.mp4)
+  // ✅ Build query with media
   const buildMediaQuery = (
     sermon: Sermon,
     mediaType: "video" | "audio" | "script",
@@ -90,7 +90,6 @@ export default function Sermons() {
   };
 
   const renderSermon = (sermon: Sermon, index: number) => {
-    // ✅ Format to dd-mm-yyyy
     const formattedDate = sermon.date
       ? new Date(sermon.date).toLocaleDateString("en-GB").replace(/\//g, "-")
       : "";

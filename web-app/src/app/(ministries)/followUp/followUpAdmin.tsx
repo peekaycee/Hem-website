@@ -9,6 +9,7 @@ import DataFormModal from "@/app/components/DataFormModal";
 import styles from "../../(pages)/admin/admin.module.css";
 import { ColumnDef } from "@tanstack/react-table";
 import toast from "react-hot-toast";
+import { supabase } from "@/app/lib/supabaseClient";
 
 const followUpTeam = process.env.NEXT_PUBLIC_FOLLOW_UP_TEAM?.split(",") || [];
 const PAGE_SIZE = 10;
@@ -17,7 +18,7 @@ interface FollowUp {
   id: number;
   name: string;
   phone: string;
-  assignedTo: string;
+  assigned_to: string; // 👈 match DB column name
 }
 
 type Tab = "followUp";
@@ -64,9 +65,9 @@ export default function FollowUpAdmin() {
 
   const formFieldsMap: Record<Tab, { key: keyof FollowUp; label: string; type?: string }[]> = {
     followUp: [
-      { key: "name" as keyof FollowUp, label: "Name" },
-      { key: "phone" as keyof FollowUp, label: "Phone" },
-      { key: "assignedTo" as keyof FollowUp, label: "Assigned To" },
+      { key: "name", label: "Name" },
+      { key: "phone", label: "Phone" },
+      { key: "assigned_to", label: "Assigned To" }, // 👈 match Supabase column
     ],
   };
 
@@ -75,7 +76,7 @@ export default function FollowUpAdmin() {
       { accessorKey: "id", header: "ID" },
       { accessorKey: "name", header: "Name" },
       { accessorKey: "phone", header: "Phone" },
-      { accessorKey: "assignedTo", header: "Assigned To" },
+      { accessorKey: "assigned_to", header: "Assigned To" }, // 👈 match DB column
     ],
   };
 
@@ -84,40 +85,37 @@ export default function FollowUpAdmin() {
     page: number;
   }
 
+  // ✅ use Supabase instead of /api
   const fetchMap = {
     followUp: async ({ search, page }: FetchQuery) => {
-      const res = await fetch(`/api/followup`);
-      const data = await res.json();
-      const filtered = data.filter((item: FollowUp) =>
-        item.name.toLowerCase().includes(search.toLowerCase()) ||
-        item.phone.includes(search) ||
-        item.assignedTo.toLowerCase().includes(search.toLowerCase())
-      );
-      const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-      return { data: paginated, total: filtered.length };
+      const { data, error, count } = await supabase
+        .from("followup")
+        .select("*", { count: "exact" })
+        .or(`name.ilike.%${search}%,phone.ilike.%${search}%,assigned_to.ilike.%${search}%`)
+        .order("created_at", { ascending: false })
+        .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+
+      if (error) {
+        console.error(error);
+        toast.error("Failed to fetch follow-ups");
+        return { data: [], total: 0 };
+      }
+      return { data: data || [], total: count || 0 };
     },
   };
 
-  const submitMap = {
-    followUp: async (form: FollowUp) => {
-      try {
-        const method = form.id ? "PUT" : "POST";
-        await fetch("/api/followup", {
-          method,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        });
-        toast.success("Saved successfully");
-      } catch {
-        toast.error("Failed to save");
-      }
-    },
-  };
 
   const deleteMap = {
     followUp: async (id: number) => {
-      await fetch(`/api/followup?id=${id}`, { method: "DELETE" });
-      triggerRefresh();
+      const toastId = toast.loading("Deleting...");
+      try {
+        const { error } = await supabase.from("followup").delete().eq("id", id);
+        if (error) throw error;
+        toast.success("Deleted successfully ✅", { id: toastId });
+        triggerRefresh();
+      } catch {
+        toast.error("Failed to delete ❌", { id: toastId });
+      }
     },
   };
 
@@ -143,9 +141,9 @@ export default function FollowUpAdmin() {
   const extractNumbers = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/followup");
-      const data = await res.json();
-      const numbers = data.map((item: FollowUp) => item.phone);
+      const { data, error } = await supabase.from("followup").select("phone");
+      if (error) throw error;
+      const numbers = data.map((item: { phone: string }) => item.phone);
       setPhoneNumbers(numbers);
       setShowNumbers(true);
     } catch (error) {
@@ -190,7 +188,7 @@ export default function FollowUpAdmin() {
                 <Button tag={`Add ${activeTab}`} onClick={openCreate} />
                 <Button tag="Send Bulk Message" onClick={bulkMessages} />
               </div>
-              <div className={styles.tableInner}>
+              <div className={styles.followupTableInner}>
                 <DataTable<FollowUp>
                   key={refreshKey + activeTab + search}
                   columns={columnDefs[activeTab]}
@@ -226,21 +224,15 @@ export default function FollowUpAdmin() {
             <div className={styles.modalOverlay}>
               <DataFormModal<FollowUp>
                 isOpen={modalOpen}
-                onClose={closeModal}
-                onSubmit={async (form) => {
-                  // Ensure all required fields are present and id is a number
-                  const completeForm: FollowUp = {
-                    id: form.id ?? 0,
-                    name: form.name ?? "",
-                    phone: form.phone ?? "",
-                    assignedTo: form.assignedTo ?? "",
-                  };
-                  await submitMap[activeTab](completeForm);
+                onClose={() => {
+                  closeModal();
                   triggerRefresh();
                 }}
-                initialData={editData || {}}
+                tableName="followup"
                 fields={formFieldsMap[activeTab]}
+                initialData={editData || {}}
                 mode={editData ? "update" : "create"}
+                rowId={editData?.id}
               />
             </div>
           )}

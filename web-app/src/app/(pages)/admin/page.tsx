@@ -11,35 +11,12 @@ import styles from "./admin.module.css";
 import { ColumnDef } from "@tanstack/react-table";
 import toast from "react-hot-toast";
 
+// ✅ import Supabase client
+import { supabase } from "@/app/lib/supabaseClient";
+
 const admin = process.env.NEXT_PUBLIC_ADMIN?.split(",") || [];
 const PAGE_SIZE = 10;
 
-interface Announcement {
-  id: number;
-  title: string;
-  venue: string;
-  description: string;
-  date: string;
-  time: string;
-  ministering: string;
-  image?: any;
-}
-interface Sermon {
-  id: number;
-  topic: string;
-  preacher: string;
-  description: string;
-  date: string;
-  videoUrl: string;
-  audioUrl: string;
-  scriptUrl: string;
-}
-interface FollowUp {
-  id: number;
-  name: string;
-  phone: string;
-  assignedTo: string;
-}
 type Tab = "announcement" | "sermon" | "followUp";
 
 function AdminContent() {
@@ -58,6 +35,13 @@ function AdminContent() {
 
   // 👉 horizontal drag-to-scroll ref
   const tableScrollRef = useRef<HTMLDivElement>(null);
+
+  // ✅ mapping once, use everywhere
+  const tableKeyMap: Record<Tab, "announcements" | "sermons" | "followup"> = {
+    announcement: "announcements",
+    sermon: "sermons",
+    followUp: "followup",
+  };
 
   useEffect(() => {
     router.replace(`/admin?tab=${activeTab}`);
@@ -83,7 +67,6 @@ function AdminContent() {
       return !!target.closest("input, textarea, select, button, a, [role='button']");
     };
 
-    // --- Mouse Events ---
     const onMouseDown = (e: MouseEvent) => {
       if (isInteractive(e.target)) return;
       isDown = true;
@@ -103,7 +86,6 @@ function AdminContent() {
       el.classList.remove(styles.dragging);
     };
 
-    // --- Touch Events ---
     const onTouchStart = (e: TouchEvent) => {
       if (isInteractive(e.target)) return;
       isDown = true;
@@ -122,7 +104,6 @@ function AdminContent() {
       el.classList.remove(styles.dragging);
     };
 
-    // Attach
     el.addEventListener("mousedown", onMouseDown);
     el.addEventListener("mousemove", onMouseMove);
     el.addEventListener("mouseup", onMouseUp);
@@ -148,16 +129,13 @@ function AdminContent() {
     setEditData(null);
     setModalOpen(true);
   };
-
   const bulkMessages = () => {
     router.push("https://www.bulksmsnigeria.com/app/bulksms/welcome");
   };
-
   const openEdit = (row: any) => {
     setEditData(row);
     setModalOpen(true);
   };
-
   const closeModal = () => setModalOpen(false);
   const triggerRefresh = () => setRefreshKey((k) => k + 1);
 
@@ -176,20 +154,31 @@ function AdminContent() {
       { key: "preacher", label: "Preacher" },
       { key: "description", label: "Description" },
       { key: "date", label: "Date", type: "date" },
-      { key: "videoUrl", label: "Video Url" },
-      { key: "audioUrl", label: "Audio Url" },
-      { key: "scriptUrl", label: "Script Url" },
+      { key: "video_url", label: "Video Url" },
+      { key: "audio_url", label: "Audio Url" },
+      { key: "script_url", label: "Script Url" },
     ],
     followUp: [
       { key: "name", label: "Name" },
       { key: "phone", label: "Phone" },
-      { key: "assignedTo", label: "Assigned To" },
+      { key: "assigned_to", label: "Assigned To" },
     ],
   };
 
   const formatDate = (dateStr: string) => {
-    const [year, month, day] = dateStr.split("-");
-    return `${day}-${month}-${year}`;
+  if (!dateStr) return "";
+  const [year, month, day] = dateStr.split("-");
+  return `${day}-${month}-${year}`;
+};
+
+
+  const formatTime = (timeStr: string) => {
+    if (!timeStr) return "";
+    const [hourStr, minute] = timeStr.split(":");
+    let hour = parseInt(hourStr, 10);
+    const ampm = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12; // convert 0 → 12
+    return `${hour}:${minute} ${ampm}`;
   };
 
   const columnDefs: Record<Tab, ColumnDef<any>[]> = {
@@ -199,7 +188,7 @@ function AdminContent() {
       { accessorKey: "venue", header: "Venue" },
       { accessorKey: "description", header: "Description" },
       { accessorKey: "date", header: "Date", cell: ({ row }) => formatDate(row.original.date) },
-      { accessorKey: "time", header: "Time" },
+      { accessorKey: "time", header: "Time", cell: ({ row }) => formatTime(row.original.time) },
       { accessorKey: "ministering", header: "Ministering" },
       { accessorKey: "image", header: "Image" },
     ],
@@ -209,129 +198,83 @@ function AdminContent() {
       { accessorKey: "preacher", header: "Preacher" },
       { accessorKey: "description", header: "Description" },
       { accessorKey: "date", header: "Date", cell: ({ row }) => formatDate(row.original.date) },
-      { accessorKey: "videoUrl", header: "Video Url" },
-      { accessorKey: "audioUrl", header: "Audio Url" },
-      { accessorKey: "scriptUrl", header: "Script Url" },
+      { accessorKey: "video_url", header: "Video Url" },
+      { accessorKey: "audio_url", header: "Audio Url" },
+      { accessorKey: "script_url", header: "Script Url" },
     ],
     followUp: [
       { accessorKey: "id", header: "ID" },
       { accessorKey: "name", header: "Name" },
       { accessorKey: "phone", header: "Phone" },
-      { accessorKey: "assignedTo", header: "Assigned To" },
+      { accessorKey: "assigned_to", header: "Assigned To" },
     ],
   };
 
-  const fetchMap = {
-    announcement: async ({ search, page }: any) => {
-      const res = await fetch(`/api/announcement`);
-      const data = await res.json();
-      const filtered = data.filter((item: Announcement) =>
-        item.title.toLowerCase().includes(search.toLowerCase())
-      );
-      interface AnnouncementWithDateTime extends Announcement {
-        date: string;
-        time: string;
-      }
-      const sorted = (filtered as AnnouncementWithDateTime[])
-        .filter((item) => item.date && item.time)
-        .sort((a, b) => new Date(`${b.date}T${b.time}`).getTime() - new Date(`${a.date}T${a.time}`).getTime());
-      const paginated = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-      return { data: paginated, total: sorted.length };
+  // ✅ fetch data with Supabase directly with pagination
+  const fetchMap: Record<"announcements" | "sermons" | "followup", (page: number, search: string) => Promise<{ data: any[]; total: number }>> = {
+    announcements: async (page, search) => {
+      const { data, error, count } = await supabase
+        .from("announcements")
+        .select("*", { count: "exact" })
+        .ilike("title", `%${search}%`)
+        .order("created_at", { ascending: false })
+        .order("time", { ascending: false })
+        .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+
+      if (error) throw error;
+      return { data: data || [], total: count || 0 };
     },
-    sermon: async ({ search, page }: any) => {
-      const res = await fetch(`/api/sermon`);
-      const data = await res.json();
-      const filtered = data.filter((item: Sermon) =>
-        item.topic.toLowerCase().includes(search.toLowerCase()) ||
-        item.preacher.toLowerCase().includes(search.toLowerCase())
-      );
-      const sorted = (filtered as Sermon[])
-        .filter((item) => item.date)
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      const paginated = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-      return { data: paginated, total: sorted.length };
+
+    sermons: async (page, search) => {
+      const { data, error, count } = await supabase
+        .from("sermons")
+        .select("*", { count: "exact" })
+        .ilike("topic", `%${search}%`)
+        .order("created_at", { ascending: false })
+        .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+
+      if (error) throw error;
+      return { data: data || [], total: count || 0 };
     },
-    followUp: async ({ search, page }: any) => {
-      const res = await fetch(`/api/followup`);
-      const data = await res.json();
-      const filtered = data.filter((item: FollowUp) =>
-        item.name.toLowerCase().includes(search.toLowerCase()) ||
-        item.phone.includes(search) ||
-        item.assignedTo.toLowerCase().includes(search.toLowerCase())
-      );
-      const sorted: FollowUp[] = (filtered as FollowUp[]).sort((a, b) => b.id - a.id);
-      const paginated = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-      return { data: paginated, total: sorted.length };
+
+    followup: async (page, search) => {
+      const { data, error, count } = await supabase
+        .from("followup")
+        .select("*", { count: "exact" })
+        .ilike("name", `%${search}%`)
+        .order("created_at", { ascending: false })
+        .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+
+      if (error) throw error;
+      return { data: data || [], total: count || 0 };
     },
   };
 
-  const submitMap = {
-    announcement: async (form: any) => {
+  const deleteMap: Record<Tab, (id: number) => Promise<void>> = {
+    announcement: async (id) => {
       try {
-        const method = form.id ? "PUT" : "POST";
-        await fetch("/api/announcement", {
-          method,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        });
-        toast.success("Saved successfully");
-      } catch {
-        toast.error("Failed to save");
-      }
-    },
-    sermon: async (form: any) => {
-      try {
-        const method = form.id ? "PUT" : "POST";
-        await fetch("/api/sermon", {
-          method,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        });
-        toast.success("Saved successfully");
-      } catch {
-        toast.error("Failed to save");
-      }
-    },
-    followUp: async (form: any) => {
-      try {
-        const method = form.id ? "PUT" : "POST";
-        await fetch("/api/followup", {
-          method,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        });
-        toast.success("Saved successfully");
-      } catch {
-        toast.error("Failed to save");
-      }
-    },
-  };
-
-  const deleteMap = {
-    announcement: async (id: number) => {
-      try {
-        const res = await fetch(`/api/announcement?id=${id}`, { method: "DELETE" });
-        if (!res.ok) throw new Error("Delete failed");
+        const { error } = await supabase.from("announcements").delete().eq("id", id);
+        if (error) throw error;
         toast.success("Deleted successfully");
         triggerRefresh();
       } catch {
         toast.error("Failed to delete");
       }
     },
-    sermon: async (id: number) => {
+    sermon: async (id) => {
       try {
-        const res = await fetch(`/api/sermon?id=${id}`, { method: "DELETE" });
-        if (!res.ok) throw new Error("Delete failed");
+        const { error } = await supabase.from("sermons").delete().eq("id", id);
+        if (error) throw error;
         toast.success("Deleted successfully");
         triggerRefresh();
       } catch {
         toast.error("Failed to delete");
       }
     },
-    followUp: async (id: number) => {
+    followUp: async (id) => {
       try {
-        const res = await fetch(`/api/followup?id=${id}`, { method: "DELETE" });
-        if (!res.ok) throw new Error("Delete failed");
+        const { error } = await supabase.from("followup").delete().eq("id", id);
+        if (error) throw error;
         toast.success("Deleted successfully");
         triggerRefresh();
       } catch {
@@ -390,12 +333,13 @@ function AdminContent() {
             )}
           </div>
 
-          {/* Force inner min-width for scroll */}
           <div className={styles.tableInner}>
             <DataTable<any>
               key={refreshKey + activeTab + search}
               columns={columnDefs[activeTab]}
-              fetchData={(query) => fetchMap[activeTab]({ ...query, search })}
+              fetchData={(query) =>
+                fetchMap[tableKeyMap[activeTab]](query.page, search)
+              }
               enableEdit={openEdit}
               enableDelete={deleteMap[activeTab]}
             />
@@ -407,14 +351,15 @@ function AdminContent() {
         <div className={styles.modalOverlay}>
           <DataFormModal<any>
             isOpen={modalOpen}
-            onClose={closeModal}
-            onSubmit={async (form) => {
-              await submitMap[activeTab](form);
+            onClose={() => {
+              closeModal();
               triggerRefresh();
             }}
-            initialData={editData || {}}
+            tableName={tableKeyMap[activeTab]}
             fields={formFieldsMap[activeTab]}
+            initialData={editData || {}}
             mode={editData ? "update" : "create"}
+            rowId={editData?.id}
           />
         </div>
       )}

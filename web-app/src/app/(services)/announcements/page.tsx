@@ -1,11 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import Image from 'next/image';
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import styles from "./announcement.module.css";
 import Hero from "@/app/components/Hero";
-import { Image11, Image12, Image13, Image14 } from '../../../../public/images';
-import ProgramData from '../../data/announcements.json';
+import { Image11, Image12, Image13, Image14 } from "../../../../public/images";
+import { supabase } from "@/app/lib/supabaseClient";
+
+interface Announcement {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+  time: string;
+  venue: string;
+  ministering: string;
+  image?: string;
+}
 
 const formatDate = (dateStr: string) => {
   const [year, month, day] = dateStr.split("-");
@@ -26,25 +38,38 @@ const imageMap: Record<string, any> = {
   Image14,
 };
 
-// Enrich each program with date and image
-const enrichedPrograms = [...ProgramData].map((program) => ({
-  ...program,
-  image: imageMap[program.image] || Image12,
-  fullDate: new Date(`${program.date}T${program.time}`),
-}));
-
-// Export first 6 images for external use (e.g. home page Events section)
-// export const announcementImages = enrichedPrograms
-//   .map((p) => p.image)
-//   .slice(0, 6);
-
-// Assume the last one added is the latest
-const nextProgram = enrichedPrograms[enrichedPrograms.length - 1];
-const scheduledPrograms = enrichedPrograms
-  .slice(0, enrichedPrograms.length - 1)
-  .reverse();
-
 export default function Announcement() {
+  const [programs, setPrograms] = useState<Announcement[]>([]);
+
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      const { data, error } = await supabase
+        .from("announcements")
+        .select("*")
+        .order("date", { ascending: true });
+
+      if (error) {
+        console.error("Error fetching announcements:", error);
+        return;
+      }
+
+      const enriched = (data || []).map((program) => ({
+        ...program,
+        image: imageMap[program.image as keyof typeof imageMap] || Image12,
+        fullDate: new Date(`${program.date}T${program.time}`),
+      }));
+
+      setPrograms(enriched);
+    };
+
+    fetchPrograms();
+  }, []);
+
+  if (programs.length === 0) return null;
+
+  const nextProgram = programs[programs.length - 1];
+  const scheduledPrograms = programs.slice(0, programs.length - 1).reverse();
+
   return (
     <section className={styles.announcementPage}>
       <Hero title="Programs" id={styles.announcement} />
@@ -62,12 +87,11 @@ export default function Announcement() {
                   <span>- happening @{nextProgram.venue}</span>
                 </h2>
                 <p className={styles.dateTime}>
-                  {formatDate(nextProgram.date)} |{" "}
-                  {formatTime(nextProgram.time)}
+                  {formatDate(nextProgram.date)} | {formatTime(nextProgram.time)}
                 </p>
-                 <p className={styles.ministering}>
-                   <span>Ministering :</span> {nextProgram.ministering}
-                  </p>
+                <p className={styles.ministering}>
+                  <span>Ministering :</span> {nextProgram.ministering}
+                </p>
                 <p className={styles.expectation}>{nextProgram.description}</p>
               </div>
             </div>
@@ -90,9 +114,10 @@ export default function Announcement() {
                     {formatDate(program.date)} | {formatTime(program.time)}
                   </p>
                   <p className={styles.ministering}>
-                   <span>Ministering : </span>{program.ministering}
+                    <span>Ministering : </span>
+                    {program.ministering}
                   </p>
-                  <p  className={styles.expectation}>{program.description}</p>
+                  <p className={styles.expectation}>{program.description}</p>
                 </div>
               </div>
             ))}

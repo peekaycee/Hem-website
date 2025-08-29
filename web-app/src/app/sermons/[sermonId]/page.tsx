@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Image12, Image13, Image14 } from "../../../../public/images";
-import styles from './sermonid.module.css';
+import styles from "./sermonid.module.css";
 import Button from "@/app/components/Button";
 
 export default function SermonId() {
@@ -26,12 +26,17 @@ export default function SermonId() {
   const isAudio = !!audioUrl;
   const isScript = !!scriptUrl;
 
-  // Function to trigger download
+  // ✅ Format date to dd-mm-yyyy
+  const formattedDate = date
+    ? new Date(date).toLocaleDateString("en-GB").replace(/\//g, "-")
+    : "";
+
+  // ✅ Download handler
   const handleDownload = () => {
     if (!scriptUrl) return;
     const link = document.createElement("a");
-    link.href = scriptUrl;
-    link.download = scriptUrl.split("/").pop() || "sermon-script.docx"; 
+    link.href = scriptUrl; // works for /docx/myScript.docx
+    link.download = scriptUrl.split("/").pop() || "sermon-script.docx";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -46,10 +51,26 @@ export default function SermonId() {
       </div>
 
       <div className={styles.details}>
-        {topic && <h2 className={styles.topic}>Topic: <span>{topic}</span></h2>}
-        {preacher && <p><strong>Preacher:</strong> {preacher}</p>}
-        {description && <p><strong>Description:</strong> {description}</p>}
-        {date && <p><strong>Date:</strong> {date}</p>}
+        {topic && (
+          <h2 className={styles.topic}>
+            Topic: <span>{topic}</span>
+          </h2>
+        )}
+        {preacher && (
+          <p>
+            <strong>Preacher:</strong> {preacher}
+          </p>
+        )}
+        {description && (
+          <p>
+            <strong>Description:</strong> {description}
+          </p>
+        )}
+        {date && (
+          <p>
+            <strong>Date:</strong> {formattedDate}
+          </p>
+        )}
       </div>
 
       {isVideo && (

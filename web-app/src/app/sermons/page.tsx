@@ -14,6 +14,7 @@ import {
   Image14,
 } from "../../../public/images";
 import Link from "next/link";
+import { supabase } from "@/app/lib/supabaseClient";
 
 interface Sermon {
   id: number;
@@ -21,9 +22,9 @@ interface Sermon {
   preacher: string;
   description: string;
   date: string;
-  videoUrl: string;
-  audioUrl: string;
-  scriptUrl: string;
+  video_url: string;  // ✅ use DB column names
+  audio_url: string;
+  script_url: string;
 }
 
 const imageMap = [Image12, Image13, Image14];
@@ -37,20 +38,26 @@ export default function Sermons() {
 
   useEffect(() => {
     const fetchSermons = async () => {
-      const res = await fetch("/api/sermon");
-      const data: Sermon[] = await res.json();
-      const sorted = data.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
-      setSermons(sorted);
+      const { data, error } = await supabase
+        .from("sermons")
+        .select("*")
+        .order("date", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching sermons:", error);
+        return;
+      }
+
+      setSermons(data || []);
     };
+
     fetchSermons();
   }, []);
 
   const filteredSermons = sermons.filter(
     (s) =>
-      s.topic.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.preacher.toLowerCase().includes(searchTerm.toLowerCase())
+      s.topic?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.preacher?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const recentSermons = sermons.slice(0, 3);
@@ -61,52 +68,60 @@ export default function Sermons() {
   );
   const totalPages = Math.ceil(librarySermons.length / PAGE_SIZE);
 
+  // ✅ Pass DB values directly (e.g., /videos/myVideo.mp4)
   const buildMediaQuery = (
     sermon: Sermon,
     mediaType: "video" | "audio" | "script",
     imageIndex: number
   ) => {
     const params = new URLSearchParams({
-      topic: sermon.topic,
-      preacher: sermon.preacher,
-      description: sermon.description,
-      date: sermon.date,
+      topic: sermon.topic || "",
+      preacher: sermon.preacher || "",
+      description: sermon.description || "",
+      date: sermon.date || "",
       imageIndex: imageIndex.toString(),
     });
 
-    if (mediaType === "video") params.append("videoUrl", sermon.videoUrl);
-    if (mediaType === "audio") params.append("audioUrl", sermon.audioUrl);
-    if (mediaType === "script") params.append("scriptUrl", sermon.scriptUrl);
+    if (mediaType === "video") params.append("videoUrl", sermon.video_url || "");
+    if (mediaType === "audio") params.append("audioUrl", sermon.audio_url || "");
+    if (mediaType === "script") params.append("scriptUrl", sermon.script_url || "");
 
     return `/sermons/${sermon.id}?${params.toString()}`;
   };
 
-  const renderSermon = (sermon: Sermon, index: number) => (
-    <div key={sermon.id} className={styles.librarySermon}>
-      <div className={styles.sermonThumbnail}>
-        <Image src={imageMap[index % 3]} alt="Sermon Flyer" />
-      </div>
-      <div className={styles.sermonBriefs}>
-        <h2>
-          {sermon.topic} <span>- By {sermon.preacher}</span>
-        </h2>
-        <pre>{sermon.date}</pre>
-        <p>{sermon.description}</p>
+  const renderSermon = (sermon: Sermon, index: number) => {
+    // ✅ Format to dd-mm-yyyy
+    const formattedDate = sermon.date
+      ? new Date(sermon.date).toLocaleDateString("en-GB").replace(/\//g, "-")
+      : "";
 
-        <div className={styles.mediaIcons}>
-          <Link href={buildMediaQuery(sermon, "video", index % 3)}>
-            <Image src={VideoIcon} alt="Video" width={20} height={20} />
-          </Link>
-          <Link href={buildMediaQuery(sermon, "audio", index % 3)}>
-            <Image src={AudioIcon} alt="Audio" width={20} height={20} />
-          </Link>
-          <Link href={buildMediaQuery(sermon, "script", index % 3)}>
-            <Image src={ScriptIcon} alt="Script" width={20} height={20} />
-          </Link>
+    return (
+      <div key={sermon.id} className={styles.librarySermon}>
+        <div className={styles.sermonThumbnail}>
+          <Image src={imageMap[index % 3]} alt="Sermon Flyer" />
+        </div>
+        <div className={styles.sermonBriefs}>
+          <h2>
+            {sermon.topic} <span>- By {sermon.preacher}</span>
+          </h2>
+          <pre>{formattedDate}</pre>
+          <p>{sermon.description}</p>
+
+          <div className={styles.mediaIcons}>
+            <Link href={buildMediaQuery(sermon, "video", index % 3)}>
+              <Image src={VideoIcon} alt="Video" width={20} height={20} />
+            </Link>
+            <Link href={buildMediaQuery(sermon, "audio", index % 3)}>
+              <Image src={AudioIcon} alt="Audio" width={20} height={20} />
+            </Link>
+            <Link href={buildMediaQuery(sermon, "script", index % 3)}>
+              <Image src={ScriptIcon} alt="Script" width={20} height={20} />
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <section className={styles.sermonPage}>

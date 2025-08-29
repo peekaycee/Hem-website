@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import styles from "./announcement.module.css";
 import Hero from "@/app/components/Hero";
 import { Image11, Image12, Image13, Image14 } from "../../../../public/images";
@@ -86,7 +86,7 @@ export default function Announcement() {
             <div className={styles.nextAnnouncement}>
               <div className={styles.announcementThumbnail}>
                 <Image
-                  src={nextProgram.image}
+                  src={nextProgram.image as string | StaticImageData}
                   alt={nextProgram.title}
                   width={500}
                   height={300}
@@ -117,7 +117,7 @@ export default function Announcement() {
               <div className={styles.nextAnnouncement} key={program.id}>
                 <div className={styles.announcementThumbnail}>
                   <Image
-                    src={program.image}
+                    src={program.image ?? Image12}
                     alt={program.title}
                     width={500}
                     height={300}

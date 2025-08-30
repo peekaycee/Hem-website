@@ -3,12 +3,12 @@
 import styles from './home.module.css';
 import Button from './components/Button';
 import Image from 'next/image';
-import { Pic1, ChurchLogo } from '../../public/images';
+import { Pic1, ChurchLogo, Image11, Image12, Image13, Image14 } from '../../public/images';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
-import { announcementImages } from './data/announcementImages';
 import { motion } from "framer-motion";
+import { supabase } from "@/app/lib/supabaseClient";
 
 // Reusable fade-in animation
 const fadeIn = {
@@ -16,12 +16,17 @@ const fadeIn = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
 };
 
+// Local image mapping for announcements
+const imageMap: Record<string, any> = { Image11, Image12, Image13, Image14 };
+
 export default function Home() {
   const router = useRouter();
   const [testimony, setTestimony] = useState(1);
+  const [programs, setPrograms] = useState<any[]>([]);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
 
-  // Ensure hero video plays on mount (desktop + mobile)
+  // Hero video autoplay setup
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
@@ -30,32 +35,53 @@ export default function Home() {
       video.setAttribute("playsinline", "true");
       video.setAttribute("webkit-playsinline", "true");
 
-      // slight delay helps Safari autoplay
       setTimeout(() => {
-        video.play().catch((err) => {
-          console.warn("Autoplay prevented:", err);
-        });
+        video.play().catch((err) => console.warn("Autoplay prevented:", err));
       }, 200);
     }
   }, []);
 
-  const redirectToGivePage = () => {
-    router.push("/give");
-  };
-  const redirectToAnnouncement = () => {
-    router.push("/announcements");
-  };
-  const redirectToPrayer = () => {
-    router.push("/prayers");
-  };
+  // Fetch announcements from Supabase
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      const { data, error } = await supabase
+        .from("announcements")
+        .select("*")
+        .order("date", { ascending: true });
 
-  const previousTestimonies = () => {
-    setTestimony((prev) => Math.max(prev - 1, 1));
-  };
+      if (error) {
+        console.error("Error fetching announcements:", error);
+        return;
+      }
 
-  const nextTestimonies = () => {
-    setTestimony((prev) => Math.min(prev + 1, 3));
-  };
+      const enriched = (data || []).map((program) => ({
+        ...program,
+        image:
+          program.image && imageMap[program.image as keyof typeof imageMap]
+            ? imageMap[program.image as keyof typeof imageMap]
+            : Image12, // fallback
+      }));
+
+      setPrograms(enriched);
+    };
+
+    fetchPrograms();
+  }, []);
+
+  const redirectToGivePage = () => router.push("/give");
+  const redirectToAnnouncement = () => router.push("/announcements");
+  const redirectToPrayer = () => router.push("/prayers");
+
+  const previousTestimonies = () => setTestimony((prev) => Math.max(prev - 1, 1));
+  const nextTestimonies = () => setTestimony((prev) => Math.min(prev + 1, 3));
+
+  // Smooth infinite scroll setup
+  const [trackWidth, setTrackWidth] = useState(0);
+  useEffect(() => {
+    if (trackRef.current) {
+      setTrackWidth(trackRef.current.scrollWidth / 2); // half because we duplicate items
+    }
+  }, [programs]);
 
   return (
     <main>
@@ -64,7 +90,7 @@ export default function Home() {
         className={styles.hero}
         variants={fadeIn}
         initial="hidden"
-        animate="visible"   // plays immediately on mount
+        animate="visible"
       >
         <div className={styles.video}>
           <video
@@ -117,26 +143,31 @@ export default function Home() {
         </div>
       </motion.section>
 
-      {/* Events Section (Infinite Scroll with Seamless Loop) */}
+      {/* Events Section (Infinite Scroll + Lazy-Load + Responsive) */}
       <section className={styles.event}>
         <h2>Upcoming Programs</h2>
         <div className={styles.eventsWrapper}>
           <motion.div
+            ref={trackRef}
             className={styles.track}
-            animate={{ x: ["0%", "-50%"] }} // half since it's duplicated
+            animate={{ x: ["0px", `-${trackWidth}px`] }}
             transition={{
               repeat: Infinity,
               ease: "linear",
               duration: 20,
             }}
           >
-            {[...announcementImages, ...announcementImages].map((img, index) => (
+            {[...programs, ...programs].map((program, index) => (
               <div className={styles.eventImageWrapper} key={index}>
                 <Image
-                  src={img}
-                  alt={`Event ${index + 1}`}
+                  src={program.image ?? Image12}
+                  alt={program.title}
                   width={200}
                   height={200}
+                  priority={index < programs.length}
+                  sizes="(max-width: 768px) 150px, (max-width: 1024px) 180px, 200px"
+                  style={{ width: "100%", height: "auto", objectFit: "cover" }}
+                  loading={index >= programs.length ? "lazy" : "eager"}
                 />
               </div>
             ))}
@@ -161,7 +192,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonies Section (NO animation) */}
+      {/* Testimonies Section */}
       <section className={styles.testimony}>
         <h2>Testimonies</h2>
         <div className={styles.testifiersDetails}>
@@ -189,7 +220,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Prayer CTA (NO animation) */}
+      {/* Prayer CTA */}
       <section className={styles.cta}>
         <div className={styles.ctaContent}>
           <h2>Need Someone To Pray With?</h2>

@@ -18,7 +18,7 @@ interface FollowUp {
   id: number;
   name: string;
   phone: string;
-  assigned_to: string; // 👈 match DB column name
+  assigned_to: string;
 }
 
 type Tab = "followUp";
@@ -28,6 +28,7 @@ export default function FollowUpAdmin() {
   const searchParams = useSearchParams();
   const initialTab = (searchParams.get("tab") as Tab) || "followUp";
   const [activeTab] = useState<Tab>(initialTab);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [editData, setEditData] = useState<FollowUp | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -38,7 +39,7 @@ export default function FollowUpAdmin() {
 
   const [phoneNumbers, setPhoneNumbers] = useState<string[]>([]);
   const [showNumbers, setShowNumbers] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loadingPhones, setLoadingPhones] = useState(false);
 
   useEffect(() => {
     if (!authenticated && passwordInputRef.current) {
@@ -63,60 +64,44 @@ export default function FollowUpAdmin() {
   const closeModal = () => setModalOpen(false);
   const triggerRefresh = () => setRefreshKey((k) => k + 1);
 
-  const formFieldsMap: Record<Tab, { key: keyof FollowUp; label: string; type?: string }[]> = {
-    followUp: [
-      { key: "name", label: "Name" },
-      { key: "phone", label: "Phone" },
-      { key: "assigned_to", label: "Assigned To" }, // 👈 match Supabase column
-    ],
-  };
-
-  const columnDefs: Record<Tab, ColumnDef<FollowUp>[]> = {
-    followUp: [
-      { accessorKey: "id", header: "ID" },
-      { accessorKey: "name", header: "Name" },
-      { accessorKey: "phone", header: "Phone" },
-      { accessorKey: "assigned_to", header: "Assigned To" }, // 👈 match DB column
-    ],
-  };
+  const columnDefs: ColumnDef<FollowUp>[] = [
+    { accessorKey: "id", header: "ID" },
+    { accessorKey: "name", header: "Name" },
+    { accessorKey: "phone", header: "Phone" },
+    { accessorKey: "assigned_to", header: "Assigned To" },
+  ];
 
   interface FetchQuery {
     search: string;
     page: number;
   }
 
-  // ✅ use Supabase instead of /api
-  const fetchMap = {
-    followUp: async ({ search, page }: FetchQuery) => {
-      const { data, error, count } = await supabase
-        .from("followup")
-        .select("*", { count: "exact" })
-        .or(`name.ilike.%${search}%,phone.ilike.%${search}%,assigned_to.ilike.%${search}%`)
-        .order("created_at", { ascending: false })
-        .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+  const fetchFollowUps = async ({ search, page }: FetchQuery) => {
+    const { data, error, count } = await supabase
+      .from("followup")
+      .select("*", { count: "exact" })
+      .or(`name.ilike.%${search}%,phone.ilike.%${search}%,assigned_to.ilike.%${search}%`)
+      .order("created_at", { ascending: false })
+      .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
 
-      if (error) {
-        console.error(error);
-        toast.error("Failed to fetch follow-ups");
-        return { data: [], total: 0 };
-      }
-      return { data: data || [], total: count || 0 };
-    },
+    if (error) {
+      console.error(error);
+      toast.error("Failed to fetch follow-ups");
+      return { data: [], total: 0 };
+    }
+    return { data: data || [], total: count || 0 };
   };
 
-
-  const deleteMap = {
-    followUp: async (id: number) => {
-      const toastId = toast.loading("Deleting...");
-      try {
-        const { error } = await supabase.from("followup").delete().eq("id", id);
-        if (error) throw error;
-        toast.success("Deleted successfully ✅", { id: toastId });
-        triggerRefresh();
-      } catch {
-        toast.error("Failed to delete ❌", { id: toastId });
-      }
-    },
+  const deleteFollowUp = async (id: number) => {
+    const toastId = toast.loading("Deleting...");
+    try {
+      const { error } = await supabase.from("followup").delete().eq("id", id);
+      if (error) throw error;
+      toast.success("Deleted successfully ✅", { id: toastId });
+      triggerRefresh();
+    } catch {
+      toast.error("Failed to delete ❌", { id: toastId });
+    }
   };
 
   const handleAuthentication = () => {
@@ -127,19 +112,8 @@ export default function FollowUpAdmin() {
     }
   };
 
-  const copyToClipboard = () => {
-    if (phoneNumbers.length === 0) {
-      toast.error("No phone numbers to copy.");
-      return;
-    }
-    const textToCopy = phoneNumbers.join(", ");
-    navigator.clipboard.writeText(textToCopy)
-      .then(() => toast.success("Phone numbers copied to clipboard!"))
-      .catch(() => toast.error("Failed to copy phone numbers."));
-  };
-
   const extractNumbers = async () => {
-    setLoading(true);
+    setLoadingPhones(true);
     try {
       const { data, error } = await supabase.from("followup").select("phone");
       if (error) throw error;
@@ -150,7 +124,7 @@ export default function FollowUpAdmin() {
       console.error("Failed to extract numbers:", error);
       toast.error("Could not fetch phone numbers.");
     } finally {
-      setLoading(false);
+      setLoadingPhones(false);
     }
   };
 
@@ -188,13 +162,14 @@ export default function FollowUpAdmin() {
                 <Button tag={`Add ${activeTab}`} onClick={openCreate} />
                 <Button tag="Send Bulk Message" onClick={bulkMessages} />
               </div>
+
               <div className={styles.followupTableInner}>
                 <DataTable<FollowUp>
                   key={refreshKey + activeTab + search}
-                  columns={columnDefs[activeTab]}
-                  fetchData={(query) => fetchMap[activeTab]({ ...query, search })}
+                  columns={columnDefs}
+                  fetchData={(query) => fetchFollowUps({ ...query, search })}
                   enableEdit={openEdit}
-                  enableDelete={deleteMap[activeTab]}
+                  enableDelete={deleteFollowUp}
                 />
               </div>
             </div>
@@ -202,9 +177,9 @@ export default function FollowUpAdmin() {
             {/* Phone Numbers Display */}
             <div className={styles.phoneNumbersSection}>
               <Button
-                tag={loading ? "Extracting..." : "Extract Phone Numbers"}
+                tag={loadingPhones ? "Extracting..." : "Extract Phone Numbers"}
                 onClick={extractNumbers}
-                disabled={loading}
+                disabled={loadingPhones}
               />
               {showNumbers && phoneNumbers.length > 0 && (
                 <div className={styles.phoneNumbers}>
@@ -212,7 +187,18 @@ export default function FollowUpAdmin() {
                     {phoneNumbers.join(", ")}
                   </p>
                   <div className={styles.controlBtns}>
-                    <Button tag="Copy" onClick={copyToClipboard} />
+                    <Button
+                      tag="Copy"
+                      onClick={() => {
+                        if (phoneNumbers.length === 0) {
+                          toast.error("No phone numbers to copy.");
+                          return;
+                        }
+                        navigator.clipboard.writeText(phoneNumbers.join(", "))
+                          .then(() => toast.success("Phone numbers copied to clipboard!"))
+                          .catch(() => toast.error("Failed to copy phone numbers."));
+                      }}
+                    />
                     <Button tag="Close" onClick={() => setShowNumbers(false)} />
                   </div>
                 </div>
@@ -229,7 +215,11 @@ export default function FollowUpAdmin() {
                   triggerRefresh();
                 }}
                 tableName="followup"
-                fields={formFieldsMap[activeTab]}
+                fields={[
+                  { key: "name", label: "Name" },
+                  { key: "phone", label: "Phone" },
+                  { key: "assigned_to", label: "Assigned To" },
+                ]}
                 initialData={editData || {}}
                 mode={editData ? "update" : "create"}
                 rowId={editData?.id}

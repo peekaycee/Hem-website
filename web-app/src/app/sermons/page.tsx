@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import Hero from "../components/Hero";
 import Button from "../components/Button";
 import styles from "./sermons.module.css";
@@ -22,7 +23,7 @@ interface Sermon {
   preacher: string;
   description: string;
   date: string;
-  video_url: string;  // ✅ DB column names
+  video_url: string;
   audio_url: string;
   script_url: string;
 }
@@ -35,6 +36,7 @@ export default function Sermons() {
   const [sermons, setSermons] = useState<Sermon[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSermons = async () => {
@@ -45,10 +47,12 @@ export default function Sermons() {
 
       if (error) {
         console.error("Error fetching sermons:", error);
+        setLoading(false);
         return;
       }
 
       setSermons(data || []);
+      setLoading(false);
     };
 
     fetchSermons();
@@ -68,7 +72,6 @@ export default function Sermons() {
   );
   const totalPages = Math.ceil(librarySermons.length / PAGE_SIZE);
 
-  // ✅ Build query with media
   const buildMediaQuery = (
     sermon: Sermon,
     mediaType: "video" | "audio" | "script",
@@ -122,6 +125,19 @@ export default function Sermons() {
     );
   };
 
+  const renderSkeleton = () => (
+    [...Array(3)].map((_, idx) => (
+      <div key={idx} className={styles.skeletonWrapper}>
+        <div className={styles.skeletonThumbnail}></div>
+        <div style={{ flex: 1 }}>
+          <div className={styles.skeletonLine}></div>
+          <div className={styles.skeletonLineShort}></div>
+          <div className={styles.skeletonLineMedium}></div>
+        </div>
+      </div>
+    ))
+  );
+
   return (
     <section className={styles.sermonPage}>
       <Hero title="Sermons" id={styles.sermon} />
@@ -153,58 +169,50 @@ export default function Sermons() {
             </div>
           </div>
 
-          <Button
-            tag="Recent"
-            onClick={() => {
-              setActiveTab("recent");
-              setSearchTerm("");
-            }}
-          />
-          <Button
-            tag="Library"
-            onClick={() => {
-              setActiveTab("library");
-              setSearchTerm("");
-            }}
-          />
+          <Button tag="Recent" onClick={() => { setActiveTab("recent"); setSearchTerm(""); }} />
+          <Button tag="Library" onClick={() => { setActiveTab("library"); setSearchTerm(""); }} />
         </div>
 
         <div className={styles.sermonContent}>
-          {searchTerm ? (
-            <div className={styles.recent}>
-              <h1>Search Results</h1>
-              {filteredSermons.length > 0 ? (
-                filteredSermons.map(renderSermon)
-              ) : (
-                <p className={styles.searchResponse}>
-                  No sermons match your search.
-                </p>
-              )}
-            </div>
-          ) : activeTab === "recent" ? (
-            <div className={styles.recent}>
-              <h1>Recent Sermons</h1>
-              {recentSermons.map(renderSermon)}
-            </div>
-          ) : (
-            <div className={styles.library}>
-              <h1>Sermon Library</h1>
-              {paginatedLibrary.map((sermon, i) => renderSermon(sermon, i))}
-              <div className={styles.pagination}>
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <button
-                    key={i + 1}
-                    className={`${styles.pageButton} ${
-                      currentPage === i + 1 ? styles.active : ""
-                    }`}
-                    onClick={() => setCurrentPage(i + 1)}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
+          <AnimatePresence>
+            {loading ? (
+              <motion.div
+                key="skeleton"
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 0, transition: { duration: 0.5 } }}
+              >
+                {renderSkeleton()}
+              </motion.div>
+            ) : searchTerm ? (
+              <div className={styles.recent}>
+                <h1>Search Results</h1>
+                {filteredSermons.length > 0
+                  ? filteredSermons.map(renderSermon)
+                  : <p className={styles.searchResponse}>No sermons match your search.</p>}
               </div>
-            </div>
-          )}
+            ) : activeTab === "recent" ? (
+              <div className={styles.recent}>
+                <h1>Recent Sermons</h1>
+                {recentSermons.map(renderSermon)}
+              </div>
+            ) : (
+              <div className={styles.library}>
+                <h1>Sermon Library</h1>
+                {paginatedLibrary.map((sermon, i) => renderSermon(sermon, i))}
+                <div className={styles.pagination}>
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                      key={i + 1}
+                      className={`${styles.pageButton} ${currentPage === i + 1 ? styles.active : ""}`}
+                      onClick={() => setCurrentPage(i + 1)}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </section>

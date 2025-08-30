@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
 import Image, { StaticImageData } from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import styles from "./announcement.module.css";
 import Hero from "@/app/components/Hero";
 import { Image11, Image12, Image13, Image14 } from "../../../../public/images";
@@ -32,8 +32,7 @@ const formatTime = (timeStr: string) => {
   return `${hr}:${minute.toString().padStart(2, "0")} ${ampm}`;
 };
 
-// ✅ local image mapping
-const imageMap: Record<string, any> = {
+const imageMap: Record<string, StaticImageData> = {
   Image11,
   Image12,
   Image13,
@@ -42,6 +41,7 @@ const imageMap: Record<string, any> = {
 
 export default function Announcement() {
   const [programs, setPrograms] = useState<Announcement[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -51,7 +51,8 @@ export default function Announcement() {
         .order("date", { ascending: true });
 
       if (error) {
-        console.error("Error fetching announcements:", error);
+        console.error(error);
+        setLoading(false);
         return;
       }
 
@@ -60,86 +61,134 @@ export default function Announcement() {
         image:
           program.image && imageMap[program.image as keyof typeof imageMap]
             ? imageMap[program.image as keyof typeof imageMap]
-            : Image12, // fallback image
+            : Image12,
         fullDate: new Date(`${program.date}T${program.time}`),
       }));
 
       setPrograms(enriched);
+      setLoading(false);
     };
 
     fetchPrograms();
   }, []);
 
-  if (programs.length === 0) return null;
-
-  // ✅ show last as next, rest as scheduled
   const nextProgram = programs[programs.length - 1];
   const scheduledPrograms = programs.slice(0, programs.length - 1).reverse();
 
   return (
     <section className={styles.announcementPage}>
       <Hero title="Programs" id={styles.announcement} />
-      <div className={styles.announcementWrapper}>
-        {nextProgram && (
-          <div className={styles.next}>
-            <h1>Next Program</h1>
-            <div className={styles.nextAnnouncement}>
-              <div className={styles.announcementThumbnail}>
-                <Image
-                  src={nextProgram.image as string | StaticImageData}
-                  alt={nextProgram.title}
-                  width={500}
-                  height={300}
-                />
-              </div>
-              <div className={styles.announcementBriefs}>
-                <h2>
-                  {nextProgram.title}{" "}
-                  <span>- happening @{nextProgram.venue}</span>
-                </h2>
-                <p className={styles.dateTime}>
-                  {formatDate(nextProgram.date)} |{" "}
-                  {formatTime(nextProgram.time)}
-                </p>
-                <p className={styles.ministering}>
-                  <span>Ministering :</span> {nextProgram.ministering}
-                </p>
-                <p className={styles.expectation}>{nextProgram.description}</p>
-              </div>
-            </div>
-          </div>
-        )}
 
-        {scheduledPrograms.length > 0 && (
-          <div className={styles.scheduled}>
-            <h1>Scheduled Programs</h1>
-            {scheduledPrograms.map((program) => (
-              <div className={styles.nextAnnouncement} key={program.id}>
-                <div className={styles.announcementThumbnail}>
-                  <Image
-                    src={program.image ?? Image12}
-                    alt={program.title}
-                    width={500}
-                    height={300}
-                  />
-                </div>
-                <div className={styles.announcementBriefs}>
-                  <h2>
-                    {program.title} <span>- happening @{program.venue}</span>
-                  </h2>
-                  <p className={styles.dateTime}>
-                    {formatDate(program.date)} | {formatTime(program.time)}
-                  </p>
-                  <p className={styles.ministering}>
-                    <span>Ministering : </span>
-                    {program.ministering}
-                  </p>
-                  <p className={styles.expectation}>{program.description}</p>
+      <div className={styles.announcementWrapper}>
+        {/* AnimatePresence handles skeleton fade-out / content fade-in */}
+        <AnimatePresence>
+          {loading ? (
+            <motion.div
+              key="skeleton"
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.5 } }}
+            >
+              {/* Skeleton Layout */}
+              <div className={styles.next}>
+                <h1>Next Program</h1>
+                <div className={styles.nextAnnouncement}>
+                  <div className={styles.announcementThumbnail}>
+                    <div className={styles.skeleton} />
+                  </div>
+                  <div className={styles.announcementBriefs}>
+                    <div className={styles.skeletonLine} />
+                    <div className={styles.skeletonLineShort} />
+                    <div className={styles.skeletonLine} />
+                    <div className={styles.skeletonLineMedium} />
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+
+              <div className={styles.scheduled}>
+                <h1>Scheduled Programs</h1>
+                {[...Array(2)].map((_, idx) => (
+                  <div className={styles.nextAnnouncement} key={idx}>
+                    <div className={styles.announcementThumbnail}>
+                      <div className={styles.skeleton} />
+                    </div>
+                    <div className={styles.announcementBriefs}>
+                      <div className={styles.skeletonLine} />
+                      <div className={styles.skeletonLineShort} />
+                      <div className={styles.skeletonLineMedium} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="content"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeInOut" } }}
+              exit={{ opacity: 0 }}
+            >
+              {/* Actual Content */}
+              {nextProgram && (
+                <div className={styles.next}>
+                  <h1>Next Program</h1>
+                  <div className={styles.nextAnnouncement}>
+                    <div className={styles.announcementThumbnail}>
+                      <Image
+                        src={nextProgram.image as string | StaticImageData}
+                        alt={nextProgram.title}
+                        width={500}
+                        height={300}
+                      />
+                    </div>
+                    <div className={styles.announcementBriefs}>
+                      <h2>
+                        {nextProgram.title} <span>- happening @{nextProgram.venue}</span>
+                      </h2>
+                      <p className={styles.dateTime}>
+                        {formatDate(nextProgram.date)} | {formatTime(nextProgram.time)}
+                      </p>
+                      <p className={styles.ministering}>
+                        <span>Ministering :</span> {nextProgram.ministering}
+                      </p>
+                      <p className={styles.expectation}>{nextProgram.description}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {scheduledPrograms.length > 0 && (
+                <div className={styles.scheduled}>
+                  <h1>Scheduled Programs</h1>
+                  {scheduledPrograms.map((program) => (
+                    <div className={styles.nextAnnouncement} key={program.id}>
+                      <div className={styles.announcementThumbnail}>
+                        <Image
+                          src={program.image ?? Image12}
+                          alt={program.title}
+                          width={500}
+                          height={300}
+                        />
+                      </div>
+                      <div className={styles.announcementBriefs}>
+                        <h2>
+                          {program.title} <span>- happening @{program.venue}</span>
+                        </h2>
+                        <p className={styles.dateTime}>
+                          {formatDate(program.date)} | {formatTime(program.time)}
+                        </p>
+                        <p className={styles.ministering}>
+                          <span>Ministering : </span>
+                          {program.ministering}
+                        </p>
+                        <p className={styles.expectation}>{program.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );

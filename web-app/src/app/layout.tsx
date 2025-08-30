@@ -4,7 +4,7 @@ import Header from './components/Navigation';
 import Footer from './components/Footer';
 import { Toaster } from "react-hot-toast";
 import LiveChat from "./components/liveChat";
-import PageTransitionWrapper from "./components/PageTransitionWrapper";
+// import PageTransitionWrapper from "./components/PageTransitionWrapper";
 
 export const metadata: Metadata = {
   title: "HEM Parish",

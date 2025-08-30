@@ -20,9 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Header />
-          <PageTransitionWrapper>
+          {/* <PageTransitionWrapper> */}
             {children}
-          </PageTransitionWrapper>
+          {/* </PageTransitionWrapper> */}
         <Toaster
           position="top-right"
           toastOptions={{

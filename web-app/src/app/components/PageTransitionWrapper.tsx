@@ -7,10 +7,16 @@ interface PageTransitionProps {
   children: React.ReactNode;
 }
 
-const slideFadeVariants: Variants = {
-  hidden: { opacity: 0, x: -50 },           // start slightly left and transparent
-  enter: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeInOut" } }, // slide to place
-  exit: { opacity: 0, transition: { duration: 0.4, ease: "easeInOut" } },       // fade out only
+const smoothSlideLeftVariants: Variants = {
+  hidden: { x: -100 }, // start slightly off-screen left
+  enter: {
+    x: 0,
+    transition: {
+      duration: 0.7,               // a bit slower for smoothness
+      ease: [0.42, 0, 0.58, 1],    // natural "easeInOut" cubic bezier
+    },
+  },
+  exit: { x: 0 }, // no exit animation needed
 };
 
 export default function PageTransitionWrapper({ children }: PageTransitionProps) {
@@ -19,8 +25,8 @@ export default function PageTransitionWrapper({ children }: PageTransitionProps)
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
-        key={pathname}            // triggers animation on route change
-        variants={slideFadeVariants}
+        key={pathname} // triggers animation on route change
+        variants={smoothSlideLeftVariants}
         initial="hidden"
         animate="enter"
         exit="exit"

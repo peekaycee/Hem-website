@@ -4,6 +4,7 @@ import Header from './components/Navigation';
 import Footer from './components/Footer';
 import { Toaster } from "react-hot-toast";
 import LiveChat from "./components/liveChat";
+import PageTransitionWrapper from "./components/PageTransitionWrapper";
 
 export const metadata: Metadata = {
   title: "HEM Parish",
@@ -19,7 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Header />
-        {children}
+          <PageTransitionWrapper>
+            {children}
+          </PageTransitionWrapper>
         <Toaster
           position="top-right"
           toastOptions={{

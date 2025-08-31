@@ -3,12 +3,26 @@
 import styles from './home.module.css';
 import Button from './components/Button';
 import Image from 'next/image';
-import { Pic1, ChurchLogo, Image11, Image12, Image13, Image14 } from '../../public/images';
+import { Pic2, ChurchLogo, Image11, Image12, Image13, Image14 } from '../../public/images';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 import { motion } from "framer-motion";
 import { supabase } from "@/app/lib/supabaseClient";
+
+// Testimonies
+const testimonies = [
+  "At HEMA, God transformed my life with healing, peace, and renewed strength through worship, prayer, and the power of His Word.",
+  "I came broken, but through HEMA’s prayers and teachings, God restored my joy, and gave me new purpose.",
+  "Through heartfelt worship at HEMA, I encountered God’s presence deeply, and found strength to overcome life’s challenges victoriously.",
+  "HEMA has been a source of hope, and spiritual growth, helping me draw closer to God and experience lasting transformation.",
+  "Prayer services at HEMA connected me to God’s power, miracles, and testimonies I never imagined possible in my life.",
+  "My faith was strengthened at HEMA through Bible study, worship, and filling me with courage, hope, and spiritual renewal.",
+  "God answered my long-awaited prayers during a HEMA service, proving His mercy, and love to me in miraculous ways.",
+  "Attending HEMA filled my heart with gratitude, joy, and peace as God lifted my burdens and gave me fresh direction.",
+  "Through fellowship and prayer at HEMA, I found healing, and strength to keep walking in God’s divine purpose daily."
+];
+
 
 // Reusable fade-in animation
 const fadeIn = {
@@ -131,7 +145,7 @@ export default function Home() {
           <div className={styles.aboutContent}>
             <h2>About HEMA </h2>
             <p>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus modi iste quas hic, harum magni placeat consequatur laboriosam, nemo vel nulla alias aut quod debitis eaque, quasi rem! Quaerat rerum eaque tenetur quis, id accusamus tempora error nulla tempore officiis, eligendi aliquam quisquam. Incidunt repellat nisi facere labore amet. Velit?
+              We are a faith-driven ministry dedicated to inspiring hope, nurturing spiritual growth, and transforming lives. Through heartfelt worship, fervent prayer, engaging Bible study, and impactful community outreach, HEMA empowers individuals to draw closer to God, live victoriously, and positively influence the world with unwavering faith.
             </p>
           </div>
         </motion.section>
@@ -191,7 +205,7 @@ export default function Home() {
             {[1, 2, 3, 4].map((n) => (
               <div className={styles.minDetails} key={n}>
                 <div className={styles.name}>
-                  <Image src={Pic1} alt="New Events" width={0} height={0} />
+                  <Image src={Pic2} alt="New Events" width={0} height={0} />
                   <h3>Bro {["Godwin", "Peter", "Sanjo", "Sanjo"][n - 1]}</h3>
                   <p>{["Asst. Parish Pastor", "Church Admin", "Hospitality", "Hospitality"][n - 1]}</p>
                 </div>
@@ -201,7 +215,7 @@ export default function Home() {
         </section>
 
         {/* Testimonies Section */}
-        <section className={styles.testimony}>
+        {/* <section className={styles.testimony}>
           <h2>Testimonies</h2>
           <div className={styles.testifiersDetails}>
             <ChevronLeft size={24} className={styles.dir} onClick={previousTestimonies} />
@@ -226,7 +240,38 @@ export default function Home() {
             )}
             <ChevronRight size={24} className={styles.dir} onClick={nextTestimonies} />
           </div>
-        </section>
+        </section> */}
+
+
+          {/* Testimonies Section */}
+<section className={styles.testimony}>
+  <h2>Testimonies</h2>
+  <div className={styles.testifiersDetails}>
+    <ChevronLeft size={24} className={styles.dir} onClick={previousTestimonies} />
+    {[1, 2, 3].map((n) =>
+      testimony === n ? (
+        <div className={`${styles.testimonyWrapper} ${styles.first}`} key={n}>
+          {testimonies.slice((n - 1) * 3, n * 3).map((text, i) => (
+            <div className={styles.testimonies} key={i}>
+              <div>
+                <p>{text}</p>
+              </div>
+              <div className={styles.testifier}>
+                <h3>John Doe {i + 1}</h3>
+                <Image src={Pic2} alt="testifier" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null
+    )}
+    <ChevronRight size={24} className={styles.dir} onClick={nextTestimonies} />
+  </div>
+</section>
+
+
+
+
 
         {/* Prayer CTA */}
         <section className={styles.cta}>

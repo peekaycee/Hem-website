@@ -25,7 +25,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 .sideBar button {
-  width: 70%;
+  width: 75%;
   margin: 0.5em auto;
 }
 
@@ -340,4 +340,74 @@
   100% {
     background-position: 200% 0;
   }
+}
+
+/* ____________________________________________________________ */
+/* Skeleton wrapper for admin table rows */
+.skeletonRowWrapper {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+/* Skeleton block for cells */
+.skeletonBlock {
+  border-radius: 4px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Width variations for realistic look */
+.skeletonBlockShort {
+  width: 40px;
+  height: 20px;
+}
+.skeletonBlockMedium {
+  width: 120px;
+  height: 20px;
+}
+.skeletonBlockLong {
+  flex: 1;
+  height: 20px;
+}
+
+/* Skeleton button */
+.skeletonButton {
+  width: 60px;
+  height: 28px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Shimmer animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Optional: skeleton for search bar */
+.skeletonSearch {
+  width: 250px;
+  height: 28px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  margin-bottom: 1rem;
+}
+
+/* Optional: skeleton for sidebar buttons */
+.skeletonButtonSidebar {
+  width: 120px;
+  height: 36px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  margin-bottom: 0.75rem;
 }

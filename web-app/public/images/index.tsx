@@ -26,5 +26,6 @@ export { default as Image12 } from './image12.jpg';
 export { default as Image13 } from './image13.jpg';
 export { default as Image14 } from './image14.webp';
 export { default as Pic1 } from './pee.png';
+export { default as Pic2 } from './pee2.png';
 export { default as ChurchLogo } from './rccgLogo.png';
 

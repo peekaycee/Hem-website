@@ -10,6 +10,7 @@ import styles from "../../(pages)/admin/admin.module.css";
 import { ColumnDef } from "@tanstack/react-table";
 import toast from "react-hot-toast";
 import { supabase } from "@/app/lib/supabaseClient";
+import './followupShimmer.module.css';
 
 const followUpTeam = process.env.NEXT_PUBLIC_FOLLOW_UP_TEAM?.split(",") || [];
 const PAGE_SIZE = 10;

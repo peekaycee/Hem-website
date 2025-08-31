@@ -10,7 +10,7 @@ export default function Footer(){
       <div className={styles.footerContent}>
         <div className={styles.churchDetails}>
           <h2>His Everlasting Mercy Area HEMA</h2>
-          <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.
+          <p>HEMA is a faith-driven ministry inspiring hope, growth, and transformation through worship, prayer, Bible study, and impactful community outreach.
           </p>
           <div className={styles.socials}>
             <h2>Follow Us</h2>

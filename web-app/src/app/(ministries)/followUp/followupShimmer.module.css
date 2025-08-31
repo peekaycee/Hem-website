@@ -1,0 +1,73 @@
+/* Skeleton wrapper for FollowUp rows */
+.skeletonRowWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Skeleton blocks for table columns */
+.skeletonBlock {
+  height: 15px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Different widths for variety */
+.skeletonBlockShort {
+  width: 50px;
+}
+.skeletonBlockMedium {
+  width: 100px;
+}
+.skeletonBlockLong {
+  width: 150px;
+}
+
+/* Skeleton for buttons */
+.skeletonButton {
+  width: 80px;
+  height: 30px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Skeleton for search input */
+.skeletonInput {
+  flex: 1;
+  height: 30px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Skeleton for modal overlay (optional) */
+.skeletonModal {
+  width: 100%;
+  max-width: 400px;
+  padding: 1rem;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Shimmer animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

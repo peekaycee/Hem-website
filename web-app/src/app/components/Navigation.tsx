@@ -166,7 +166,9 @@ export default function Navigation() {
 
           {/* LOGIN + MENU */}
           <div className={styles.login}>
-            <Link href='/login' className={pathname === '/login' ? styles.active : ''}>Login</Link>
+            {/* <Link href='/login' className={pathname === '/login' ? styles.active : ''}>Login</Link> */}
+            <Link href='/location' className={pathname === '/location' ? styles.active : ''}>Location</Link>
+            
             {isMenuOpen
               ? <X size={24} className={styles.icons} onClick={toggleMenu} />
               : <Menu size={24} className={styles.icons} onClick={toggleMenu} />
@@ -237,7 +239,8 @@ export default function Navigation() {
               </li>
 
               <li><Link href="/contact" onClick={handleLinkClick}>Contact</Link></li>
-              <li><Link href="/login" onClick={handleLinkClick}>Login</Link></li>
+              {/* <li><Link href="/login" onClick={handleLinkClick}>Login</Link></li> */}
+              <li><Link href="/location" onClick={handleLinkClick}>Location</Link></li>
             </ul>
           </div>
         </div>

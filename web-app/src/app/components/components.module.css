@@ -32,20 +32,13 @@
   font-size: 20px;
   font-weight: var(--regular);
 }
-/* .navbar {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  background-color: var(--background);
-
-} */
 .navbar {
   position: sticky;
   top: 0;
   background-color: var(--background);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease-in-out;
-  z-index: 2; 
+  z-index: 3; 
 }
 .navlinks{
   width: 100%;
@@ -799,9 +792,30 @@ ul.sublinks {
   
 } */
 @media (max-width: 480px) {
+  .chatHeader span{
+    font-weight: var(--bold);
+  }
+  .chatHeader p {
+    background-color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-weight: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .inputVal input{
+    width: 90%;
+    font-size: calc(var(--p3) * 0.9);
+    font-weight: 300;
+  }
   .chatBox {
     width: 90%;
     right: 5%;
+  }
+  .chatBox button:hover{
+    background: var(--tertiary-100);
   }
 }
 

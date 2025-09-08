@@ -184,15 +184,10 @@ export default function Home() {
                 <Image
                   src={program.image || FallbackImage}
                   alt={program.title || "Announcement image"}
-                  width={200}
-                  height={200}
+                  width={0}
+                  height={0}
                   priority={index < programs.length}
                   sizes="(max-width: 768px) 150px, (max-width: 1024px) 180px, 200px"
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                    objectFit: "cover",
-                  }}
                   loading={index >= programs.length ? "lazy" : "eager"}
                 />
               </div>

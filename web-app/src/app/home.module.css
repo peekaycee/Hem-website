@@ -145,7 +145,7 @@
 }
 .eventImageWrapper{
   width: 170px;
-  height: 25dvh;
+  height: 30dvh;
   border-radius: var(--br-2);
   transition: all 0.3s ease;
   flex: 0 0 auto; /* for scrollable layout */
@@ -157,10 +157,11 @@
   height: 100%;
   object-fit: cover;
   border-radius: var(--br-2);
+  transition: all 0.3s ease; 
 }
-.eventImageWrapper:hover {
-  transform:translateY(-10px);
-} 
+.eventImageWrapper:hover{
+  transform: translateY(-10px);
+}
 
 .eventsWrapper {
   overflow: hidden;

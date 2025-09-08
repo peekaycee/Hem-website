@@ -188,8 +188,8 @@ export default function Home() {
                     <Image
                       src={program.image || FallbackImage.src}
                       alt={program.title || "Announcement image"}
-                      width={200}               // match your wrapper width
-                      height={200}              // you can adjust to maintain aspect ratio
+                      width={200} 
+                      height={200}              
                       style={{
                         width: "100%",
                         height: "100%",

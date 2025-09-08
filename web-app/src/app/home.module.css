@@ -122,6 +122,7 @@
 }
 
 /* Events */
+/* Events */
 .event {
   background-color: var(--background);
   display: flex;
@@ -133,30 +134,20 @@
 }
 
 .eventsWrapper {
-  overflow: hidden;             /* hide overflow */
+  overflow: hidden;
   width: 70%;
   padding: 1em 0 2em;
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: flex-start;  /* start from left for seamless scroll */
+  justify-content: flex-start;
 }
 
 .track {
   display: flex;
-  flex-wrap: nowrap;            /* single line */
+  flex-wrap: nowrap;
   width: max-content;
-  gap: 1.2em;                       /* no space between items */
-  animation: scroll 20s linear infinite; /* continuous scroll */
-}
-
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%); /* scroll by half width since duplicated */
-  }
+  gap: 1.2em; /* no gap between images */
 }
 
 .eventImageWrapper {
@@ -164,15 +155,12 @@
   width: 200px;
   height: 30dvh;
   border-radius: var(--br-2);
-  margin: 0;                     /* remove right margin for no gaps */
-  scroll-snap-align: center;     /* snap for mobile */
+  margin: 0;
   transition: all 0.3s ease;
 }
 
-.eventImageWrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.eventImageWrapper img,
+.eventImageWrapper :global(img) {
   border-radius: var(--br-2);
   transition: all 0.3s ease;
 }
@@ -181,39 +169,31 @@
   transform: translateY(-10px);
 }
 
-/* --- Mobile: horizontal scroll, hide scrollbar --- */
-@media only screen and (max-width: 599px) {
+/* Mobile: full images, horizontal scroll */
+@media only screen and (max-width: 480px) {
   .eventsWrapper {
     width: 100%;
   }
 
-  .events {
-    flex-wrap: nowrap;              
-    overflow-x: auto;               
-    gap: 1em;
-    scroll-snap-type: x mandatory;  
-    justify-content: flex-start;    
-
-    /* Hide scrollbars */
-    -ms-overflow-style: none;  
-    scrollbar-width: none;     
-  }
-
-  .events::-webkit-scrollbar {
-    display: none; 
-  }
-
   .eventImageWrapper {
-    width: 150px;
-    height: 20dvh;
-    transition: none;               
+    width: 100%;           /* full width */
+    height: auto;          /* maintain aspect ratio */
+  }
+
+  .eventImage {
+    object-fit: contain !important; /* show full image */
   }
 }
 
-/* Clone items for seamless scroll (optional if duplicating in JSX) */
-.track .clone {
-  flex: 0 0 auto;
+/* Optional: hide scrollbars if using horizontal scroll on mobile */
+.eventsWrapper::-webkit-scrollbar {
+  display: none;
 }
+.eventsWrapper {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 
 
 .testimony,

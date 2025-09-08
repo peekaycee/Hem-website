@@ -122,7 +122,6 @@
 }
 
 /* Events */
-/* Events */
 .event {
   background-color: var(--background);
   display: flex;
@@ -147,7 +146,7 @@
   display: flex;
   flex-wrap: nowrap;
   width: max-content;
-  gap: 1.2em; /* no gap between images */
+  gap: 1.2em;
 }
 
 .eventImageWrapper {
@@ -173,14 +172,15 @@
 @media only screen and (max-width: 480px) {
   .eventsWrapper {
     width: 100%;
+    border-radius: var(--br-1);
   }
-
-  .eventImageWrapper {
+.track{
+  width: fit-content;
+  gap: 0;
+}
+  .eventImageWrapper img{
     width: 100%;           /* full width */
-    height: auto;          /* maintain aspect ratio */
-  }
-
-  .eventImage {
+    height: 30dvh;          /* maintain aspect ratio */
     object-fit: contain !important; /* show full image */
   }
 }
@@ -193,8 +193,6 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
-
 
 .testimony,
 .minister {

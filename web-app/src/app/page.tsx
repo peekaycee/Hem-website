@@ -3,13 +3,14 @@
 import styles from "./home.module.css";
 import Button from "./components/Button";
 import Image from "next/image";
-// import fallbackImage from "@/public/fallback.png"; // ✅ add fallback.png inside /public
 import { Pic2, ChurchLogo } from "../../public/images";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/app/lib/supabaseClient";
+
+const fallbackImage = "/public/fallback.png";
 
 // Testimonies
 const testimonies = [

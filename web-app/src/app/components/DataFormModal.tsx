@@ -29,12 +29,12 @@ export default function DataFormModal<T>({
   const [formData, setFormData] = useState<Partial<T>>(initialData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<Record<string, File | null>>({}); // For image/audio/video/script uploads
 
   useEffect(() => {
     setFormData(initialData);
     setErrors({});
-    setFile(null);
+    setFiles({});
   }, [initialData, isOpen]);
 
   const handleChange = (key: keyof T, value: any) => {
@@ -42,16 +42,16 @@ export default function DataFormModal<T>({
     setErrors((prev) => ({ ...prev, [key as string]: "" }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (key: string, e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+      setFiles((prev) => ({ ...prev, [key]: e.target.files![0] }));
     }
   };
 
   const handleSubmit = async () => {
     const newErrors: Record<string, string> = {};
     fields.forEach((field) => {
-      if (!formData[field.key] && field.key !== "image") {
+      if (!formData[field.key] && !["image", "video", "audio", "script"].includes(field.key as string)) {
         newErrors[field.key as string] = `${field.label} is required`;
       }
     });
@@ -67,44 +67,36 @@ export default function DataFormModal<T>({
     );
 
     try {
-      let imageUrl = formData["image" as keyof T] as string | null;
+      const payload: Record<string, any> = { ...formData };
 
-      if (file) {
-        // Create a unique file name with timestamp and original name
+      // Handle files for image, video, audio, script
+      for (const key of Object.keys(files)) {
+        const file = files[key];
+        if (!file) continue;
+
         const timestamp = Date.now();
-        // const fileExt = file.name.split(".").pop();
         const safeName = file.name.replace(/\s+/g, "-").toLowerCase();
         const fileName = `${timestamp}-${safeName}`;
 
-        // Upload to Supabase
+        // Determine bucket
+        const bucket = key === "image" ? "announcements" : "sermons";
+
         const { error: uploadError } = await supabase.storage
-          .from("announcements") // Make sure this bucket exists
+          .from(bucket)
           .upload(fileName, file, { upsert: true });
 
         if (uploadError) throw uploadError;
 
-        // Get public URL
-        const { data: urlData } = supabase.storage
-          .from("announcements")
-          .getPublicUrl(fileName);
-
-        imageUrl = urlData.publicUrl;
+        const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(fileName);
+        payload[key] = urlData.publicUrl;
       }
-
-      const payload = {
-        ...formData,
-        ...(imageUrl ? { image: imageUrl } : {}),
-      };
 
       if (mode === "create") {
         const { error } = await supabase.from(tableName).insert([payload]);
         if (error) throw error;
         toast.success("Item added successfully", { id: toastId });
       } else {
-        const { error } = await supabase
-          .from(tableName)
-          .update(payload)
-          .eq("id", rowId);
+        const { error } = await supabase.from(tableName).update(payload).eq("id", rowId);
         if (error) throw error;
         toast.success("Item updated successfully", { id: toastId });
       }
@@ -129,12 +121,20 @@ export default function DataFormModal<T>({
           <div key={String(field.key)} className={styles.table}>
             <label htmlFor={String(field.key)}>{field.label}</label>
 
-            {field.key === "image" ? (
+            {["image", "video", "audio", "script"].includes(field.key as string) ? (
               <input
                 id={String(field.key)}
                 type="file"
-                accept="image/*"
-                onChange={handleFileChange}
+                accept={
+                  field.key === "image"
+                    ? "image/*"
+                    : field.key === "video"
+                    ? "video/*"
+                    : field.key === "audio"
+                    ? "audio/*"
+                    : ".pdf,.doc,.docx,.txt"
+                }
+                onChange={(e) => handleFileChange(String(field.key), e)}
                 className={styles.inputValue}
                 disabled={loading}
               />

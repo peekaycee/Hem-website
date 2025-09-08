@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./announcement.module.css";
 import Hero from "@/app/components/Hero";
-import { Image11, Image12, Image13, Image14 } from "../../../../public/images";
 import { supabase } from "@/app/lib/supabaseClient";
 
 interface Announcement {
@@ -16,8 +15,9 @@ interface Announcement {
   time: string;
   venue: string;
   ministering: string;
-  image?: string;
+  image?: string; // Supabase URL
   fullDate?: Date;
+  updated_at?: string; // cache-busting
 }
 
 const formatDate = (dateStr: string) => {
@@ -30,13 +30,6 @@ const formatTime = (timeStr: string) => {
   const ampm = hour >= 12 ? "PM" : "AM";
   const hr = hour % 12 || 12;
   return `${hr}:${minute.toString().padStart(2, "0")} ${ampm}`;
-};
-
-const imageMap: Record<string, StaticImageData> = {
-  Image11,
-  Image12,
-  Image13,
-  Image14,
 };
 
 export default function Announcement() {
@@ -58,10 +51,6 @@ export default function Announcement() {
 
       const enriched = (data || []).map((program) => ({
         ...program,
-        image:
-          program.image && imageMap[program.image as keyof typeof imageMap]
-            ? imageMap[program.image as keyof typeof imageMap]
-            : Image12,
         fullDate: new Date(`${program.date}T${program.time}`),
       }));
 
@@ -75,12 +64,16 @@ export default function Announcement() {
   const nextProgram = programs[programs.length - 1];
   const scheduledPrograms = programs.slice(0, programs.length - 1).reverse();
 
+  const getCacheBustedUrl = (url?: string, timestamp?: string) => {
+    if (!url) return "";
+    return `${url}?t=${timestamp || Date.now()}`;
+  };
+
   return (
     <section className={styles.announcementPage}>
       <Hero title="Programs" id={styles.announcement} />
 
       <div className={styles.announcementWrapper}>
-        {/* AnimatePresence handles skeleton fade-out / content fade-in */}
         <AnimatePresence>
           {loading ? (
             <motion.div
@@ -127,18 +120,22 @@ export default function Announcement() {
               animate={{ opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeInOut" } }}
               exit={{ opacity: 0 }}
             >
-              {/* Actual Content */}
               {nextProgram && (
                 <div className={styles.next}>
                   <h1>Next Program</h1>
                   <div className={styles.nextAnnouncement}>
                     <div className={styles.announcementThumbnail}>
-                      <Image
-                        src={nextProgram.image as string | StaticImageData}
-                        alt={nextProgram.title}
-                        width={500}
-                        height={300}
-                      />
+                      {nextProgram.image ? (
+                        <Image
+                          src={getCacheBustedUrl(nextProgram.image, nextProgram.updated_at)}
+                          alt={nextProgram.title}
+                          width={500}
+                          height={300}
+                          style={{ objectFit: "cover", borderRadius: 8 }}
+                        />
+                      ) : (
+                        <div className={styles.skeleton} />
+                      )}
                     </div>
                     <div className={styles.announcementBriefs}>
                       <h2>
@@ -162,12 +159,17 @@ export default function Announcement() {
                   {scheduledPrograms.map((program) => (
                     <div className={styles.nextAnnouncement} key={program.id}>
                       <div className={styles.announcementThumbnail}>
-                        <Image
-                          src={program.image ?? Image12}
-                          alt={program.title}
-                          width={500}
-                          height={300}
-                        />
+                        {program.image ? (
+                          <Image
+                            src={getCacheBustedUrl(program.image, program.updated_at)}
+                            alt={program.title}
+                            width={500}
+                            height={300}
+                            style={{ objectFit: "cover", borderRadius: 8 }}
+                          />
+                        ) : (
+                          <div className={styles.skeleton} />
+                        )}
                       </div>
                       <div className={styles.announcementBriefs}>
                         <h2>

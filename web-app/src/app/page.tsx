@@ -1,12 +1,13 @@
 "use client";
 
-import styles from './home.module.css';
-import Button from './components/Button';
-import Image from 'next/image';
-import { Pic2, ChurchLogo, Image11, Image12, Image13, Image14 } from '../../public/images';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import styles from "./home.module.css";
+import Button from "./components/Button";
+import Image from "next/image";
+// import fallbackImage from "@/public/fallback.png"; // ✅ add fallback.png inside /public
+import { Pic2, ChurchLogo } from "../../public/images";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/app/lib/supabaseClient";
 
@@ -20,19 +21,14 @@ const testimonies = [
   "My faith was strengthened at HEMA through Bible study, worship, and filling me with courage, hope, and spiritual renewal.",
   "God answered my long-awaited prayers during a HEMA service, proving His mercy, and love to me in miraculous ways.",
   "Attending HEMA filled my heart with gratitude, joy, and peace as God lifted my burdens and gave me fresh direction.",
-  "Through fellowship and prayer at HEMA, I found healing, and strength to keep walking in God’s divine purpose daily."
+  "Through fellowship and prayer at HEMA, I found healing, and strength to keep walking in God’s divine purpose daily.",
 ];
-
 
 // Reusable fade-in animation
 const fadeIn = {
   hidden: { opacity: 0, y: 50 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
 };
-
-// Local image mapping for announcements
-import type { StaticImageData } from 'next/image';
-const imageMap: Record<string, StaticImageData> = { Image11, Image12, Image13, Image14 };
 
 export default function Home() {
   const router = useRouter();
@@ -41,7 +37,7 @@ export default function Home() {
     id: number;
     title: string;
     date: string;
-    image?: string | StaticImageData;
+    image?: string;
     [key: string]: unknown;
   };
   const [programs, setPrograms] = useState<Program[]>([]);
@@ -78,10 +74,7 @@ export default function Home() {
 
       const enriched = (data || []).map((program) => ({
         ...program,
-        image:
-          program.image && imageMap[program.image as keyof typeof imageMap]
-            ? imageMap[program.image as keyof typeof imageMap]
-            : Image12, // fallback
+        image: program.image || "", // leave blank, handle in render with fallback
       }));
 
       setPrograms(enriched);
@@ -94,8 +87,10 @@ export default function Home() {
   const redirectToAnnouncement = () => router.push("/announcements");
   const redirectToPrayer = () => router.push("/prayers");
 
-  const previousTestimonies = () => setTestimony((prev) => Math.max(prev - 1, 1));
-  const nextTestimonies = () => setTestimony((prev) => Math.min(prev + 1, 3));
+  const previousTestimonies = () =>
+    setTestimony((prev) => Math.max(prev - 1, 1));
+  const nextTestimonies = () =>
+    setTestimony((prev) => Math.min(prev + 1, 3));
 
   // Smooth infinite scroll setup
   const [trackWidth, setTrackWidth] = useState(0);
@@ -113,178 +108,178 @@ export default function Home() {
         variants={fadeIn}
         initial="hidden"
         animate="visible"
-        >
-          <div className={styles.video}>
-            <video
-              ref={videoRef}
-              src="/videos/Hema-vid.mp4"
-              loop
-              autoPlay
-              muted
-              playsInline
-              preload="auto"
-            />
-          </div>
-        </motion.section>
+      >
+        <div className={styles.video}>
+          <video
+            ref={videoRef}
+            src="/videos/Hema-vid.mp4"
+            loop
+            autoPlay
+            muted
+            playsInline
+            preload="auto"
+          />
+        </div>
+      </motion.section>
 
-        {/* About Section */}
-        <motion.section
-          className={styles.about}
-          variants={fadeIn}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <div className={styles.details}>
-            <div className={styles.detailImage}></div>
-            <div className={styles.pastorsDetails}>
-              <h3>Pastor & Mrs. Gbdegheshin</h3>
-              <abbr>PICA</abbr>
-            </div>
+      {/* About Section */}
+      <motion.section
+        className={styles.about}
+        variants={fadeIn}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        <div className={styles.details}>
+          <div className={styles.detailImage}></div>
+          <div className={styles.pastorsDetails}>
+            <h3>Pastor & Mrs. Gbdegheshin</h3>
+            <abbr>PICA</abbr>
           </div>
-          <div className={styles.aboutContent}>
-            <h2>About HEMA </h2>
-            <p>
-              We are a faith-driven ministry dedicated to inspiring hope, nurturing spiritual growth, and transforming lives. Through heartfelt worship, fervent prayer, engaging Bible study, and impactful community outreach, HEMA empowers individuals to draw closer to God, live victoriously, and positively influence the world with unwavering faith.
-            </p>
-          </div>
-        </motion.section>
+        </div>
+        <div className={styles.aboutContent}>
+          <h2>About HEMA </h2>
+          <p>
+            We are a faith-driven ministry dedicated to inspiring hope, nurturing
+            spiritual growth, and transforming lives. Through heartfelt worship,
+            fervent prayer, engaging Bible study, and impactful community
+            outreach, HEMA empowers individuals to draw closer to God, live
+            victoriously, and positively influence the world with unwavering
+            faith.
+          </p>
+        </div>
+      </motion.section>
 
-        {/* Church Project Section */}
-        <motion.section
-          className={styles.prototype}
-          variants={fadeIn}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <div className={styles.projectContent}>
-            <h2>Join Us To Make The Church Building A Reality.</h2>
-            <p>Partner With Us Today!</p>
-            <Button tag="Donate" onClick={redirectToGivePage} />
-          </div>
-        </motion.section>
+      {/* Church Project Section */}
+      <motion.section
+        className={styles.prototype}
+        variants={fadeIn}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        <div className={styles.projectContent}>
+          <h2>Join Us To Make The Church Building A Reality.</h2>
+          <p>Partner With Us Today!</p>
+          <Button tag="Donate" onClick={redirectToGivePage} />
+        </div>
+      </motion.section>
 
-        {/* Events Section (Infinite Scroll + Lazy-Load + Responsive) */}
-        <section className={styles.event}>
-          <h2>Upcoming Programs</h2>
-          <div className={styles.eventsWrapper}>
-            <motion.div
-              ref={trackRef}
-              className={styles.track}
-              animate={{ x: ["0px", `-${trackWidth}px`] }}
-              transition={{
-                repeat: Infinity,
-                ease: "linear",
-                duration: 20,
-              }}
-            >
-              {[...programs, ...programs].map((program, index) => (
-                <div className={styles.eventImageWrapper} key={index}>
-                  <Image
-                    src={program.image ?? Image12}
-                    alt={program.title}
-                    width={200}
-                    height={200}
-                    priority={index < programs.length}
-                    sizes="(max-width: 768px) 150px, (max-width: 1024px) 180px, 200px"
-                    style={{ width: "100%", height: "auto", objectFit: "cover" }}
-                    loading={index >= programs.length ? "lazy" : "eager"}
-                  />
-                </div>
-              ))}
-            </motion.div>
-          </div>
-          <Button tag="View all" onClick={redirectToAnnouncement} />
-        </section>
-
-        {/* Ministers Section */}
-        <section className={styles.minister}>
-          <h2>Meet Our Ministers</h2>
-          <div className={styles.ministers}>
-            {[1, 2, 3, 4].map((n) => (
-              <div className={styles.minDetails} key={n}>
-                <div className={styles.name}>
-                  <Image src={Pic2} alt="New Events" width={0} height={0} />
-                  <h3>Bro {["Godwin", "Peter", "Sanjo", "Sanjo"][n - 1]}</h3>
-                  <p>{["Asst. Parish Pastor", "Church Admin", "Hospitality", "Hospitality"][n - 1]}</p>
-                </div>
+      {/* Events Section (Infinite Scroll + Lazy-Load + Responsive) */}
+      <section className={styles.event}>
+        <h2>Upcoming Programs</h2>
+        <div className={styles.eventsWrapper}>
+          <motion.div
+            ref={trackRef}
+            className={styles.track}
+            animate={{ x: ["0px", `-${trackWidth}px`] }}
+            transition={{
+              repeat: Infinity,
+              ease: "linear",
+              duration: 20,
+            }}
+          >
+            {[...programs, ...programs].map((program, index) => (
+              <div className={styles.eventImageWrapper} key={index}>
+                <Image
+                  src={program.image || fallbackImage}
+                  alt={program.title || "Announcement image"}
+                  width={200}
+                  height={200}
+                  priority={index < programs.length}
+                  sizes="(max-width: 768px) 150px, (max-width: 1024px) 180px, 200px"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "cover",
+                  }}
+                  loading={index >= programs.length ? "lazy" : "eager"}
+                />
               </div>
             ))}
-          </div>
-        </section>
+          </motion.div>
+        </div>
+        <Button tag="View all" onClick={redirectToAnnouncement} />
+      </section>
 
-        {/* Testimonies Section */}
-        {/* <section className={styles.testimony}>
-          <h2>Testimonies</h2>
-          <div className={styles.testifiersDetails}>
-            <ChevronLeft size={24} className={styles.dir} onClick={previousTestimonies} />
-            {[1, 2, 3].map((n) =>
-              testimony === n ? (
-                <div className={`${styles.testimonyWrapper} ${styles.first}`} key={n}>
-                  {[...Array(3)].map((_, i) => (
-                    <div className={styles.testimonies} key={i}>
-                      <div>
-                        <p>
-                          Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis, iste.
-                        </p>
-                      </div>
-                      <div className={styles.testifier}>
-                        <h3>John Doe {n}</h3>
-                        <Image src={Pic1} alt="testifier" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : null
-            )}
-            <ChevronRight size={24} className={styles.dir} onClick={nextTestimonies} />
-          </div>
-        </section> */}
-
-
-          {/* Testimonies Section */}
-<section className={styles.testimony}>
-  <h2>Testimonies</h2>
-  <div className={styles.testifiersDetails}>
-    <ChevronLeft size={24} className={styles.dir} onClick={previousTestimonies} />
-    {[1, 2, 3].map((n) =>
-      testimony === n ? (
-        <div className={`${styles.testimonyWrapper} ${styles.first}`} key={n}>
-          {testimonies.slice((n - 1) * 3, n * 3).map((text, i) => (
-            <div className={styles.testimonies} key={i}>
-              <div>
-                <p>{text}</p>
-              </div>
-              <div className={styles.testifier}>
-                <h3>John Doe {i + 1}</h3>
-                <Image src={Pic2} alt="testifier" />
+      {/* Ministers Section */}
+      <section className={styles.minister}>
+        <h2>Meet Our Ministers</h2>
+        <div className={styles.ministers}>
+          {[1, 2, 3, 4].map((n) => (
+            <div className={styles.minDetails} key={n}>
+              <div className={styles.name}>
+                <Image src={Pic2} alt="New Events" width={0} height={0} />
+                <h3>
+                  Bro {["Godwin", "Peter", "Sanjo", "Sanjo"][n - 1]}
+                </h3>
+                <p>
+                  {
+                    [
+                      "Asst. Parish Pastor",
+                      "Church Admin",
+                      "Hospitality",
+                      "Hospitality",
+                    ][n - 1]
+                  }
+                </p>
               </div>
             </div>
           ))}
         </div>
-      ) : null
-    )}
-    <ChevronRight size={24} className={styles.dir} onClick={nextTestimonies} />
-  </div>
-</section>
+      </section>
 
+      {/* Testimonies Section */}
+      <section className={styles.testimony}>
+        <h2>Testimonies</h2>
+        <div className={styles.testifiersDetails}>
+          <ChevronLeft
+            size={24}
+            className={styles.dir}
+            onClick={previousTestimonies}
+          />
+          {[1, 2, 3].map((n) =>
+            testimony === n ? (
+              <div
+                className={`${styles.testimonyWrapper} ${styles.first}`}
+                key={n}
+              >
+                {testimonies
+                  .slice((n - 1) * 3, n * 3)
+                  .map((text, i) => (
+                    <div className={styles.testimonies} key={i}>
+                      <div>
+                        <p>{text}</p>
+                      </div>
+                      <div className={styles.testifier}>
+                        <h3>John Doe {i + 1}</h3>
+                        <Image src={Pic2} alt="testifier" />
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            ) : null
+          )}
+          <ChevronRight
+            size={24}
+            className={styles.dir}
+            onClick={nextTestimonies}
+          />
+        </div>
+      </section>
 
+      {/* Prayer CTA */}
+      <section className={styles.cta}>
+        <div className={styles.ctaContent}>
+          <h2>Need Someone To Pray With?</h2>
+          <Button tag="Reach Out To Us" onClick={redirectToPrayer} />
+        </div>
+      </section>
 
-
-
-        {/* Prayer CTA */}
-        <section className={styles.cta}>
-          <div className={styles.ctaContent}>
-            <h2>Need Someone To Pray With?</h2>
-            <Button tag="Reach Out To Us" onClick={redirectToPrayer} />
-          </div>
-        </section>
-
-        {/* Church Logo */}
-        <section className={styles.churchLogo}>
-          <Image src={ChurchLogo} alt="New Events" />
-        </section>
-      </main>
+      {/* Church Logo */}
+      <section className={styles.churchLogo}>
+        <Image src={ChurchLogo} alt="New Events" />
+      </section>
+    </main>
   );
 }

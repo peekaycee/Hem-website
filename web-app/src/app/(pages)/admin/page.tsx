@@ -14,8 +14,18 @@ import toast from "react-hot-toast";
 // ✅ import Supabase client
 import { supabase } from "@/app/lib/supabaseClient";
 
+// ✅ Next/Image for thumbnails
+import Image from "next/image";
+
+// ✅ fallback image URL (from public folder)
+const fallbackImage = "/images/fallback.png"; // place your fallback.png in public/images/
+
 const admin = process.env.NEXT_PUBLIC_ADMIN?.split(",") || [];
 const PAGE_SIZE = 10;
+
+// ✅ Supabase public bucket base URL
+const bucketBase =
+  "https://lnqosogvxpjywoqjgdwx.supabase.co/storage/v1/object/public/announcements/";
 
 type Tab = "announcement" | "sermon" | "followUp";
 
@@ -33,10 +43,12 @@ function AdminContent() {
   const [authenticated, setAuthenticated] = useState(false);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
-  // 👉 horizontal drag-to-scroll ref
+  // horizontal drag-to-scroll ref
   const tableScrollRef = useRef<HTMLDivElement>(null);
 
-  // ✅ mapping once, use everywhere
+  // full-size preview state
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
   const tableKeyMap: Record<Tab, "announcements" | "sermons" | "followup"> = {
     announcement: "announcements",
     sermon: "sermons",
@@ -53,7 +65,7 @@ function AdminContent() {
     }
   }, [authenticated]);
 
-  // 👉 add “grab to scroll” behavior
+  // grab to scroll
   useEffect(() => {
     const el = tableScrollRef.current;
     if (!el) return;
@@ -64,7 +76,9 @@ function AdminContent() {
 
     const isInteractive = (target: EventTarget | null) => {
       if (!(target instanceof HTMLElement)) return false;
-      return !!target.closest("input, textarea, select, button, a, [role='button']");
+      return !!target.closest(
+        "input, textarea, select, button, a, [role='button']"
+      );
     };
 
     const onMouseDown = (e: MouseEvent) => {
@@ -166,11 +180,10 @@ function AdminContent() {
   };
 
   const formatDate = (dateStr: string) => {
-  if (!dateStr) return "";
-  const [year, month, day] = dateStr.split("-");
-  return `${day}-${month}-${year}`;
-};
-
+    if (!dateStr) return "";
+    const [year, month, day] = dateStr.split("-");
+    return `${day}-${month}-${year}`;
+  };
 
   const formatTime = (timeStr: string) => {
     if (!timeStr) return "";
@@ -187,17 +200,59 @@ function AdminContent() {
       { accessorKey: "title", header: "Title" },
       { accessorKey: "venue", header: "Venue" },
       { accessorKey: "description", header: "Description" },
-      { accessorKey: "date", header: "Date", cell: ({ row }) => formatDate(row.original.date) },
-      { accessorKey: "time", header: "Time", cell: ({ row }) => formatTime(row.original.time) },
+      {
+        accessorKey: "date",
+        header: "Date",
+        cell: ({ row }) => formatDate(row.original.date),
+      },
+      {
+        accessorKey: "time",
+        header: "Time",
+        cell: ({ row }) => formatTime(row.original.time),
+      },
       { accessorKey: "ministering", header: "Ministering" },
-      { accessorKey: "image", header: "Image" },
+      {
+        accessorKey: "image",
+        header: "Image",
+        cell: ({ row }) => {
+          const rawImage = row.original.image;
+          const imgUrl = rawImage?.startsWith("http")
+            ? rawImage
+            : rawImage
+            ? `${bucketBase}${rawImage}`
+            : fallbackImage;
+
+          return (
+            <div
+              style={{
+                width: 80,
+                height: 80,
+                position: "relative",
+                cursor: "pointer",
+              }}
+              onClick={() => setPreviewImage(imgUrl)}
+            >
+              <Image
+                src={imgUrl}
+                alt={row.original.title || "announcement image"}
+                fill
+                style={{ objectFit: "cover", borderRadius: 8 }}
+              />
+            </div>
+          );
+        },
+      },
     ],
     sermon: [
       { accessorKey: "id", header: "ID" },
       { accessorKey: "topic", header: "Topic" },
       { accessorKey: "preacher", header: "Preacher" },
       { accessorKey: "description", header: "Description" },
-      { accessorKey: "date", header: "Date", cell: ({ row }) => formatDate(row.original.date) },
+      {
+        accessorKey: "date",
+        header: "Date",
+        cell: ({ row }) => formatDate(row.original.date),
+      },
       { accessorKey: "video_url", header: "Video Url" },
       { accessorKey: "audio_url", header: "Audio Url" },
       { accessorKey: "script_url", header: "Script Url" },
@@ -210,8 +265,10 @@ function AdminContent() {
     ],
   };
 
-  // ✅ fetch data with Supabase directly with pagination
-  const fetchMap: Record<"announcements" | "sermons" | "followup", (page: number, search: string) => Promise<{ data: any[]; total: number }>> = {
+  const fetchMap: Record<
+    "announcements" | "sermons" | "followup",
+    (page: number, search: string) => Promise<{ data: any[]; total: number }>
+  > = {
     announcements: async (page, search) => {
       const { data, error, count } = await supabase
         .from("announcements")
@@ -220,11 +277,9 @@ function AdminContent() {
         .order("created_at", { ascending: false })
         .order("time", { ascending: false })
         .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
-
       if (error) throw error;
       return { data: data || [], total: count || 0 };
     },
-
     sermons: async (page, search) => {
       const { data, error, count } = await supabase
         .from("sermons")
@@ -232,11 +287,9 @@ function AdminContent() {
         .ilike("topic", `%${search}%`)
         .order("created_at", { ascending: false })
         .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
-
       if (error) throw error;
       return { data: data || [], total: count || 0 };
     },
-
     followup: async (page, search) => {
       const { data, error, count } = await supabase
         .from("followup")
@@ -244,7 +297,6 @@ function AdminContent() {
         .ilike("name", `%${search}%`)
         .order("created_at", { ascending: false })
         .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
-
       if (error) throw error;
       return { data: data || [], total: count || 0 };
     },
@@ -253,7 +305,10 @@ function AdminContent() {
   const deleteMap: Record<Tab, (id: number) => Promise<void>> = {
     announcement: async (id) => {
       try {
-        const { error } = await supabase.from("announcements").delete().eq("id", id);
+        const { error } = await supabase
+          .from("announcements")
+          .delete()
+          .eq("id", id);
         if (error) throw error;
         toast.success("Deleted successfully");
         triggerRefresh();
@@ -311,12 +366,14 @@ function AdminContent() {
       <Hero title="Admin" id={styles.admin} />
       <div className={styles.adminWrapper}>
         <div className={styles.sideBar}>
-          <Button tag={"Announcements"} onClick={() => setActiveTab("announcement")} />
+          <Button
+            tag={"Announcements"}
+            onClick={() => setActiveTab("announcement")}
+          />
           <Button tag={"Sermon Library"} onClick={() => setActiveTab("sermon")} />
           <Button tag={"Follow-up"} onClick={() => setActiveTab("followUp")} />
         </div>
 
-        {/* SCROLL/DRAG CONTAINER */}
         <div className={styles.adminTable} ref={tableScrollRef}>
           <div className={styles.tableHeader}>
             <input
@@ -346,6 +403,40 @@ function AdminContent() {
           </div>
         </div>
       </div>
+
+      {/* Fullscreen preview modal */}
+      {previewImage && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(0,0,0,0.8)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+          onClick={() => setPreviewImage(null)}
+        >
+          <div
+            style={{
+              maxWidth: "90%",
+              maxHeight: "90%",
+              position: "relative",
+            }}
+          >
+            <Image
+              src={previewImage}
+              alt="Preview"
+              fill
+              style={{ objectFit: "contain" }}
+            />
+          </div>
+        </div>
+      )}
 
       {modalOpen && (
         <div className={styles.modalOverlay}>

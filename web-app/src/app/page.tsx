@@ -93,7 +93,7 @@ export default function Home() {
     setTestimony((prev) => Math.min(prev + 1, 3));
 
   // Smooth infinite scroll setup
-  const [trackWidth, setTrackWidth] = useState(0);
+  const [, setTrackWidth] = useState(0);
   useEffect(() => {
     if (trackRef.current) {
       setTrackWidth(trackRef.current.scrollWidth / 2); // half because we duplicate items
@@ -165,34 +165,46 @@ export default function Home() {
         </div>
       </motion.section>
 
-      {/* Events Section (Infinite Scroll + Lazy-Load + Responsive) */}
+      {/* Events Section (Infinite Scroll, Continuous, No Flicker) */}
       <section className={styles.event}>
         <h2>Upcoming Programs</h2>
         <div className={styles.eventsWrapper}>
-          <motion.div
-            ref={trackRef}
-            className={styles.track}
-            animate={{ x: ["0px", `-${trackWidth}px`] }}
-            transition={{
-              repeat: Infinity,
-              ease: "linear",
-              duration: 20,
-            }}
-          >
-            {[...programs, ...programs].map((program, index) => (
-              <div className={styles.eventImageWrapper} key={index}>
-                <Image
-                  src={program.image || FallbackImage}
-                  alt={program.title || "Announcement image"}
-                  width={0}
-                  height={0}
-                  priority={index < programs.length}
-                  sizes="(max-width: 768px) 150px, (max-width: 1024px) 180px, 200px"
-                  loading={index >= programs.length ? "lazy" : "eager"}
-                />
-              </div>
-            ))}
-          </motion.div>
+          {typeof window !== "undefined" && programs.length > 0 && (
+            <motion.div
+              className={styles.track}
+              animate={{ x: ["0%", "-50%"] }} // scroll by half the track since we duplicated
+              transition={{
+                repeat: Infinity,
+                ease: "linear",
+                duration: 20,
+              }}
+            >
+              {[...programs.filter(p => p.image), ...programs.filter(p => p.image)].map(
+                (program, index) => (
+                  <div
+                    className={styles.eventImageWrapper}
+                    key={`program-${program.id}-${index}`}
+                  >
+                    <Image
+                      src={program.image || FallbackImage.src}
+                      alt={program.title || "Announcement image"}
+                      width={200}               // match your wrapper width
+                      height={200}              // you can adjust to maintain aspect ratio
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: "var(--br-2)",
+                      }}
+                      priority={false}          // optional, prevents preloading all
+                    />
+                  </div>
+
+                )
+              )}
+            </motion.div>
+
+          )}
         </div>
         <Button tag="View all" onClick={redirectToAnnouncement} />
       </section>

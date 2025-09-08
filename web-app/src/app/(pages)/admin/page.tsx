@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useState, useRef, Suspense } from "react";
+import { FallbackImage } from "../../../../public/images";
 import { useSearchParams, useRouter } from "next/navigation";
 import Hero from "@/app/components/Hero";
 import Button from "@/app/components/Button";
@@ -18,7 +19,6 @@ import { supabase } from "@/app/lib/supabaseClient";
 import Image from "next/image";
 
 // ✅ fallback image URL (from public folder)
-const fallbackImage = "/images/fallback.png"; // place your fallback.png in public/images/
 
 const admin = process.env.NEXT_PUBLIC_ADMIN?.split(",") || [];
 const PAGE_SIZE = 10;
@@ -220,7 +220,7 @@ function AdminContent() {
             ? rawImage
             : rawImage
             ? `${bucketBase}${rawImage}`
-            : fallbackImage;
+            : FallbackImage;
 
           return (
             <div

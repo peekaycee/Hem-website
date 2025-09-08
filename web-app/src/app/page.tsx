@@ -3,14 +3,13 @@
 import styles from "./home.module.css";
 import Button from "./components/Button";
 import Image from "next/image";
-import { Pic2, ChurchLogo } from "../../public/images";
+import { Pic2, ChurchLogo, FallbackImage } from "../../public/images";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/app/lib/supabaseClient";
 
-const fallbackImage = "/public/fallback.png";
 
 // Testimonies
 const testimonies = [
@@ -183,7 +182,7 @@ export default function Home() {
             {[...programs, ...programs].map((program, index) => (
               <div className={styles.eventImageWrapper} key={index}>
                 <Image
-                  src={program.image || fallbackImage}
+                  src={program.image || FallbackImage}
                   alt={program.title || "Announcement image"}
                   width={200}
                   height={200}

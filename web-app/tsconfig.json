@@ -19,10 +19,21 @@
         "name": "next"
       }
     ],
+
+    // 👇 add baseUrl
+    "baseUrl": "src",
+
+    // 👇 correct paths mapping
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/@pages/profile"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/app/@pages/profile"
+  ],
   "exclude": ["node_modules"]
 }

@@ -1,19 +1,33 @@
 "use client";
 
-import styles from './components.module.css';
+import React from "react";
+import styles from "./components.module.css";
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   tag: string;
-  onClick?: () => void;
-  disabled?: boolean;
   className?: string;
-  type?: "button" | "submit" | "reset"; 
 }
 
-export default function Button({ tag, onClick, disabled, className, type = "button" }: ButtonProps) {
-  const combinedClass = `${styles.button} ${disabled ? styles.disabled : ""} ${className || ""}`;
+export default function Button({
+  tag,
+  onClick,
+  disabled,
+  className,
+  type = "button",
+  ...rest
+}: ButtonProps) {
+  const combinedClass = `${styles.button} ${disabled ? styles.disabled : ""} ${
+    className || ""
+  }`;
+
   return (
-    <button onClick={onClick} className={combinedClass} disabled={disabled} type={type}>
+    <button
+      onClick={onClick}
+      className={combinedClass}
+      disabled={disabled}
+      type={type}
+      {...rest} // ✅ forwards any extra props (title, aria-label, etc.)
+    >
       {tag}
     </button>
   );

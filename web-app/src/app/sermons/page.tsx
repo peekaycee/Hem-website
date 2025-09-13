@@ -10,6 +10,8 @@ import {
   VideoIcon,
   AudioIcon,
   ScriptIcon,
+  Image10,
+  Image11,
   Image12,
   Image13,
   Image14,
@@ -28,7 +30,7 @@ interface Sermon {
   script_url: string;
 }
 
-const imageMap = [Image12, Image13, Image14];
+const imageMap = [Image10, Image11, Image12, Image13, Image14];
 const PAGE_SIZE = 5;
 
 export default function Sermons() {
@@ -92,31 +94,68 @@ export default function Sermons() {
     return `/sermons/${sermon.id}?${params.toString()}`;
   };
 
-  const renderSermon = (sermon: Sermon, index: number) => {
+  let lastImageIndex = -1;
+
+  const renderSermon = (sermon: Sermon) => {
     const formattedDate = sermon.date
       ? new Date(sermon.date).toLocaleDateString("en-GB").replace(/\//g, "-")
       : "";
 
+    // Deterministic image based on sermon ID
+    let imageIndex = sermon.id % imageMap.length;
+
+    // Avoid consecutive repeats
+    if (imageIndex === lastImageIndex) {
+      imageIndex = (imageIndex + 1) % imageMap.length;
+    }
+    lastImageIndex = imageIndex;
+
+    const selectedImage = imageMap[imageIndex];
+
     return (
       <div key={sermon.id} className={styles.librarySermon}>
-        <div className={styles.sermonThumbnail}>
-          <Image src={imageMap[index % 3]} alt="Sermon Flyer" />
+        <div className={styles.sermonThumbnail} style={{ position: "relative" }}>
+          <Image
+            src={selectedImage}
+            alt="Sermon Flyer"
+            fill
+            style={{ objectFit: "cover", borderRadius: 8 }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              color: "#fff",
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+              textAlign: "center",
+              textShadow: "2px 2px 8px rgba(0,0,0,0.7)",
+              padding: "0 10px",
+            }}
+          >
+            {sermon.topic}
+          </div>
         </div>
+
         <div className={styles.sermonBriefs}>
           <h2>
-            {sermon.topic} <span>- By {sermon.preacher}</span>
+            {sermon.topic}
+            <span> - By {sermon.preacher}</span>
           </h2>
           <pre>{formattedDate}</pre>
           <p>{sermon.description}</p>
 
           <div className={styles.mediaIcons}>
-            <Link href={buildMediaQuery(sermon, "video", index % 3)}>
+            {/* ✅ Pass the correct imageIndex to the details page */}
+            <Link href={buildMediaQuery(sermon, "video", imageIndex)}>
               <Image src={VideoIcon} alt="Video" width={20} height={20} />
             </Link>
-            <Link href={buildMediaQuery(sermon, "audio", index % 3)}>
+            <Link href={buildMediaQuery(sermon, "audio", imageIndex)}>
               <Image src={AudioIcon} alt="Audio" width={20} height={20} />
             </Link>
-            <Link href={buildMediaQuery(sermon, "script", index % 3)}>
+            <Link href={buildMediaQuery(sermon, "script", imageIndex)}>
               <Image src={ScriptIcon} alt="Script" width={20} height={20} />
             </Link>
           </div>
@@ -198,7 +237,7 @@ export default function Sermons() {
             ) : (
               <div className={styles.library}>
                 <h1>Sermon Library</h1>
-                {paginatedLibrary.map((sermon, i) => renderSermon(sermon, i))}
+                {paginatedLibrary.map(renderSermon)}
                 <div className={styles.pagination}>
                   {Array.from({ length: totalPages }, (_, i) => (
                     <button

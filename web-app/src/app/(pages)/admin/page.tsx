@@ -3,6 +3,7 @@
 
 import { useEffect, useState, useRef, Suspense } from "react";
 import { FallbackImage } from "../../../../public/images";
+import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import Hero from "@/app/components/Hero";
 import Button from "@/app/components/Button";
@@ -11,21 +12,15 @@ import DataFormModal from "@/app/components/DataFormModal";
 import styles from "./admin.module.css";
 import { ColumnDef } from "@tanstack/react-table";
 import toast from "react-hot-toast";
-
-// ✅ import Supabase client
 import { supabase } from "@/app/lib/supabaseClient";
-
-// ✅ Next/Image for thumbnails
-import Image from "next/image";
-
-// ✅ fallback image URL (from public folder)
 
 const admin = process.env.NEXT_PUBLIC_ADMIN?.split(",") || [];
 const PAGE_SIZE = 10;
 
-// ✅ Supabase public bucket base URL
-const bucketBase =
+const announcementBucketBase =
   "https://lnqosogvxpjywoqjgdwx.supabase.co/storage/v1/object/public/announcements/";
+const sermonBucketBase =
+  "https://lnqosogvxpjywoqjgdwx.supabase.co/storage/v1/object/public/sermons/";
 
 type Tab = "announcement" | "sermon" | "followUp";
 
@@ -43,10 +38,7 @@ function AdminContent() {
   const [authenticated, setAuthenticated] = useState(false);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
-  // horizontal drag-to-scroll ref
   const tableScrollRef = useRef<HTMLDivElement>(null);
-
-  // full-size preview state
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const tableKeyMap: Record<Tab, "announcements" | "sermons" | "followup"> = {
@@ -65,7 +57,7 @@ function AdminContent() {
     }
   }, [authenticated]);
 
-  // grab to scroll
+  // Drag-to-scroll
   useEffect(() => {
     const el = tableScrollRef.current;
     if (!el) return;
@@ -153,6 +145,7 @@ function AdminContent() {
   const closeModal = () => setModalOpen(false);
   const triggerRefresh = () => setRefreshKey((k) => k + 1);
 
+  // Form fields
   const formFieldsMap = {
     announcement: [
       { key: "title", label: "Title" },
@@ -161,16 +154,16 @@ function AdminContent() {
       { key: "date", label: "Date", type: "date" },
       { key: "time", label: "Time", type: "time" },
       { key: "ministering", label: "Ministering" },
-      { key: "image", label: "Image" },
+      { key: "image", label: "Image" }, // bucket file
     ],
     sermon: [
       { key: "topic", label: "Topic" },
       { key: "preacher", label: "Preacher" },
       { key: "description", label: "Description" },
       { key: "date", label: "Date", type: "date" },
-      { key: "video_url", label: "Video Url" },
-      { key: "audio_url", label: "Audio Url" },
-      { key: "script_url", label: "Script Url" },
+      { key: "video_file", label: "Video File" }, // bucket file
+      { key: "audio_file", label: "Audio File" }, // bucket file
+      { key: "script_file", label: "Script File" }, // bucket file
     ],
     followUp: [
       { key: "name", label: "Name" },
@@ -190,10 +183,11 @@ function AdminContent() {
     const [hourStr, minute] = timeStr.split(":");
     let hour = parseInt(hourStr, 10);
     const ampm = hour >= 12 ? "PM" : "AM";
-    hour = hour % 12 || 12; // convert 0 → 12
+    hour = hour % 12 || 12;
     return `${hour}:${minute} ${ampm}`;
   };
 
+  // Table columns
   const columnDefs: Record<Tab, ColumnDef<any>[]> = {
     announcement: [
       { accessorKey: "id", header: "ID" },
@@ -216,11 +210,11 @@ function AdminContent() {
         header: "Image",
         cell: ({ row }) => {
           const rawImage = row.original.image;
-          const imgUrl = rawImage?.startsWith("http")
-            ? rawImage
-            : rawImage
-            ? `${bucketBase}${rawImage}`
-            : FallbackImage;
+          const imgUrl = rawImage
+            ? rawImage.startsWith("http")
+              ? rawImage
+              : `${announcementBucketBase}${rawImage}`
+            : FallbackImage.src;
 
           return (
             <div
@@ -253,9 +247,63 @@ function AdminContent() {
         header: "Date",
         cell: ({ row }) => formatDate(row.original.date),
       },
-      { accessorKey: "video_url", header: "Video Url" },
-      { accessorKey: "audio_url", header: "Audio Url" },
-      { accessorKey: "script_url", header: "Script Url" },
+      {
+        accessorKey: "video_url",
+        header: "Video",
+        cell: ({ row }) => {
+          const rawFile = row.original.video_url;
+          const fileUrl = rawFile
+            ? rawFile.startsWith("http")
+              ? rawFile
+              : `${sermonBucketBase}${rawFile}`
+            : null;
+          return fileUrl ? (
+            <a href={fileUrl} target="_blank" rel="noopener noreferrer">
+              View Video
+            </a>
+          ) : (
+            "-"
+          );
+        },
+      },
+      {
+        accessorKey: "audio_url",
+        header: "Audio",
+        cell: ({ row }) => {
+          const rawFile = row.original.audio_url;
+          const fileUrl = rawFile
+            ? rawFile.startsWith("http")
+              ? rawFile
+              : `${sermonBucketBase}${rawFile}`
+            : null;
+          return fileUrl ? (
+            <a href={fileUrl} target="_blank" rel="noopener noreferrer">
+              Listen Audio
+            </a>
+          ) : (
+            "-"
+          );
+        },
+      },
+      {
+        accessorKey: "script_url",
+        header: "Script",
+        cell: ({ row }) => {
+          const rawFile = row.original.script_url;
+          const fileUrl = rawFile
+            ? rawFile.startsWith("http")
+              ? rawFile
+              : `${sermonBucketBase}${rawFile}`
+            : null;
+          return fileUrl ? (
+            <a href={fileUrl} target="_blank" rel="noopener noreferrer">
+              View Script
+            </a>
+          ) : (
+            "-"
+          );
+        },
+      },
     ],
     followUp: [
       { accessorKey: "id", header: "ID" },
@@ -265,6 +313,7 @@ function AdminContent() {
     ],
   };
 
+  // Fetchers
   const fetchMap: Record<
     "announcements" | "sermons" | "followup",
     (page: number, search: string) => Promise<{ data: any[]; total: number }>
@@ -275,7 +324,6 @@ function AdminContent() {
         .select("*", { count: "exact" })
         .ilike("title", `%${search}%`)
         .order("created_at", { ascending: false })
-        .order("time", { ascending: false })
         .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
       if (error) throw error;
       return { data: data || [], total: count || 0 };
@@ -302,6 +350,7 @@ function AdminContent() {
     },
   };
 
+  // Delete handlers
   const deleteMap: Record<Tab, (id: number) => Promise<void>> = {
     announcement: async (id) => {
       try {

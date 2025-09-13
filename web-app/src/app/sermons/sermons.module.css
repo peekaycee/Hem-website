@@ -156,13 +156,13 @@ p.searchResponse{
 .sermonBriefs h2{
   font-family: var(--headerFont);
   font-weight: var(--bold);
-  font-size: var(--s);
+  font-size: var(--m); 
 }
 .sermonBriefs span{
   font-family: var(--bodyFont);
   font-weight: var(--regular);
   font-size: var(--p3);
-  font-style: italic;
+  font-style: italic; 
 }
 .sermonBriefs p{
   font-family: var(--bodyFont);

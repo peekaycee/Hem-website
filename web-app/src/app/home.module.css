@@ -174,10 +174,10 @@
     width: 100%;
     border-radius: var(--br-1);
   }
-.track{
-  width: fit-content;
-  gap: 0;
-}
+  .track{
+    width: fit-content;
+    gap: 0;
+  }
   .eventImageWrapper img{
     width: 100%;           /* full width */
     height: 30dvh;          /* maintain aspect ratio */

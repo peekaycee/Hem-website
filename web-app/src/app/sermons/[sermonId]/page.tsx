@@ -20,22 +20,21 @@ export default function SermonId() {
   const imageIndex = parseInt(searchParams.get("imageIndex") || "0");
 
   const imageMap = [Image12, Image13, Image14];
-  const selectedImage = imageMap[imageIndex % 3];
+  // ✅ Render exact image passed from sermon page
+  const selectedImage = imageMap[imageIndex % imageMap.length];
 
   const isVideo = Boolean(videoUrl);
   const isAudio = Boolean(audioUrl);
   const isScript = Boolean(scriptUrl);
 
-  // ✅ Format date to dd-mm-yyyy
   const formattedDate = date
     ? new Date(date).toLocaleDateString("en-GB").replace(/\//g, "-")
     : "";
 
-  // ✅ Download handler
   const handleDownload = () => {
     if (!scriptUrl) return;
     const link = document.createElement("a");
-    link.href = scriptUrl; // e.g. /docx/my-sermon.docx in /public/docx
+    link.href = scriptUrl;
     link.download = scriptUrl.split("/").pop() || "sermon-script.docx";
     document.body.appendChild(link);
     link.click();
@@ -87,13 +86,33 @@ export default function SermonId() {
 
       {isScript && (
         <div className={styles.scriptWrapper}>
-          <Image
-            src={selectedImage}
-            alt="Script Thumbnail"
-            className={styles.scriptImage}
-            width={400}
-            height={500}
-          />
+          <div style={{ position: "relative", width: 400, height: 500, borderRadius: 8, overflow: "hidden" }}>
+            <Image
+              src={selectedImage}
+              alt="Sermon Thumbnail"
+              fill
+              style={{ objectFit: "cover", borderRadius: 8 }}
+            />
+            {topic && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  color: "#fff",
+                  fontSize: "1.5rem",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  textShadow: "2px 2px 8px rgba(0,0,0,0.7)",
+                  padding: "0 10px",
+                }}
+              >
+                {topic}
+              </div>
+            )}
+          </div>
+
           <div className={styles.downloadWrapper}>
             <Button tag="Download Script" onClick={handleDownload} />
           </div>

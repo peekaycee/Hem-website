@@ -135,7 +135,7 @@ export default function Sermons() {
               padding: "0 10px",
             }}
           >
-            {sermon.topic}
+            {/* {sermon.topic} */}
           </div>
         </div>
 
@@ -148,7 +148,6 @@ export default function Sermons() {
           <p>{sermon.description}</p>
 
           <div className={styles.mediaIcons}>
-            {/* ✅ Pass the correct imageIndex to the details page */}
             <Link href={buildMediaQuery(sermon, "video", imageIndex)}>
               <Image src={VideoIcon} alt="Video" width={20} height={20} />
             </Link>

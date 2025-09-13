@@ -91,7 +91,7 @@ export default function SermonId() {
               src={selectedImage}
               alt="Sermon Thumbnail"
               fill
-              style={{ objectFit: "cover", borderRadius: 8 }}
+              style={{ objectFit: "cover", borderRadius: 8}}
             />
             {topic && (
               <div

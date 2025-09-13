@@ -20,6 +20,7 @@
 .details {
   line-height: 1.5;
   color: var(--foreground);
+  margin-bottom: 2em;
 }
 
 .details h2 {
@@ -53,6 +54,11 @@
 .audio{
   box-shadow: none;
 }
+
+.downloadWrapper button {
+  margin-top: 1em;
+}
+
 /* Script Section */
 .scriptWrapper { 
   margin-top: 2rem auto;

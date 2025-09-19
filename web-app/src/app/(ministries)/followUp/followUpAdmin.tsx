@@ -140,10 +140,15 @@ export default function FollowUpAdmin() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleAuthentication()}
               placeholder="Enter Password to Access"
               autoFocus
             />
-            <Button tag="Submit" onClick={handleAuthentication} />
+            <Button
+              tag="Submit"
+              onClick={handleAuthentication}
+              onKeyDown={(e) => e.key === "Enter" && handleAuthentication()}
+            />
           </div>
         </div>
       ) : (

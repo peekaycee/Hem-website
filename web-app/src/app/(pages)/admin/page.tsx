@@ -28,15 +28,48 @@ function AdminContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialTab = (searchParams.get("tab") as Tab) || "announcement";
+    const [activeTab, setActiveTab] = useState<Tab>(() => {
+      if (typeof window !== "undefined") {
+        return (localStorage.getItem("admin_activeTab") as Tab) || initialTab;
+      }
+      return initialTab;
+    });
+    const [search, setSearch] = useState(() => {
+      if (typeof window !== "undefined") {
+        return localStorage.getItem("admin_search") || "";
+      }
+      return "";
+    });
+    const [password, setPassword] = useState(() => {
+      if (typeof window !== "undefined") {
+        return localStorage.getItem("admin_password") || "";
+      }
+      return "";
+    });
+    const [authenticated, setAuthenticated] = useState(() => {
+      if (typeof window !== "undefined") {
+        return localStorage.getItem("admin_authenticated") === "true";
+      }
+      return false;
+    });
 
-  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editData, setEditData] = useState<any>(null);
-  const [refreshKey, setRefreshKey] = useState(0);
-  const [search, setSearch] = useState("");
-  const [password, setPassword] = useState("");
-  const [authenticated, setAuthenticated] = useState(false);
-  const passwordInputRef = useRef<HTMLInputElement>(null);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [editData, setEditData] = useState<any>(null);
+    const [refreshKey, setRefreshKey] = useState(0);
+//=======================================================================
+  // On first load, check if saved admin session expired
+  useEffect(() => {
+    const expiry = localStorage.getItem("admin_expiry");
+    if (expiry && Date.now() > parseInt(expiry, 10)) {
+      localStorage.removeItem("admin_authenticated");
+      localStorage.removeItem("admin_password");
+      localStorage.removeItem("admin_expiry");
+      setAuthenticated(false);
+      setPassword("");
+    }
+  }, []);
+  
+const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const tableScrollRef = useRef<HTMLDivElement>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -58,6 +91,31 @@ function AdminContent() {
   }, [authenticated]);
 
   // Drag-to-scroll
+  //====================================================
+  // Persist values to localStorage
+  useEffect(() => {
+    localStorage.setItem("admin_activeTab", activeTab);
+  }, [activeTab]);
+
+  useEffect(() => {
+    localStorage.setItem("admin_search", search);
+  }, [search]);
+
+  useEffect(() => {
+    if (authenticated) {
+      const expiry = Date.now() + 60 * 60 * 1000; // 1 hour from now
+      localStorage.setItem("admin_authenticated", "true");
+      localStorage.setItem("admin_password", password);
+      localStorage.setItem("admin_expiry", expiry.toString());
+    } else {
+      localStorage.removeItem("admin_authenticated");
+      localStorage.removeItem("admin_password");
+      localStorage.removeItem("admin_expiry");
+    }
+  }, [authenticated, password]);
+
+  //====================================================
+
   useEffect(() => {
     const el = tableScrollRef.current;
     if (!el) return;
@@ -258,8 +316,8 @@ function AdminContent() {
               : `${sermonBucketBase}${rawFile}`
             : null;
           return fileUrl ? (
-            <a href={fileUrl} target="_blank" rel="noopener noreferrer">
-              View Video
+            <a href={fileUrl} target="_blank" rel="noopener noreferrer" className={styles.mediaLinks}>
+              Watch Video
             </a>
           ) : (
             "-"
@@ -277,7 +335,7 @@ function AdminContent() {
               : `${sermonBucketBase}${rawFile}`
             : null;
           return fileUrl ? (
-            <a href={fileUrl} target="_blank" rel="noopener noreferrer">
+            <a href={fileUrl} target="_blank" rel="noopener noreferrer" className={styles.mediaLinks}>
               Listen Audio
             </a>
           ) : (
@@ -296,8 +354,8 @@ function AdminContent() {
               : `${sermonBucketBase}${rawFile}`
             : null;
           return fileUrl ? (
-            <a href={fileUrl} target="_blank" rel="noopener noreferrer">
-              View Script
+            <a href={fileUrl} target="_blank" rel="noopener noreferrer" className={styles.mediaLinks}>
+              Read Script
             </a>
           ) : (
             "-"
@@ -404,6 +462,7 @@ function AdminContent() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleAdminAuthentication()}
           placeholder="Enter password to Access"
           autoFocus
         />

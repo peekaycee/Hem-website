@@ -411,3 +411,9 @@
   animation: shimmer 1.5s infinite linear;
   margin-bottom: 0.75rem;
 }
+
+.mediaLinks{
+  text-decoration: none;
+  color: var(--hoverBg);
+  font-style: italic;
+}

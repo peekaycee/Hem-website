@@ -86,9 +86,18 @@
   letter-spacing: 0;
   opacity: .8;
 }
+.mobileChurch{
+  background: url(../../public/images/building.jpg) no-repeat center var(--primary-50);
+  background-size: cover;
+  object-position: center;
+  width: 100%;
+  height: 50dvh;
+  margin-top: 2em;
+  display: none;
+}
 .prototype{
   position: relative;
-  background: url(../../public/images/church-sermon-768x600.jpg) no-repeat right fixed var(--primary-50);
+  background: url(../../public/images/building.jpg) no-repeat right fixed var(--primary-50);
   background-size: contain;
   object-position: center;
   width: 100%;
@@ -544,8 +553,9 @@
     margin: 0;
   }
   .prototype{
-    height: 30dvh;
+    height: 25dvh;
     padding-top: 0;
+    margin-top: -1em;
   }
   .projectContent{
     margin-left: -2.5em;
@@ -555,6 +565,10 @@
   }
   .projectContent p {
     font-size: calc(var(--p2) * 0.8);
+  }
+  .mobileChurch{
+    display: block;
+    height: ;
   }
 
   /* === Horizontal scroll on mobile for THREE sections === */

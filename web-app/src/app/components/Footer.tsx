@@ -1,7 +1,7 @@
 "use client";
 import Image  from 'next/image';
 import styles from './components.module.css';
-import { Youtube, Instagram, Facebook } from '../../../public/images/index';
+import { Youtube, Instagram, Facebook, Tiktok } from '../../../public/images/index';
 import Link from "next/link";
 
 export default function Footer(){
@@ -23,6 +23,9 @@ export default function Footer(){
               </a>
               <a href="https://facebook.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title="facebook">
                 <Image src={Facebook} alt="Facebook" width={22} height={22} />
+              </a>
+              <a href="https://facebook.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title="tiktok">
+                <Image src={Tiktok} alt="Tiktok" width={22} height={22} />
               </a>
             </div>
           </div>

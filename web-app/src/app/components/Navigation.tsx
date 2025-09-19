@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from './components.module.css';
 import Image from 'next/image';
-import { Youtube, Instagram, Facebook } from '../../../public/images/index';
+import { Youtube, Instagram, Facebook, Logo, Tiktok } from '../../../public/images/index';
 import { ChevronDown, Menu, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -62,6 +62,9 @@ export default function Navigation() {
           </a><span>|</span>
           <a href="https://facebook.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title='Facebook'>
             <Image src={Facebook} alt="Facebook" width={20} height={20} />
+          </a><span>|</span>
+          <a href="https://facebook.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title='Tiktok'>
+            <Image src={Tiktok} alt="Tiktok" width={20} height={20} />
           </a>
         </div>
       </header>
@@ -69,7 +72,7 @@ export default function Navigation() {
       <nav className={styles.navbar} ref={navRef}>
         <div className={styles.navlinks}>
           <div className={styles.logo}>
-            <Link href='/'><h1>HEMA</h1></Link>
+            <Link href='/'><Image src={Logo} alt="Logo" width={70} height={60}/></Link>
           </div>
 
           {/* DESKTOP LINKS (hover dropdowns) */}

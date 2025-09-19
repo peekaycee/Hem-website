@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./components.module.css";
 import Image from "next/image";
 import Button from "./Button";
-import { Instagram } from "../../../public/images"; 
+import { Livechat } from "../../../public/images"; 
 
 export default function LiveChat() {
   const [isOpen, setIsOpen] = useState(false);
@@ -153,7 +153,7 @@ export default function LiveChat() {
 
         {/* Floating Icon */}
         <Image
-          src={Instagram}
+          src={Livechat}
           alt="Chat"
           width={45}
           height={45}

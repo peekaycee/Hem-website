@@ -133,7 +133,7 @@ export default function Home() {
         <div className={styles.details}>
           <div className={styles.detailImage}></div>
           <div className={styles.pastorsDetails}>
-            <h3>Pastor & Mrs. Gbdegheshin</h3>
+            <h3>Pastor & Mrs. Gbadegheshin</h3>
             <abbr>PICA</abbr>
           </div>
         </div>
@@ -142,14 +142,14 @@ export default function Home() {
           <p>
             We are a faith-driven ministry dedicated to inspiring hope, nurturing
             spiritual growth, and transforming lives. Through heartfelt worship,
-            fervent prayer, engaging Bible study, and impactful community
+            fervent prayer, engaging bible study, and impactful community
             outreach, HEMA empowers individuals to draw closer to God, live
             victoriously, and positively influence the world with unwavering
             faith.
           </p>
         </div>
       </motion.section>
-
+      <div className={styles.mobileChurch}></div>
       {/* Church Project Section */}
       <motion.section
         className={styles.prototype}
@@ -158,6 +158,7 @@ export default function Home() {
         whileInView="visible"
         viewport={{ once: true }}
       >
+        
         <div className={styles.projectContent}>
           <h2>Join Us To Make The Church Building A Reality.</h2>
           <p>Partner With Us Today!</p>

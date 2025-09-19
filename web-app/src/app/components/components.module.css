@@ -286,7 +286,7 @@ ul.sublinks {
 .heroSlide {
   position: relative;
   background: url("/images/hero-bg.jpg") center no-repeat;
-  background-size: contain;
+  background-size: cover;
   min-height: 50vh;
   z-index: 1; /* always behind nav & livechat */
   display: flex;

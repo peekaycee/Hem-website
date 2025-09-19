@@ -6,6 +6,7 @@ export { default as Cross } from './cross.png';
 export { default as DownloadIcon } from './download-svgrepo-com.svg';
 export { default as Facebook } from './facebook-176-svgrepo-com.svg';
 export { default as Instagram } from './instagram-svgrepo-com.svg';
+export { default as Tiktok } from './tiktok-svgrepo-com.svg';
 export { default as Playbutton } from './play-button-svgrepo-com.svg';
 export { default as Pointer } from './pointer-svgrepo-com.svg';
 export { default as ScriptIcon } from './script-svgrepo-com.svg';
@@ -29,4 +30,6 @@ export { default as Pic1 } from './pee.png';
 export { default as Pic2 } from './pee2.png';
 export { default as FallbackImage } from './fallback.png';
 export { default as ChurchLogo } from './rccgLogo.png';
+export { default as Logo } from './Church-logo-icon.jpg';
+export { default as Livechat } from './livechat.png';
 

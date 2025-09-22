@@ -57,11 +57,40 @@ export default function Give() {
     setAmount("");
   };
 
-  const handleSuccess = (ref: { reference: string }) => {
-    alert("Payment successful! Reference: " + ref.reference);
-    clearForm();
-  };
+  // Prevously handling clents alone
+  // const handleSuccess = (ref: { reference: string }) => {
+  //   alert("Payment successful! Reference: " + ref.reference);
+  //   clearForm();
+  // };
 
+  //======================================================================
+  // Verifying from API route
+  const handleSuccess = async (ref: { reference: string }) => {
+    try {
+      const res = await fetch("/api/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reference: ref.reference }),
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        alert("Payment verified successfully!");
+        clearForm();
+        console.log("Verified payment:", result.data);
+      } else {
+        alert("Payment could not be verified. Please contact support.");
+        console.error(result.error);
+      }
+    } catch (err) {
+      alert("An error occurred while verifying payment.");
+      console.error(err);
+    }
+  };
+//======================================================================
+
+  // please modify for redirect please
   const handleClose = () => {
     alert("Payment closed.");
   };

@@ -54,6 +54,8 @@
   font-family: var(--headerFont);
   font-weight: var(--bold);
   font-size: var(--p1);
+  margin-top: 0.5em;
+  margin-bottom: 0.2em;
 }
 .nameDetail p{  
   font-family: var(--bodyFont);

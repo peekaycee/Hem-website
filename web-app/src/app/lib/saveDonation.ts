@@ -18,6 +18,7 @@ interface Payment {
     email: string;
   };
   metadata?: PaymentMetadata;
+  [key: string]: unknown; // allow extra fields from Paystack
 }
 
 export async function saveDonation(payment: Payment) {
@@ -33,6 +34,7 @@ export async function saveDonation(payment: Payment) {
     donor_name: payment.metadata?.fullName || null,
     donor_phone: payment.metadata?.phone || null,
     category: payment.metadata?.category || null,
+    raw_data: payment, // full Paystack payload
   };
 
   const { error } = await supabase

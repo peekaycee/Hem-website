@@ -24,7 +24,8 @@ export default function Give() {
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "";
 
   const subaccountMap: Record<string, string> = {
-    Offering: "ACCT_yxr9wcq3bjitw8w",
+    // Offering: "ACCT_yxr9wcq3bjitw8w",
+    Offering: "ACCT_sg0ocq2xfk9irny",
     Tithe: "ACCT_eal1s4xwrolnldl",
     "Building Project": "ACCT_XXXXX3",
     Mission: "ACCT_XXXXX4",

@@ -1,5 +1,6 @@
 /* NAVIGATION */
-.address{
+header.address{
+  position: relative;
   background: var(--background);
   box-shadow: 0px 0px 13px 1px var(--foreground);
   width:  100%;
@@ -10,6 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 99;
 }
 .socialIcons{
   width: 120px;
@@ -558,7 +560,7 @@ ul.sublinks {
 .dataModalTable{
   position: sticky;
   width: 35%;
-  top: 12%;
+  top: 22%;
   background-color: var(--tertiary-50);
   padding: 1em 2em;
   border-radius: var(--br-2);
@@ -864,11 +866,12 @@ ul.sublinks {
 
 /* Tablet / Laptop view */
 @media only screen and (max-width: 960px) {
-  .address {
+  header.address {
     flex-direction: column;
     padding: 0.5em 2em;
     gap: 0.5em;
     font-size: calc(var(--p3) * 0.9);
+    text-align: center;
   }
     .login a {
     display: none;
@@ -941,7 +944,7 @@ ul.sublinks {
 
 /* Mobile view */
 @media only screen and (max-width: 599px) {
-  .address {
+  header.address {
     padding: 0.5em 1em;
     font-size: calc(var(--p3) * 0.8);
   }

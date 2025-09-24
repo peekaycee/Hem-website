@@ -149,8 +149,8 @@ export default function Home() {
           </p>
         </div>
       </motion.section>
-      <div className={styles.mobileChurch}></div>
       {/* Church Project Section */}
+      <div className={styles.mobileChurch}></div>
       <motion.section
         className={styles.prototype}
         variants={fadeIn}
@@ -160,6 +160,7 @@ export default function Home() {
       >
         
         <div className={styles.projectContent}>
+          <div className={styles.overlay}></div>
           <h2>Join Us To Make The Church Building A Reality.</h2>
           <p>Partner With Us Today!</p>
           <Button tag="Donate" onClick={redirectToGivePage} />

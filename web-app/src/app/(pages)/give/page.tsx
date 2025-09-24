@@ -4,16 +4,10 @@ import { useState, useEffect } from "react";
 import Hero from "@/app/components/Hero";
 import styles from './give.module.css';
 import Button from "@/app/components/Button";
-import dynamic from "next/dynamic";
-
-const PaystackButton = dynamic(() =>
-  import("react-paystack").then((mod) => mod.PaystackButton),
-  { ssr: false }
-);
 
 export default function Give() {
-  const [formTitle, setFormTitle] = useState("Offering"); // default to Offering
-  const [activeCategory, setActiveCategory] = useState<string | null>("Offering"); // ✅ open Offering on load
+  const [formTitle, setFormTitle] = useState("Offering");
+  const [activeCategory, setActiveCategory] = useState<string | null>("Offering");
   const [isMobile, setIsMobile] = useState(false);
 
   const [fullName, setFullName] = useState("");
@@ -21,10 +15,8 @@ export default function Give() {
   const [phone, setPhone] = useState("");
   const [amount, setAmount] = useState("");
 
-  const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "";
-
+  // ✅ Map each category to its subaccount
   const subaccountMap: Record<string, string> = {
-    // Offering: "ACCT_yxr9wcq3bjitw8w",
     Offering: "ACCT_sg0ocq2xfk9irny",
     Tithe: "ACCT_eal1s4xwrolnldl",
     "Building Project": "ACCT_XXXXX3",
@@ -39,7 +31,6 @@ export default function Give() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // ✅ Ensure Offering is always open on load
   useEffect(() => {
     setActiveCategory("Offering");
   }, []);
@@ -47,68 +38,41 @@ export default function Give() {
   const handleCategoryClick = (category: string) => {
     setFormTitle(category);
     if (isMobile) {
-      setActiveCategory(activeCategory === category ? null : category); // toggle open/close
+      setActiveCategory(activeCategory === category ? null : category);
     }
   };
 
-  const clearForm = () => {
-    setFullName("");
-    setEmail("");
-    setPhone("");
-    setAmount("");
-  };
-
-  // Prevously handling clents alone
-  // const handleSuccess = (ref: { reference: string }) => {
-  //   alert("Payment successful! Reference: " + ref.reference);
-  //   clearForm();
-  // };
-
-  //======================================================================
-  // Verifying from API route
-  const handleSuccess = async (ref: { reference: string }) => {
+  // ✅ Handle donation via backend initialize route
+  const handleDonate = async () => {
     try {
-      const res = await fetch("/api/verify", {
+      const res = await fetch("/api/paystack/initialize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reference: ref.reference }),
+        body: JSON.stringify({
+          email,
+          amount: Number(amount), // NGN
+          subaccount: subaccountMap[formTitle],
+          metadata: {
+            fullName,
+            phone,
+            category: formTitle,
+          },
+        }),
       });
 
       const result = await res.json();
 
-      if (result.success) {
-        alert("Payment verified successfully!");
-        clearForm();
-        console.log("Verified payment:", result.data);
+      if (result.success && result.data?.authorization_url) {
+        // Redirect donor to Paystack checkout
+        window.location.href = result.data.authorization_url;
       } else {
-        alert("Payment could not be verified. Please contact support.");
-        console.error(result.error);
+        alert(`Error: ${result.error || "Could not start payment"}`);
+        console.error("Initialize error:", result);
       }
     } catch (err) {
-      alert("An error occurred while verifying payment.");
+      alert("Something went wrong while starting payment.");
       console.error(err);
     }
-  };
-//======================================================================
-
-  // please modify for redirect please
-  const handleClose = () => {
-    alert("Payment closed.");
-  };
-
-  const paystackConfig = {
-    reference: new Date().getTime().toString(),
-    email,
-    amount: Number(amount) * 100,
-    publicKey,
-    subaccount: subaccountMap[formTitle],
-    metadata: {
-      custom_fields: [
-        { display_name: "Full Name", variable_name: "fullName", value: fullName },
-        { display_name: "Phone Number", variable_name: "phone", value: phone },
-        { display_name: "Category", variable_name: "category", value: formTitle },
-      ],
-    },
   };
 
   return (
@@ -125,10 +89,9 @@ export default function Give() {
                 onClick={() => handleCategoryClick(category)}
               />
 
-              {/* ✅ Mobile: show form under clicked button */}
               {isMobile && activeCategory === category && (
                 <div className={styles.rightSide}>
-                  <form onSubmit={(e) => e.preventDefault()}>
+                  <form onSubmit={(e) => { e.preventDefault(); handleDonate(); }}>
                     <h1>{formTitle}</h1>
 
                     <div className={styles.formDivs}>
@@ -174,13 +137,9 @@ export default function Give() {
                     </div>
 
                     <div className={styles.formDivs}>
-                      <PaystackButton
-                        {...paystackConfig}
-                        className={styles.giveButton}
-                        text="Make Payment"
-                        onSuccess={handleSuccess}
-                        onClose={handleClose}
-                      />
+                      <button type="submit" className={styles.giveButton}>
+                        Make Payment
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -189,10 +148,9 @@ export default function Give() {
           ))}
         </div>
 
-        {/* ✅ Desktop: form on the right side only */}
         {!isMobile && (
           <div className={styles.rightSide}>
-            <form onSubmit={(e) => e.preventDefault()}>
+            <form onSubmit={(e) => { e.preventDefault(); handleDonate(); }}>
               <h1>{formTitle}</h1>
 
               <div className={styles.formDivs}>
@@ -238,13 +196,9 @@ export default function Give() {
               </div>
 
               <div className={styles.formDivs}>
-                <PaystackButton
-                  {...paystackConfig}
-                  className={styles.giveButton}
-                  text="Make Payment"
-                  onSuccess={handleSuccess}
-                  onClose={handleClose}
-                />
+                <button type="submit" className={styles.giveButton}>
+                  Make Payment
+                </button>
               </div>
             </form>
           </div>

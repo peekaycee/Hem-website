@@ -54,16 +54,16 @@ export default function Navigation() {
       <header className={styles.address}>
         <p>9, Redeemed Avenue, Off Remlek Bus-stop, Badore</p>
         <div className={styles.socialIcons}>
-          <a href="https://twitter.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title='Twitter'>
-            <Image src={Youtube} alt="Twitter" width={20} height={20} />
+          <a href="https://youtube.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title='Youtube'>
+            <Image src={Youtube} alt="Youtube" width={20} height={20} />
           </a><span>|</span>
-          <a href="https://instagram.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title='Instagram'>
+          <a href="https://www.instagram.com/hema_church?igsh=MXMzZHU0NnRqZ3Ztbw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" title='Instagram'>
             <Image src={Instagram} alt="Instagram" width={20} height={20} />
           </a><span>|</span>
-          <a href="https://facebook.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title='Facebook'>
+          <a href="https://www.facebook.com/profile.php?id=61581220898043&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer" title='Facebook'>
             <Image src={Facebook} alt="Facebook" width={20} height={20} />
           </a><span>|</span>
-          <a href="https://facebook.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title='Tiktok'>
+          <a href="https://www.facebook.com/profile.php?id=61581220898043&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer" title='Tiktok'>
             <Image src={Tiktok} alt="Tiktok" width={20} height={20} />
           </a>
         </div>

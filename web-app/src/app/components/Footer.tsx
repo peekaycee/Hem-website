@@ -15,16 +15,16 @@ export default function Footer(){
           <div className={styles.socials}>
             <h2>Follow Us</h2>
             <div className={styles.socialIcons}>
-              <a href="https://twitter.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title="twitter">
-                <Image src={Youtube} alt="Twitter" width={22} height={22} />
+              <a href="https://youtube.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title="youtube">
+                <Image src={Youtube} alt="Youtube" width={22} height={22} />
               </a>
-              <a href="https://instagram.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title="instagram">
+              <a href="https://www.instagram.com/hema_church?igsh=MXMzZHU0NnRqZ3Ztbw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" title="instagram">
                 <Image src={Instagram} alt="Instagram" width={22} height={22} />
               </a>
-              <a href="https://facebook.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title="facebook">
+              <a href="https://www.facebook.com/profile.php?id=61581220898043&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer" title="facebook">
                 <Image src={Facebook} alt="Facebook" width={22} height={22} />
               </a>
-              <a href="https://facebook.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title="tiktok">
+              <a href="https://www.facebook.com/profile.php?id=61581220898043&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer" title="tiktok">
                 <Image src={Tiktok} alt="Tiktok" width={22} height={22} />
               </a>
             </div>

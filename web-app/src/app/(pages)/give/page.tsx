@@ -130,7 +130,7 @@ export default function Give() {
                         placeholder="Amount (NGN)"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
-                        min={1000}
+                        min={500}
                         step={100}
                         required
                       />
@@ -189,7 +189,7 @@ export default function Give() {
                   placeholder="Amount (NGN)"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  min={1000}
+                  min={500}
                   step={100}
                   required
                 />

@@ -4,6 +4,7 @@ import Header from './components/Navigation';
 import Footer from './components/Footer';
 import { Toaster } from "react-hot-toast";
 import LiveChat from "./components/liveChat";
+// @ts-expect-error: Type definitions for CSS import are not available
 import "leaflet/dist/leaflet.css";
 
 // import PageTransitionWrapper from "./components/PageTransitionWrapper";

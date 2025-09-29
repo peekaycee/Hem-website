@@ -4,7 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./components.module.css";
 import Image from "next/image";
 import Button from "./Button";
-import { Livechat } from "../../../public/images"; 
+import { Livechat } from "../../../public/images";
+import { getFuzzyResponse } from "../chatResponses/aiResponses";
+import { getLLMResponse } from "../chatResponses/llm"; 
 
 export default function LiveChat() {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,20 +26,31 @@ export default function LiveChat() {
     setIsOpen((prev) => !prev);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
-    setMessages([...messages, { text: inputValue, type: "sent" }]);
+
+    // add user msg
+    setMessages((prev) => [...prev, { text: inputValue, type: "sent" }]);
     setInputValue("");
     setIsUserTyping(false);
 
-    // Simulate bot typing before reply
+    // simulate typing
     setIsBotTyping(true);
+
+    let reply: string;
+
+    // 1️⃣ Fuzzy match first
+    const fuzzy = getFuzzyResponse(inputValue);
+    if (fuzzy) {
+      reply = fuzzy;
+    } else {
+      // 2️⃣ LLM API fallback
+      reply = await getLLMResponse(inputValue);
+    }
+
     setTimeout(() => {
       setIsBotTyping(false);
-      setMessages((prev) => [
-        ...prev,
-        { text: "Thanks for reaching out! We'll get back to you.", type: "received" },
-      ]);
+      setMessages((prev) => [...prev, { text: reply, type: "received" }]);
     }, 1500);
   };
 
@@ -61,25 +74,21 @@ export default function LiveChat() {
     }, 1000);
   };
 
-  // Jump instantly to bottom when chat opens
   useEffect(() => {
     if (!isOpen) return;
     messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
   }, [isOpen]);
 
-  // Smooth scroll when new messages or typing indicators appear
   useEffect(() => {
     if (!isOpen) return;
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isUserTyping, isBotTyping]);
 
-  // Close chat when clicking outside (but not when clicking the icon)
   useEffect(() => {
     if (!isOpen) return;
 
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
-
       if (
         chatBoxRef.current &&
         !chatBoxRef.current.contains(target) &&
@@ -100,13 +109,11 @@ export default function LiveChat() {
       <div className={styles.liveChatBox}>
         {isOpen && (
           <div className={styles.chatBox} ref={chatBoxRef}>
-            {/* Header */}
             <div className={styles.chatHeader}>
               <span>Live Chat</span>
               <p onClick={handleChatBoxOpenAndClose}>✖</p>
             </div>
 
-            {/* Messages */}
             <div className={styles.messages}>
               {messages.map((msg, index) => (
                 <div
@@ -117,7 +124,6 @@ export default function LiveChat() {
                 </div>
               ))}
 
-              {/* Typing Indicators */}
               {isUserTyping && (
                 <div className={styles.sentText}>
                   <div className={styles.typingBubble}>
@@ -133,11 +139,9 @@ export default function LiveChat() {
                 </div>
               )}
 
-              {/* Invisible marker to scroll into view */}
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input */}
             <div className={styles.inputVal}>
               <input
                 type="text"
@@ -151,7 +155,6 @@ export default function LiveChat() {
           </div>
         )}
 
-        {/* Floating Icon */}
         <Image
           src={Livechat}
           alt="Chat"

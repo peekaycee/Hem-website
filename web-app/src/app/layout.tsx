@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import './globals.css';
-import Header from './components/Navigation';
-import Footer from './components/Footer';
+import "./globals.css";
+import Header from "./components/Navigation";
+import Footer from "./components/Footer";
 import { Toaster } from "react-hot-toast";
 import LiveChat from "./components/liveChat";
-// @ts-expect-error: Type definitions for CSS import are not available
 import "leaflet/dist/leaflet.css";
 
 // import PageTransitionWrapper from "./components/PageTransitionWrapper";
@@ -23,14 +22,14 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <Header />
-          {/* <PageTransitionWrapper> */}
-            {children}
-          {/* </PageTransitionWrapper> */}
+        {/* <PageTransitionWrapper> */}
+        {children}
+        {/* </PageTransitionWrapper> */}
         <Toaster
           position="top-right"
           toastOptions={{
             style: {
-              fontFamily: "'Poppins', sans-serif", 
+              fontFamily: "'Poppins', sans-serif",
               fontSize: "14px",
               fontWeight: 500,
               borderRadius: "12px",
@@ -59,7 +58,7 @@ export default function RootLayout({
             },
           }}
         />
-        <LiveChat/>       
+        <LiveChat />
         <Footer />
       </body>
     </html>

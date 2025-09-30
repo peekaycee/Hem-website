@@ -14,9 +14,13 @@
       "default",
       {
         "ignore": [
-          "user-select"
+          "user-select",
+          "scrollbar-width",
+          "scrollbar-width: none",
+          "-webkit-overflow-scrolling"
         ]
       }
-    ]
+    ],
+    "button-type": "off"
   }
 }

@@ -1026,8 +1026,8 @@ ul.sublinks {
   font-weight: bold;
   transition: transform 0.2s ease-in-out;
 }
-
 .top:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  color: var(--hoverBg);
 }

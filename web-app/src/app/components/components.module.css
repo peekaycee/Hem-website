@@ -623,6 +623,7 @@ ul.sublinks {
 }
 
 /* Chat  */
+.top,
 .liveChatBox {
   position: fixed;
   bottom: 20px;
@@ -639,10 +640,19 @@ ul.sublinks {
   z-index: 999;
   transition: transform 0.2s ease-in-out;
 }
-
+.top:hover,
 .liveChatBox:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+.goTop{
+  color: var(--foreground);
+}
+.top{
+  left: 20px;
+}
+.top:hover{
+  color: var(--hoverBg);
 }
 
 .liveChatBox img {
@@ -1009,7 +1019,7 @@ ul.sublinks {
     font-size: calc(var(--p3) * 0.85);
   }
 }
-.top{
+/* .top{
   position: fixed;
   bottom: 20px;
   left: 20px;
@@ -1030,4 +1040,4 @@ ul.sublinks {
   transform: scale(1.05);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
   color: var(--hoverBg);
-}
+} */

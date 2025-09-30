@@ -4,7 +4,7 @@ import { ChevronUp} from "lucide-react";
 
 const goToTop = () => {
   return (
-    <a href="#" title="top">
+    <a href="#" title="top" className={styles.goTop}>
       <div className={styles.top}>
         <ChevronUp />
       </div>

@@ -7,6 +7,7 @@ import LiveChat from "./components/liveChat";
 import "leaflet/dist/leaflet.css";
 
 // import PageTransitionWrapper from "./components/PageTransitionWrapper";
+import GoToTop from "./components/goToTOp";
 
 export const metadata: Metadata = {
   title: "HEM Parish",
@@ -59,6 +60,7 @@ export default function RootLayout({
           }}
         />
         <LiveChat />
+        <GoToTop />
         <Footer />
       </body>
     </html>

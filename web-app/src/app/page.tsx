@@ -3,7 +3,7 @@
 import styles from "./home.module.css";
 import Button from "./components/Button";
 import Image from "next/image";
-import { Pic2, ChurchLogo, FallbackImage } from "../../public/images";
+import { Pic2, Min1, Min2, Min4, ChurchLogo, FallbackImage } from "../../public/images";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
@@ -23,6 +23,25 @@ const testimonies = [
   "Attending HEMA filled my heart with gratitude, joy, and peace as God lifted my burdens and gave me fresh direction.",
   "Through fellowship and prayer at HEMA, I found healing, and strength to keep walking in God’s divine purpose daily.",
 ];
+
+
+const ministersData = [
+  {
+    name: "Deac. Godwin",
+    position: "Asst. Pastor",
+    imageSrc: Min1, 
+  },
+  {
+    name: "Min. Sanjo",
+    position: "Minister/Hospitality",
+    imageSrc: Min2,
+  },
+  {
+    name: "Min. Peter",
+    position: "Church Admin",
+    imageSrc: Min4,
+  },
+]
 
 // Reusable fade-in animation
 const fadeIn = {
@@ -86,7 +105,6 @@ export default function Home() {
   const redirectToGivePage = () => router.push("/give");
   const redirectToAnnouncement = () => router.push("/announcements");
   const redirectToPrayer = () => router.push("/prayers");
-
   const previousTestimonies = () =>
     setTestimony((prev) => Math.max(prev - 1, 1));
   const nextTestimonies = () =>
@@ -133,7 +151,7 @@ export default function Home() {
         <div className={styles.details}>
           <div className={styles.detailImage}></div>
           <div className={styles.pastorsDetails}>
-            <h3>Pastor & Mrs. Gbadegheshin</h3>
+            <h3>Pastor & Mrs. Gbadegeshin</h3>
             <abbr>PICA</abbr>
           </div>
         </div>
@@ -215,23 +233,13 @@ export default function Home() {
       <section className={styles.minister}>
         <h2>Meet Our Ministers</h2>
         <div className={styles.ministers}>
-          {[1, 2, 3, 4].map((n) => (
-            <div className={styles.minDetails} key={n}>
+          {/* {[1, 2, 3, 4].map((n) => ( */}
+          {ministersData.map((n) => (
+            <div className={styles.minDetails} key={n.name}>
               <div className={styles.name}>
-                <Image src={Pic2} alt="New Events" width={0} height={0} />
-                <h3>
-                  Bro {["Godwin", "Peter", "Sanjo", "Sanjo"][n - 1]}
-                </h3>
-                <p>
-                  {
-                    [
-                      "Asst. Parish Pastor",
-                      "Church Admin",
-                      "Hospitality",
-                      "Hospitality",
-                    ][n - 1]
-                  }
-                </p>
+                <Image src={n.imageSrc} alt="New Events" width={0} height={0}/>
+                <h3>{n.name}</h3>
+                <p>{n.position}</p>
               </div>
             </div>
           ))}

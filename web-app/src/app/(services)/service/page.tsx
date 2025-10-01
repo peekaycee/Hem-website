@@ -43,6 +43,14 @@ export default function Services() {
         </div>
         <div className={`${styles.pic} ${styles.left}`} ></div>
       </div>
+      <div className={styles.service}>
+        <div className={`${styles.dig} ${styles.left}`}>
+          <h3>POWER SWALLOW POWER |<span> Prayer</span> </h3>
+          <b><em>Third Sundays @ 6:15AM</em></b>
+          <p>This is a pre-dawn prayer program of intense intercession where God&apos;s power swallows every opposing power against destiny.</p>
+        </div>
+        <div className={`${styles.pic} ${styles.right}`} ></div>
+      </div>
     </section>
   );
 }  

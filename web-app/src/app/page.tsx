@@ -3,27 +3,60 @@
 import styles from "./home.module.css";
 import Button from "./components/Button";
 import Image from "next/image";
-import { Pic2, Min1, Min2, Min4, ChurchLogo, FallbackImage } from "../../public/images";
+import { Min1, Min2, Min4, Min6, Testifier1, Testifier2, Testifier3, Testifier4, Testifier5, Testifier6, Testifier7, Testifier8, Testifier9, ChurchLogo, FallbackImage } from "../../public/images";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/app/lib/supabaseClient";
 
-
-// Testimonies
-const testimonies = [
-  "At HEMA, God transformed my life with healing, peace, and renewed strength through worship, prayer, and the power of His Word.",
-  "I came broken, but through HEMA’s prayers and teachings, God restored my joy, and gave me new purpose.",
-  "Through heartfelt worship at HEMA, I encountered God’s presence deeply, and found strength to overcome life’s challenges victoriously.",
-  "HEMA has been a source of hope, and spiritual growth, helping me draw closer to God and experience lasting transformation.",
-  "Prayer services at HEMA connected me to God’s power, miracles, and testimonies I never imagined possible in my life.",
-  "My faith was strengthened at HEMA through Bible study, worship, and filling me with courage, hope, and spiritual renewal.",
-  "God answered my long-awaited prayers during a HEMA service, proving His mercy, and love to me in miraculous ways.",
-  "Attending HEMA filled my heart with gratitude, joy, and peace as God lifted my burdens and gave me fresh direction.",
-  "Through fellowship and prayer at HEMA, I found healing, and strength to keep walking in God’s divine purpose daily.",
-];
-
+const testifiers = [
+  {
+    name: "Eld. Bababfemi", 
+    text: "At HEMA, God transformed my life with healing, peace, and renewed strength through worship, prayer, and the power of His Word.", 
+    thumbnail: Testifier1,
+  },
+  {
+    name: "Taiwo", 
+    text: "I came broken, but through HEMA’s prayers and teachings, God restored my joy, and gave me new purpose.", 
+    thumbnail: Testifier2,
+  },
+  {
+    name: "Deac. Oludayo", 
+    text: "Through heartfelt worship at HEMA, I encountered God’s presence deeply, and found strength to overcome life’s challenges victoriously.", 
+    thumbnail: Testifier3,
+  },
+  {
+    name: "Sis. Jumoke", 
+    text: "HEMA has been a source of hope, and spiritual growth, helping me draw closer to God and experience lasting transformation.", 
+    thumbnail: Testifier4,
+  },
+  {
+    name: "Peter Wey", 
+    text: "Prayer services at HEMA connected me to God’s power, miracles, and testimonies I never imagined possible in my life.", 
+    thumbnail: Testifier5,
+  },
+  {
+    name: "Princess Faith", 
+    text: "Through fellowship and prayer at HEMA, I found healing, and strength to keep walking in God’s divine purpose daily.", 
+    thumbnail: Testifier6,
+  },
+  {
+    name: "Chelsea", 
+    text: "My faith was strengthened at HEMA through Bible study, worship, and filling me with courage, hope, and spiritual renewal.", 
+    thumbnail: Testifier7,
+  },
+  {
+    name: "Odinaka", 
+    text: "God answered my long-awaited prayers during a HEMA service, proving His mercy, and love to me in miraculous ways.", 
+    thumbnail: Testifier8,
+  },
+  {
+    name: "Min. Adeyemo", 
+    text: "Attending HEMA filled my heart with gratitude, joy, and peace as God lifted my burdens and gave me fresh direction.", 
+    thumbnail: Testifier9,
+  },
+]
 
 const ministersData = [
   {
@@ -40,6 +73,11 @@ const ministersData = [
     name: "Min. Peter",
     position: "Church Admin",
     imageSrc: Min4,
+  },
+  {
+    name: "Min. Kolawole",
+    position: "Minister",
+    imageSrc: Min6,
   },
 ]
 
@@ -104,7 +142,9 @@ export default function Home() {
 
   const redirectToGivePage = () => router.push("/give");
   const redirectToAnnouncement = () => router.push("/announcements");
+  const redirectToDepartment = () => router.push("/departments");
   const redirectToPrayer = () => router.push("/prayers");
+
   const previousTestimonies = () =>
     setTestimony((prev) => Math.max(prev - 1, 1));
   const nextTestimonies = () =>
@@ -244,46 +284,48 @@ export default function Home() {
             </div>
           ))}
         </div>
+        <Button tag="Meet others" onClick={redirectToDepartment} />
       </section>
 
       {/* Testimonies Section */}
       <section className={styles.testimony}>
-        <h2>Testimonies</h2>
-        <div className={styles.testifiersDetails}>
-          <ChevronLeft
-            size={24}
-            className={styles.dir}
-            onClick={previousTestimonies}
-          />
-          {[1, 2, 3].map((n) =>
-            testimony === n ? (
-              <div
-                className={`${styles.testimonyWrapper} ${styles.first}`}
-                key={n}
-              >
-                {testimonies
-                  .slice((n - 1) * 3, n * 3)
-                  .map((text, i) => (
-                    <div className={styles.testimonies} key={i}>
-                      <div>
-                        <p>{text}</p>
-                      </div>
-                      <div className={styles.testifier}>
-                        <h3>John Doe {i + 1}</h3>
-                        <Image src={Pic2} alt="testifier" />
-                      </div>
-                    </div>
-                  ))}
+  <h2>Testimonies</h2>
+  <div className={styles.testifiersDetails}>
+    <ChevronLeft
+      size={24}
+      className={styles.dir}
+      onClick={previousTestimonies}
+    />
+    {[1, 2, 3].map((n) =>
+      testimony === n ? (
+        <div
+          className={`${styles.testimonyWrapper} ${styles.first}`}
+          key={n}
+        >
+          {testifiers
+            .slice((n - 1) * 3, n * 3)
+            .map((person, i) => (
+              <div className={styles.testimonies} key={i}>
+                <div>
+                  <p>{person.text}</p>
+                </div>
+                <div className={styles.testifier}>
+                  <h3>{person.name}</h3>
+                  <Image src={person.thumbnail} alt={person.name} />
+                </div>
               </div>
-            ) : null
-          )}
-          <ChevronRight
-            size={24}
-            className={styles.dir}
-            onClick={nextTestimonies}
-          />
+            ))}
         </div>
-      </section>
+      ) : null
+    )}
+    <ChevronRight
+      size={24}
+      className={styles.dir}
+      onClick={nextTestimonies}
+    />
+  </div>
+</section>
+
 
       {/* Prayer CTA */}
       <section className={styles.cta}>

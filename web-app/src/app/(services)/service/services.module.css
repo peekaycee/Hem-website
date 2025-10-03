@@ -12,11 +12,29 @@
   height: auto;
   display: flex;
 }
+.program1 {
+  background: url(../../../../public/images/bible-study.jpg) no-repeat center;
+}
+.program2 {
+  background: url(../../../../public/images/encounter.jpg) no-repeat center;
+}
+.program3 {
+  background: url(../../../../public/images/faith-clinic.jpg) no-repeat center;
+}
+.program4 {
+  background: url(../../../../public/images/thanksgiving.jpg) no-repeat center;
+  box-shadow: 0 0 3px 0px rgba(0, 0, 0, .3);
+}
+.program5 {
+  background: url(../../../../public/images/power.jpg) no-repeat center;
+}
+.program6 {
+  background: url(../../../../public/images/ycs.jpg) no-repeat center;
+}
 .pic{
-  width: 50%;
-  height: 100dvh;
-  background: url(../../../../public/images/image14.jpg) no-repeat center;
-  background-size: cover; 
+   width: 50%;
+  height: 110dvh;
+  background-size: cover;
 }
 .dig{
   width: 50%;

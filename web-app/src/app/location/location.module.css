@@ -83,6 +83,13 @@
   }
 }
 
+@media screen and (max-width: 599px) {
+   #location {
+    background-image: none;
+    background-color: var(--tertiary-100);
+  }
+}
+
 /* Skeleton loader */
 .skeleton {
   background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);

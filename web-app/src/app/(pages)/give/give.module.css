@@ -146,3 +146,9 @@
     margin-top: 1em;
   }
 }
+@media screen and (max-width: 599px) {
+   #give {
+    background-image: none;
+    background-color: var(--tertiary-100);
+  }
+}

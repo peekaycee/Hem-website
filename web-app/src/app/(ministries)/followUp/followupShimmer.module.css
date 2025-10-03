@@ -71,3 +71,9 @@
     background-position: 200% 0;
   }
 }
+/* @media screen and (max-width: 599px) {
+   .followUp {
+    background-image: none;
+    background-color: var(--tertiary-100);
+  }
+} */

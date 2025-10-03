@@ -63,7 +63,7 @@ export default function Navigation() {
           <a href="https://www.facebook.com/profile.php?id=61581220898043&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer" title='Facebook'>
             <Image src={Facebook} alt="Facebook" width={20} height={20} />
           </a><span>|</span>
-          <a href="https://www.facebook.com/profile.php?id=61581220898043&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer" title='Tiktok'>
+          <a href="https://www.tiktok.com/@hema_church?_t=ZS-8zbshgRaEmV&_r=1" target="_blank" rel="noopener noreferrer" title='Tiktok'>
             <Image src={Tiktok} alt="Tiktok" width={20} height={20} />
           </a>
         </div>
@@ -158,7 +158,7 @@ export default function Navigation() {
                     <li><Link href='/give'>Give</Link></li>
                     <li><Link href='/prayers'>Prayer</Link></li>
                     <li><Link href='/faq'>FAQ</Link></li>
-                    <li><Link href='/admin'>Admin</Link></li>
+                    {/* <li><Link href='/admin'>Admin</Link></li> */}
                   </ul>
                 </motion.div>
               </li>
@@ -237,7 +237,7 @@ export default function Navigation() {
                   <li><Link href="/give" onClick={handleLinkClick}>Give</Link></li>
                   <li><Link href="/prayers" onClick={handleLinkClick}>Prayer</Link></li>
                   <li><Link href="/faq" onClick={handleLinkClick}>FAQ</Link></li>
-                  <li><Link href="/admin" onClick={handleLinkClick}>Admin</Link></li>
+                  {/* <li><Link href="/admin" onClick={handleLinkClick}>Admin</Link></li> */}
                 </ul>
               </li>
 

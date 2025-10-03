@@ -289,7 +289,7 @@ ul.sublinks {
   position: relative;
   background: url("/images/hero-bg.jpg") center no-repeat;
   background-size: cover;
-  min-height: 50vh;
+  height: 50dvh;
   z-index: 1; /* always behind nav & livechat */
   display: flex;
   align-items: center;
@@ -905,7 +905,9 @@ ul.sublinks {
     gap: 0.5em;
   }
   .heroSlide {
-    height: 200px;
+    height: 40dvh;
+    margin-bottom: 3em;
+    background-size: contain;
   }
   .heroSlide h1 {
     font-size: calc(var(--m) * 0.9);
@@ -968,10 +970,13 @@ ul.sublinks {
     gap: 0.3em;
   }
   .heroSlide {
-    height: 150px;
+    height: 35dvh;
+  }
+  .heroSlide .overlay {
+    display: none;
   }
   .heroSlide h1 {
-    font-size: calc(var(--m) * 0.8);
+    font-size: var(--m);
   }
   .footerContent {
     padding: 1em 1.5em;

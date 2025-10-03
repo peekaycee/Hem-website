@@ -153,6 +153,13 @@
   }
 }
 
+@media screen and (max-width: 599px) {
+   #prayer {
+    background-image: none;
+    background-color: var(--tertiary-100);
+  }
+}
+
 @media (max-width: 480px) {
   .counsellingForm,
   .prayerForm {

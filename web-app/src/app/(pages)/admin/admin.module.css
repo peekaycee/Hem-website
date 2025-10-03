@@ -302,7 +302,12 @@
 
 }
 
-
+@media screen and (max-width: 599px) {
+   #admin {
+    background-image: none;
+    background-color: var(--tertiary-100);
+  }
+}
 
 /* Skeleton shimmer effect for table */
 .skeletonWrapper {

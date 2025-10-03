@@ -382,6 +382,12 @@ p.searchResponse{
 }
 
 /* =========== Responsive =========== */
+@media screen and (max-width: 599px) {
+   #sermon {
+    background-image: none;
+    background-color: var(--tertiary-100);
+  }
+}
 @media screen and (max-width: 768px) {
   .sermonDetailWrapper {
     padding: 1.5em;

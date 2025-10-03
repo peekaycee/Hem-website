@@ -191,7 +191,7 @@ export default function Home() {
         <div className={styles.details}>
           <div className={styles.detailImage}></div>
           <div className={styles.pastorsDetails}>
-            <h3>Pastor & Mrs. Gbadegeshin</h3>
+            <h3>Pst. & Mrs. Gbade Adesoye</h3>
             <abbr>PICA</abbr>
           </div>
         </div>
@@ -207,6 +207,7 @@ export default function Home() {
           </p>
         </div>
       </motion.section>
+      
       {/* Church Project Section */}
       <div className={styles.mobileChurch}></div>
       <motion.section

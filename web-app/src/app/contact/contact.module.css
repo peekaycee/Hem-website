@@ -110,6 +110,13 @@
   }
 }
 
+@media screen and (max-width: 599px) {
+   #contact {
+    background-image: none;
+    background-color: var(--tertiary-100);
+  }
+}
+
 @media (max-width: 480px) { /* Small Mobile */
   .contactForm {
     width: 95%;

@@ -24,7 +24,7 @@ export default function Footer(){
               <a href="https://www.facebook.com/profile.php?id=61581220898043&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer" title="facebook">
                 <Image src={Facebook} alt="Facebook" width={22} height={22} />
               </a>
-              <a href="https://www.facebook.com/profile.php?id=61581220898043&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer" title="tiktok">
+              <a href="https://www.tiktok.com/@hema_church?_t=ZS-8zbshgRaEmV&_r=1" target="_blank" rel="noopener noreferrer" title="tiktok">
                 <Image src={Tiktok} alt="Tiktok" width={22} height={22} />
               </a>
             </div>

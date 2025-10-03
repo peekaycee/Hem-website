@@ -186,23 +186,6 @@
   transform: translateY(-10px);
 }
 
-/* Mobile: full images, horizontal scroll */
-@media only screen and (max-width: 480px) {
-  .eventsWrapper {
-    width: 100%;
-    border-radius: var(--br-1);
-  }
-  .track{
-    width: fit-content;
-    gap: 0;
-  }
-  .eventImageWrapper img{
-    width: 100%;           /* full width */
-    height: 30dvh;          /* maintain aspect ratio */
-    object-fit: contain !important; /* show full image */
-  }
-}
-
 /* Optional: hide scrollbars if using horizontal scroll on mobile */
 .eventsWrapper::-webkit-scrollbar {
   display: none;
@@ -355,51 +338,6 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* --- Mobile: Ministers scrollable & hide scrollbars --- */
-@media only screen and (max-width: 599px) {
-  .ministers {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 1em;
-    scroll-snap-type: x mandatory;
-    justify-content: flex-start;
-    padding: 0 1.5em;
-    /* Hide scrollbars */
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .ministers::-webkit-scrollbar {
-    display: none;
-  }
-  .minDetails {
-    margin: 0px 5px;
-    flex: 0 0 auto;
-    scroll-snap-align: center;
-    width: 160px;
-  }
-
-  .testimonyWrapper {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 1em;
-    scroll-snap-type: x mandatory;
-    justify-content: flex-start;
-
-    /* Hide scrollbars */
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .testimonyWrapper::-webkit-scrollbar {
-    display: none;
-  }
-  .testimonies {
-    flex: 0 0 auto;
-    scroll-snap-align: center;
-    width: 200px;
-    min-height: 160px;
-  }
-}
-
 .direction{
   display: flex;
   align-items: center;
@@ -492,11 +430,11 @@
     margin-bottom: 2em;
   }
   .detailImage {
-    height: 70dvh;
-    background-size: contain;
+    height: 100dvh;
+    background-size: cover;
   }
   .pastorsDetails{
-    width: 95%;
+    width: 100%;
     padding: 1em 2em;
     margin: 0 auto;
   }
@@ -558,13 +496,57 @@
   }
 }
 
-/* Mobile view */
+/* --- Mobile: Ministers scrollable & hide scrollbars --- */
 @media only screen and (max-width: 599px) {
+  .ministers {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 1em;
+    scroll-snap-type: x mandatory;
+    justify-content: flex-start;
+    padding: 0 1.5em;
+    /* Hide scrollbars */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .ministers::-webkit-scrollbar {
+    display: none;
+  }
+  .minDetails {
+    margin: 0px 5px;
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+    width: 160px;
+  }
+.pastorsDetails{
+  padding: 0.5em 0;
+}
+  .testimonyWrapper {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 1em;
+    scroll-snap-type: x mandatory;
+    justify-content: flex-start;
+
+    /* Hide scrollbars */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .testimonyWrapper::-webkit-scrollbar {
+    display: none;
+  }
+  .testimonies {
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+    width: 200px;
+    min-height: 160px;
+  }
   .video {
     height: 30dvh;
   }
   .detailImage {
-    height: 50dvh;
+    height: 30dvh;
+    background-size: contain;
   }
   .aboutContent {
     padding: 0em;
@@ -572,8 +554,8 @@
   }
   .prototype{
     height: 25dvh;
-    padding-top: 0;
-    margin-top: -1em;
+    padding: 7em 0;
+    margin-top: 0em;
   }
   .projectContent{
     margin-left: -2.5em;
@@ -599,7 +581,9 @@
     justify-content: flex-start;     /* align to left */
   }
   .eventImageWrapper {
-    flex: 0 0 auto;                  /* no shrinking */
+    background-size: cover;
+    margin: 0 5px;
+    flex: 0 0 auto;
     width: 150px;
     height: 20dvh;
     scroll-snap-align: center;
@@ -673,14 +657,31 @@
   }
 }
 
+/* Mobile: full images, horizontal scroll */
+@media only screen and (max-width: 480px) {
+  .eventsWrapper {
+    width: 100%;
+    border-radius: var(--br-1);
+  }
+  .track{
+    width: fit-content;
+    gap: 0;
+  }
+  .eventImageWrapper img{
+    width: 100%;           /* full width */
+    height: 30dvh;
+    object-fit: contain !important; /* show full image */
+  }
+}
+
 /* Landscape orientation for small devices */
 @media only screen and (orientation: landscape) and (max-width: 800px) {
   .video {
     height: 50dvh;
   }
-  .detailImage {
-    height: 50dvh;
-  }
+  /* .detailImage {
+    height: 100dvh;
+  } */
   .cta {
     height: 60dvh;
   }

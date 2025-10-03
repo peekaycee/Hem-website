@@ -178,7 +178,7 @@ p.ministering span{
 }
 
 /* Mobile (≤560px) */
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 599px) {
   .announcementWrapper {
     padding: 0 1em;
   }
@@ -212,6 +212,11 @@ p.ministering span{
   p.expectation,
   p.ministering {
     font-size: var(--p4);
+  }
+
+   #announcement {
+    background-image: none;
+    background-color: var(--tertiary-100);
   }
 }
 

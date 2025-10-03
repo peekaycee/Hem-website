@@ -84,7 +84,12 @@
     padding: 2em 1em; /* reduce padding */
   }
 }
-
+@media screen and (max-width: 599px) {
+   #faq {
+    background-image: none;
+    background-color: var(--tertiary-100);
+  }
+}
 /* Small mobile (≤480px) */
 @media (max-width: 480px) {
   .faqQst,

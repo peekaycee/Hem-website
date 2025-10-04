@@ -1,44 +1,44 @@
 "use client";
 import Hero from "@/app/components/Hero";
 import styles from './departments.module.css';
-import { Pic1 } from "../../../../public/images";
+import { GpPics1, GpPics2, GpPics3, GpPics4, GpPics5, GpPics6, GpPics7 } from "../../../../public/images";
 import Image from 'next/image';
 
 const departmentData = [
   {
     department: "Choir",
     text: "A brief text describing the choir and their performance",
-    image: Pic1
+    image: GpPics2,
   },
   {
     department: "Ushers",
     text: "A brief text describing the ushers and their performance",
-    image: Pic1
+    image: GpPics4,
   },
   {
-    department: "Treasury",
+    department: "Children",
     text: "A brief text describing the treasury and their performance",
-    image: Pic1
+    image: GpPics3,
   },
   {
     department: "Sanitation",
     text: "A brief text describing the sanitation and their performance",
-    image: Pic1
+    image: GpPics1,
   },
   {
     department: "Teachers",
     text: "A brief text describing the teachers and their performance",
-    image: Pic1
+    image: GpPics5,
   },
   {
     department: "Redeem Volunteers",
     text: "A brief text describing the Redeem Volunteers and their performance",
-    image: Pic1
+    image: GpPics6,
   },
   {
-    department: "Security",
+    department: "Teens (T4C)",
     text: "A brief text describing the security and their performance",
-    image: Pic1
+    image: GpPics7,
   },
 ]
 
@@ -53,7 +53,7 @@ export default function Departments() {
             return(
               <div className={styles.minDetails} key={department.department}>
                 <div className={styles.name}>
-                  <Image src={Pic1} alt='New Events' width={0} height={0}/>
+                  <Image src={department.image} alt='New Events' width={0} height={0}/>
                   <div className={styles.nameDetail}>
                     <h3>{department.department}</h3>
                     <p>{department.text}</p>

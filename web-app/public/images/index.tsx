@@ -48,4 +48,11 @@ export { default as Testifier6 } from './faith.png';
 export { default as Testifier7 } from './chez.png';
 export { default as Testifier8 } from './odinaka.png';
 export { default as Testifier9 } from './adeyemo.png';
+export { default as GpPics1 } from './gp1.jpg';
+export { default as GpPics2 } from './gp2.webp';
+export { default as GpPics3 } from './gp3.jpg';
+export { default as GpPics4 } from './gp4.webp';
+export { default as GpPics5 } from './gp5.webp';
+export { default as GpPics6 } from './gp6.jpg';
+export { default as GpPics7 } from './gp7.jpg';
 

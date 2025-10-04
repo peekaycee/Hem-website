@@ -64,7 +64,7 @@ export default function Contact() {
 
           <div className={styles.formGroup}>
             <label htmlFor="message">Feedback:</label>
-            <textarea id="message" name="message" rows={4} required></textarea>
+            <textarea id="message" name="message" rows={4}></textarea>
           </div>
 
           {/* Hidden fields to satisfy shared template */}

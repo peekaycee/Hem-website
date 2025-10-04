@@ -1,5 +1,5 @@
 {
-  // "$schema": "https://www.schemastore.org/tsconfig", // Keep this line commented out to avoid schema loading error
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -17,16 +17,15 @@
 
     "baseUrl": "src",
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["./*"]
     },
+
     "ignoreDeprecations": "6.0",
     "incremental": true,
 
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
+    "plugins": [{ "name": "next" }],
+
+    "types": ["node", "react", "react-dom", "leaflet"]
   },
   "include": [
     "next-env.d.ts",

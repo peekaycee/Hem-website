@@ -15,7 +15,7 @@ export default function Footer(){
           <div className={styles.socials}>
             <h2>Follow Us</h2>
             <div className={styles.socialIcons}>
-              <a href="https://youtube.com/HEMA_Church" target="_blank" rel="noopener noreferrer" title="youtube">
+              <a href="https://www.youtube.com/@HisEverlastingMercyArea-HEMA" target="_blank" rel="noopener noreferrer" title="youtube">
                 <Image src={Youtube} alt="Youtube" width={22} height={22} />
               </a>
               <a href="https://www.instagram.com/hema_church?igsh=MXMzZHU0NnRqZ3Ztbw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" title="instagram">

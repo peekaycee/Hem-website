@@ -7,37 +7,37 @@ import Image from 'next/image';
 const departmentData = [
   {
     department: "Choir",
-    text: "A brief text describing the choir and their performance",
+    text: "Ministering with grace and by the spirit of God.",
     image: GpPics2,
   },
   {
     department: "Ushers",
-    text: "A brief text describing the ushers and their performance",
+    text: "Cordinating and directing the affairs of the services is what we do.",
     image: GpPics4,
   },
   {
     department: "Children",
-    text: "A brief text describing the treasury and their performance",
+    text: "Our church is fun and we love coming to play and fellowship together",
     image: GpPics3,
   },
   {
     department: "Sanitation",
-    text: "A brief text describing the sanitation and their performance",
+    text: "Cleanliness is next to godliness. Keep your environs clean always.",
     image: GpPics1,
   },
   {
     department: "Teachers",
-    text: "A brief text describing the teachers and their performance",
+    text: "Impacting lives and instilling godly character through effective teaching.",
     image: GpPics5,
   },
   {
     department: "Redeem Volunteers",
-    text: "A brief text describing the Redeem Volunteers and their performance",
+    text: "Through the power of God we safeguard the church from danger",
     image: GpPics6,
   },
   {
     department: "Teens (T4C)",
-    text: "A brief text describing the security and their performance",
+    text: "We are 'Teens for Christ - T4C'  and e uphold the name of Jesus wherever we go",
     image: GpPics7,
   },
 ]

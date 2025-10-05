@@ -56,6 +56,14 @@ export default function Services() {
         </div>
         <div className={`${styles.pic} ${styles.program6} ${styles.left}`} ></div>
       </div>
+      <div className={styles.service}>
+        <div className={`${styles.dig} ${styles.left}`}>
+          <h3>HOLY COMMUNION SERVICE |<span> Communion</span> </h3>
+          <b><em>First Sundays @ 6:00PM</em></b>
+          <p>This is a special Holy Communion service where believers gather to partake in the Lord’s Table, reflecting on Christ’s sacrifice and renewing their faith. It’s a time of worship, thanksgiving, and spiritual connection. You don’t want to miss this sacred experience.</p>
+        </div>
+        <div className={`${styles.pic} ${styles.program7} ${styles.right}`} ></div>
+      </div>
     </section>
   );
 }  

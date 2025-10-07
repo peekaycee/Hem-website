@@ -40,7 +40,7 @@ export { default as ChurchLogo } from './rccgLogo.png';
 export { default as Logo } from './Church-logo-icon.jpg';
 export { default as Livechat } from './livechat.png';
 export { default as Testifier1 } from './grandma.png';
-export { default as Testifier2 } from './tl.png';
+export { default as Testifier2 } from './taiwo.jpg';
 export { default as Testifier3 } from './oludayo.png';
 export { default as Testifier4 } from './mom-chelele.png';
 export { default as Testifier5 } from './peter1.png';

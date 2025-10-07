@@ -384,8 +384,8 @@ p.searchResponse{
 /* =========== Responsive =========== */
 @media screen and (max-width: 599px) {
    #sermon {
-    background-image: none;
-    background-color: var(--tertiary-100);
+    background: url(../../../public/images/hero.png) no-repeat center;
+    background-size: cover;
   }
 }
 @media screen and (max-width: 768px) {

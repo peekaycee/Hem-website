@@ -83,7 +83,7 @@ export default function Announcement() {
             >
               {/* Skeleton Layout */}
               <div className={styles.next}>
-                <h1>Next Program</h1>
+                <h1>Latest Program</h1>
                 <div className={styles.nextAnnouncement}>
                   <div className={styles.announcementThumbnail}>
                     <div className={styles.skeleton} />
@@ -122,7 +122,7 @@ export default function Announcement() {
             >
               {nextProgram && (
                 <div className={styles.next}>
-                  <h1>Next Program</h1>
+                  <h1>Latest Program</h1>
                   <div className={styles.nextAnnouncement}>
                     <div className={styles.announcementThumbnail}>
                       {nextProgram.image ? (

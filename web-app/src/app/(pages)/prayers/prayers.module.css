@@ -155,8 +155,8 @@
 
 @media screen and (max-width: 599px) {
    #prayer {
-    background-image: none;
-    background-color: var(--tertiary-100);
+    background: url(../../../../public/images/hero.png) no-repeat center;
+    background-size: cover;
   }
 }
 

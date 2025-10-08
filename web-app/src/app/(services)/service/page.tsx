@@ -19,8 +19,8 @@ export default function Services() {
       <div className={styles.service}>
         <div className={`${styles.dig} ${styles.right}`}>
           <h3>DIVINE ENCOUNTER |<span> Prayer Service</span> </h3>
-          <b><em>Wednesdays&apos; @ 9AM</em></b>
-          <p>Experience Gods presence at Divine Encounter Prayer Service through prayer, Bible study, and teachings that inspire faith, growth, and transformation.</p>
+          <b><em>Wednesdays @ 9AM</em></b>
+          <p>Experience God&apos;s presence at Divine Encounter Prayer Service through prayer, Bible study, and teachings that inspire faith, growth, and transformation.</p>
         </div>
         <div className={`${styles.pic} ${styles.program2} ${styles.left}`}></div>
       </div>
@@ -63,6 +63,14 @@ export default function Services() {
           <p>This is a special Holy Communion service where believers gather to partake in the Lord’s Table, reflecting on Christ’s sacrifice and renewing their faith. It’s a time of worship, thanksgiving, and spiritual connection. You don’t want to miss this sacred experience.</p>
         </div>
         <div className={`${styles.pic} ${styles.program7} ${styles.right}`} ></div>
+      </div>
+      <div className={styles.service}>
+        <div className={`${styles.dig} ${styles.right}`}>
+          <h3>HOUSE FELLOWSHIP |<span> Fellowship</span> </h3>
+          <b><em>Sundays @ 6:00PM</em></b>
+          <p>Join our house fellowship meetings across various centers for a time of worshp, bible study, prayer, and community building. Each centers provide a warm, welcoming environment where lives are transformed through God&apos;s Word and genuine fellowship.</p>
+        </div>
+        <div className={`${styles.pic} ${styles.program8} ${styles.left}`} ></div>
       </div>
     </section>
   );

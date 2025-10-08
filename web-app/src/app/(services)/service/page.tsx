@@ -52,7 +52,7 @@ export default function Services() {
         <div className={`${styles.dig} ${styles.right}`}>
           <h3>YOUTH CELEBRATION SERVICE |<span> YCS</span> </h3>
           <b><em>Last Sundays @ 10:00AM</em></b>
-          <p>This is a service where the young adults and youths are given the opportunity to lead and demonstrate their spiritual gifts and talents as they coordinate the service on that day. You cannot afford to miss it.</p>
+          <p>A special service led by young adults and youths showcasing their spiritual gifts and talents — an event you don’t want to miss.</p>
         </div>
         <div className={`${styles.pic} ${styles.program6} ${styles.left}`} ></div>
       </div>
@@ -60,7 +60,7 @@ export default function Services() {
         <div className={`${styles.dig} ${styles.left}`}>
           <h3>HOLY COMMUNION SERVICE |<span> Communion</span> </h3>
           <b><em>First Sundays @ 6:00PM</em></b>
-          <p>This is a special Holy Communion service where believers gather to partake in the Lord’s Table, reflecting on Christ’s sacrifice and renewing their faith. It’s a time of worship, thanksgiving, and spiritual connection. You don’t want to miss this sacred experience.</p>
+          <p>A special Holy Communion service focused on worship, reflection, and renewal — a sacred time to remember Christ’s sacrifice and strengthen your faith.</p>
         </div>
         <div className={`${styles.pic} ${styles.program7} ${styles.right}`} ></div>
       </div>
@@ -68,7 +68,7 @@ export default function Services() {
         <div className={`${styles.dig} ${styles.right}`}>
           <h3>HOUSE FELLOWSHIP |<span> Fellowship</span> </h3>
           <b><em>Sundays @ 6:00PM</em></b>
-          <p>Join our house fellowship meetings across various centers for a time of worshp, bible study, prayer, and community building. Each centers provide a warm, welcoming environment where lives are transformed through God&apos;s Word and genuine fellowship.</p>
+          <p>A time of worship, bible study, prayer, and fellowship in a warm, welcoming environment where lives are transformed through God’s Word.</p>
         </div>
         <div className={`${styles.pic} ${styles.program8} ${styles.left}`} ></div>
       </div>

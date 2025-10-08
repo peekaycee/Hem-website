@@ -159,12 +159,15 @@ order: 1;
   }
   .dig h3 {
     font-size: var(--p1);
+    text-align: center;
   }
   .dig em {
     font-size: var(--p3);
   }
   .dig p {
     font-size: var(--p4);
+    text-align: justify;
+    letter-spacing: 0;
   }
   .pic {
     width: 100%;

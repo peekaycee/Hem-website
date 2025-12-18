@@ -28,36 +28,45 @@ function AdminContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialTab = (searchParams.get("tab") as Tab) || "announcement";
-    const [activeTab, setActiveTab] = useState<Tab>(() => {
-      if (typeof window !== "undefined") {
-        return (localStorage.getItem("admin_activeTab") as Tab) || initialTab;
-      }
-      return initialTab;
-    });
-    const [search, setSearch] = useState(() => {
-      if (typeof window !== "undefined") {
-        return localStorage.getItem("admin_search") || "";
-      }
-      return "";
-    });
-    const [password, setPassword] = useState(() => {
-      if (typeof window !== "undefined") {
-        return localStorage.getItem("admin_password") || "";
-      }
-      return "";
-    });
-    const [authenticated, setAuthenticated] = useState(() => {
-      if (typeof window !== "undefined") {
-        return localStorage.getItem("admin_authenticated") === "true";
-      }
-      return false;
-    });
 
-    const [modalOpen, setModalOpen] = useState(false);
-    const [editData, setEditData] = useState<any>(null);
-    const [refreshKey, setRefreshKey] = useState(0);
-//=======================================================================
-  // On first load, check if saved admin session expired
+  const [mounted, setMounted] = useState(false); // ensures client-only rendering
+  useEffect(() => setMounted(true), []);
+
+  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
+  const [search, setSearch] = useState("");
+  const [password, setPassword] = useState("");
+  const [authenticated, setAuthenticated] = useState(false);
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editData, setEditData] = useState<any>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+  const tableScrollRef = useRef<HTMLDivElement>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  const tableKeyMap: Record<Tab, "announcements" | "sermons" | "followup"> = {
+    announcement: "announcements",
+    sermon: "sermons",
+    followUp: "followup",
+  };
+
+  // Hydrate state from localStorage
+  useEffect(() => {
+    const storedTab = localStorage.getItem("admin_activeTab") as Tab;
+    if (storedTab) setActiveTab(storedTab);
+
+    const storedSearch = localStorage.getItem("admin_search") || "";
+    setSearch(storedSearch);
+
+    const storedPassword = localStorage.getItem("admin_password") || "";
+    setPassword(storedPassword);
+
+    const auth = localStorage.getItem("admin_authenticated") === "true";
+    setAuthenticated(auth);
+  }, []);
+
+  // Clear expired session
   useEffect(() => {
     const expiry = localStorage.getItem("admin_expiry");
     if (expiry && Date.now() > parseInt(expiry, 10)) {
@@ -68,31 +77,8 @@ function AdminContent() {
       setPassword("");
     }
   }, []);
-  
-const passwordInputRef = useRef<HTMLInputElement>(null);
 
-  const tableScrollRef = useRef<HTMLDivElement>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-
-  const tableKeyMap: Record<Tab, "announcements" | "sermons" | "followup"> = {
-    announcement: "announcements",
-    sermon: "sermons",
-    followUp: "followup",
-  };
-
-  useEffect(() => {
-    router.replace(`/admin?tab=${activeTab}`);
-  }, [activeTab, router]);
-
-  useEffect(() => {
-    if (!authenticated && passwordInputRef.current) {
-      passwordInputRef.current.focus();
-    }
-  }, [authenticated]);
-
-  // Drag-to-scroll
-  //====================================================
-  // Persist values to localStorage
+  // Persist changes to localStorage
   useEffect(() => {
     localStorage.setItem("admin_activeTab", activeTab);
   }, [activeTab]);
@@ -103,7 +89,7 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (authenticated) {
-      const expiry = Date.now() + 60 * 60 * 1000; // 1 hour from now
+      const expiry = Date.now() + 60 * 60 * 1000; // 1 hour
       localStorage.setItem("admin_authenticated", "true");
       localStorage.setItem("admin_password", password);
       localStorage.setItem("admin_expiry", expiry.toString());
@@ -114,8 +100,19 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
     }
   }, [authenticated, password]);
 
-  //====================================================
+  // Update URL query when activeTab changes
+  useEffect(() => {
+    if (mounted) router.replace(`/admin?tab=${activeTab}`);
+  }, [activeTab, router, mounted]);
 
+  // Focus password input if not authenticated
+  useEffect(() => {
+    if (!authenticated && passwordInputRef.current) {
+      passwordInputRef.current.focus();
+    }
+  }, [authenticated]);
+
+  // Drag-to-scroll implementation
   useEffect(() => {
     const el = tableScrollRef.current;
     if (!el) return;
@@ -149,7 +146,6 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
       isDown = false;
       el.classList.remove(styles.dragging);
     };
-
     const onTouchStart = (e: TouchEvent) => {
       if (isInteractive(e.target)) return;
       isDown = true;
@@ -172,7 +168,6 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
     el.addEventListener("mousemove", onMouseMove);
     el.addEventListener("mouseup", onMouseUp);
     el.addEventListener("mouseleave", onMouseUp);
-
     el.addEventListener("touchstart", onTouchStart, { passive: false });
     el.addEventListener("touchmove", onTouchMove, { passive: false });
     el.addEventListener("touchend", onTouchEnd);
@@ -182,7 +177,6 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
       el.removeEventListener("mousemove", onMouseMove);
       el.removeEventListener("mouseup", onMouseUp);
       el.removeEventListener("mouseleave", onMouseUp);
-
       el.removeEventListener("touchstart", onTouchStart);
       el.removeEventListener("touchmove", onTouchMove);
       el.removeEventListener("touchend", onTouchEnd);
@@ -193,17 +187,20 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
     setEditData(null);
     setModalOpen(true);
   };
+
   const bulkMessages = () => {
     router.push("https://www.bulksmsnigeria.com/app/bulksms/welcome");
   };
+
   const openEdit = (row: any) => {
     setEditData(row);
     setModalOpen(true);
   };
+
   const closeModal = () => setModalOpen(false);
+
   const triggerRefresh = () => setRefreshKey((k) => k + 1);
 
-  // Form fields
   const formFieldsMap = {
     announcement: [
       { key: "title", label: "Title" },
@@ -212,16 +209,16 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
       { key: "date", label: "Date", type: "date" },
       { key: "time", label: "Time", type: "time" },
       { key: "ministering", label: "Ministering" },
-      { key: "image", label: "Image" }, // bucket file
+      { key: "image", label: "Image" },
     ],
     sermon: [
       { key: "topic", label: "Topic" },
       { key: "preacher", label: "Preacher" },
       { key: "description", label: "Description" },
       { key: "date", label: "Date", type: "date" },
-      { key: "video_file", label: "Video File" }, // bucket file
-      { key: "audio_file", label: "Audio File" }, // bucket file
-      { key: "script_file", label: "Script File" }, // bucket file
+      { key: "video_file", label: "Video File" },
+      { key: "audio_file", label: "Audio File" },
+      { key: "script_file", label: "Script File" },
     ],
     followUp: [
       { key: "name", label: "Name" },
@@ -245,7 +242,6 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
     return `${hour}:${minute} ${ampm}`;
   };
 
-  // Table columns
   const columnDefs: Record<Tab, ColumnDef<any>[]> = {
     announcement: [
       { accessorKey: "id", header: "ID" },
@@ -316,7 +312,12 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
               : `${sermonBucketBase}${rawFile}`
             : null;
           return fileUrl ? (
-            <a href={fileUrl} target="_blank" rel="noopener noreferrer" className={styles.mediaLinks}>
+            <a
+              href={fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.mediaLinks}
+            >
               Watch Video
             </a>
           ) : (
@@ -335,7 +336,12 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
               : `${sermonBucketBase}${rawFile}`
             : null;
           return fileUrl ? (
-            <a href={fileUrl} target="_blank" rel="noopener noreferrer" className={styles.mediaLinks}>
+            <a
+              href={fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.mediaLinks}
+            >
               Listen Audio
             </a>
           ) : (
@@ -354,7 +360,12 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
               : `${sermonBucketBase}${rawFile}`
             : null;
           return fileUrl ? (
-            <a href={fileUrl} target="_blank" rel="noopener noreferrer" className={styles.mediaLinks}>
+            <a
+              href={fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.mediaLinks}
+            >
               Read Script
             </a>
           ) : (
@@ -371,7 +382,6 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
     ],
   };
 
-  // Fetchers
   const fetchMap: Record<
     "announcements" | "sermons" | "followup",
     (page: number, search: string) => Promise<{ data: any[]; total: number }>
@@ -408,7 +418,6 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
     },
   };
 
-  // Delete handlers
   const deleteMap: Record<Tab, (id: number) => Promise<void>> = {
     announcement: async (id) => {
       try {
@@ -453,6 +462,8 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
     }
   };
 
+  if (!mounted) return null; // prevent hydration mismatch
+
   return !authenticated ? (
     <div className={styles.authBox}>
       <div className={styles.authBoxCard}>
@@ -462,7 +473,9 @@ const passwordInputRef = useRef<HTMLInputElement>(null);
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleAdminAuthentication()}
+          onKeyDown={(e) =>
+            e.key === "Enter" && handleAdminAuthentication()
+          }
           placeholder="Enter password to Access"
           autoFocus
         />

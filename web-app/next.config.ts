@@ -5,11 +5,6 @@ const nextConfig: NextConfig = {
   turbopack: {
     // Add Turbopack options here if needed
   },
-
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-
   images: {
     remotePatterns: [
       {
